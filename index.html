@@ -195,6 +195,34 @@ svg circle.lit { fill: #ffc93c; }
 #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
 @media (prefers-reduced-motion: reduce) { .pop, .shake { animation: none; } .progress > div { transition: none; } }
 @media (max-width: 420px) { .question { font-size: 1.6rem; } .ans { font-size: 1.45rem; } h1 { font-size: 1.8rem; } }
+
+/* Fit each question on one iPad screen */
+.shape-box svg { max-height: 30vh; max-height: 30dvh; }
+.stack2 { font-size: min(3.4rem, 6.5vh); }
+.wrap { transition: max-width .2s; }
+@media (orientation: landscape) and (min-width: 700px) {
+  body { padding-block: 10px; }
+  .wrap { max-width: 980px; gap: 8px; }
+  h1 { font-size: 1.8rem; }
+  .progress { height: 10px; }
+  .card { padding: 14px 18px 16px; gap: 10px; }
+  .card.quiz { grid-template-columns: 1.1fr 1fr; column-gap: 22px; align-items: center;
+    grid-template-areas: "bar bar" "vis q" "vis ans" "vis help" "tip tip" "fb fb"; }
+  .card.quiz > .quiz-bar { grid-area: bar; }
+  .card.quiz > .question { grid-area: q; align-self: end; }
+  .card.quiz > .shape-box { grid-area: vis; }
+  .card.quiz > .answers { grid-area: ans; }
+  .card.quiz > .help-btn { grid-area: help; align-self: start; }
+  .card.quiz > #tip { grid-area: tip; }
+  .card.quiz > #fb { grid-area: fb; }
+  .card.quiz .shape-box svg { max-width: 100% !important; max-height: 56vh; max-height: 56dvh; }
+  .card.quiz .stack2 { font-size: min(4rem, 10vh); }
+  .card.quiz .ans { padding: 12px 10px; }
+  #padc { height: 260px; }
+}
+@media (orientation: portrait) and (min-width: 700px) {
+  .wrap { max-width: 640px; }
+}
 </style>
 </head>
 <body>
@@ -405,6 +433,7 @@ const BUDDY = `<svg class="buddy robot" viewBox="0 0 140 160" aria-label="Foxy F
 
 let welcomed = false;
 function menu(first) {
+  card.classList.remove("quiz");
   if (welcomed && !first) chime();
   document.getElementById("bar").style.width = "0%";
   const h = new Date().getHours();
@@ -438,6 +467,7 @@ function menu(first) {
 }
 
 function splash() {
+  card.classList.remove("quiz");
   const name = "JAYDEN".split("").map((c, k) => `<span style="animation-delay:${k * .08}s">${c}</span>`).join("");
   card.innerHTML = `
     <div class="screen">
@@ -454,6 +484,7 @@ function splash() {
 
 // Foxy Fox introduces himself, one line at a time
 function intro() {
+  card.classList.remove("quiz");
   const lines = [
     "Hey Jayden! I'm Foxy Fox, your computer sidekick.",
     "I loaded 4 missions for you: Shapes, Subtraction, Multiplication, and Division.",
@@ -504,6 +535,7 @@ function talk(text, robot) {
 }
 
 function tableMenu(m) {
+  card.classList.remove("quiz");
   const nums = [2, 3, 4, 5, 6, 7, 8, 9, 10];
   const isTimes = m === "times";
   card.innerHTML = `
@@ -759,6 +791,7 @@ function start(m, t) {
 }
 
 function show() {
+  card.classList.add("quiz");
   document.getElementById("bar").style.width = (i / ROUND * 100) + "%";
   const q = qs[i];
   card.innerHTML = `
@@ -820,6 +853,7 @@ function answer(btn) {
 }
 
 function finish() {
+  card.classList.remove("quiz");
   document.getElementById("bar").style.width = "100%";
   const n = score >= 9 ? 3 : score >= 6 ? 2 : 1;
   const champ = "You are a " + ({ times: "Multiplication", minus: "Subtraction", divide: "Division" }[mode] || "Shape") + " Champion!";
