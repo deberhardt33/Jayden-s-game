@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quiz Quest">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#5ec8f2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="apple-touch-icon.png">
+<title>Jayden's Quiz Quest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@700;800;900&display=swap">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; font-size: 14px; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<style>
+/* Layout: one big card in the middle, a shape on top, giant answer buttons below. Single bright "playroom" look by choice. */
+:root {
+  --sky: #5ec8f2;
+  --sky2: #9be0fb;
+  --card: #fffdf6;
+  --ink: #23305a;
+  --sun: #ffc93c;
+  --good: #33c26b;
+  --bad: #ff6b6b;
+  --btn: #7b5cff;
+  --btn-dark: #5638d6;
+  --display: "Chewy", "Comic Sans MS", cursive;
+  --body: "Nunito", "Trebuchet MS", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 20% 10%, var(--sky2), var(--sky) 60%);
+  background-color: var(--sky);
+  color: var(--ink);
+  font-family: var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px;
+  display: flex; justify-content: center; align-items: flex-start;
+}
+.wrap { width: 100%; max-width: 560px; display: grid; gap: 14px; }
+header { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+h1 { font-family: var(--display); font-weight: 400; font-size: 2.2rem; margin: 0; color: #fff; text-shadow: 0 3px 0 var(--btn-dark); letter-spacing: 1px; }
+.stars { background: #fff; border-radius: 999px; padding: 6px 14px; font-weight: 900; font-size: 1.2rem; box-shadow: 0 4px 0 rgba(0,0,0,.12); }
+.progress { height: 14px; background: rgba(255,255,255,.55); border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; width: 0; background: var(--sun); border-radius: 999px; transition: width .4s; }
+.card { background: var(--card); border-radius: 28px; padding: 22px 20px 24px; box-shadow: 0 8px 0 rgba(35,48,90,.18); display: grid; gap: 16px; text-align: center; }
+.qnum { font-weight: 800; font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; opacity: .6; }
+.question { font-family: var(--display); font-size: 2rem; margin: 0; text-wrap: balance; line-height: 1.15; }
+.shape-box { display: flex; justify-content: center; }
+.shape-box svg { width: 100%; max-width: 300px; height: auto; }
+.answers { display: grid; gap: 12px; }
+.answers.two { grid-template-columns: 1fr 1fr; }
+.ans {
+  font-family: var(--display); font-size: 1.7rem; letter-spacing: .5px;
+  border: 0; border-radius: 18px; padding: 14px 10px; cursor: pointer;
+  color: #fff; background: var(--btn); box-shadow: 0 6px 0 var(--btn-dark);
+  transition: transform .1s, box-shadow .1s;
+}
+.ans:hover { transform: translateY(-2px); }
+.ans:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--btn-dark); }
+.ans:focus-visible { outline: 4px solid var(--sun); outline-offset: 3px; }
+.ans.right { background: var(--good); box-shadow: 0 6px 0 #22924f; }
+.ans.wrong { background: var(--bad); box-shadow: 0 6px 0 #c94848; }
+.ans:disabled { cursor: default; }
+.ans:disabled:not(.right):not(.wrong) { opacity: .4; }
+.big-choice { font-size: 2.2rem; padding: 22px 10px; }
+.ans.times { background: #ff9f1c; box-shadow: 0 6px 0 #d07a00; }
+.answers.tables { grid-template-columns: repeat(3, 1fr); }
+.quiz-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.mini { font-family: var(--body); font-weight: 900; font-size: .95rem; color: var(--ink); background: #eef1fb; border: 0; border-radius: 999px; padding: 8px 12px; cursor: pointer; box-shadow: 0 3px 0 rgba(35,48,90,.18); white-space: nowrap; }
+.mini:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(35,48,90,.18); }
+.mini:focus-visible { outline: 3px solid var(--btn); outline-offset: 2px; }
+@media (max-width: 420px) { .mini { font-size: .8rem; padding: 7px 9px; } .quiz-bar .qnum { font-size: .75rem; } }
+.help-btn { justify-self: center; font-family: var(--display); font-size: 1.5rem; color: var(--ink); background: #fff3c4; border: 3px dashed var(--sun); border-radius: 999px; padding: 8px 22px; cursor: pointer; }
+.help-btn:focus-visible { outline: 3px solid var(--btn); outline-offset: 3px; }
+.tip { background: #fff3c4; border-radius: 18px; padding: 14px 16px; font-size: 1.2rem; font-weight: 800; line-height: 1.4; }
+.ans.gone { opacity: .15 !important; text-decoration: line-through; }
+.tutor { background: #fff3c4; border-radius: 20px; padding: 14px 16px 16px; display: grid; gap: 10px; text-align: left; }
+.tutor-head { font-family: var(--display); font-size: 1.6rem; text-align: center; }
+.tsteps { margin: 0; padding-left: 1.6em; display: grid; gap: 8px; font-size: 1.2rem; font-weight: 800; line-height: 1.4; }
+.tsteps li.old { opacity: .55; }
+.tutor .next { font-size: 1.4rem; padding: 10px; }
+svg circle.lit { fill: #ffc93c; }
+.ans.pulse { animation: pulse 1s ease-in-out infinite; outline: 4px solid var(--sun); outline-offset: 3px; }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+.stack2 { display: inline-grid; justify-items: center; align-items: end; font-family: var(--body); font-weight: 900; font-size: 3.4rem; line-height: 1.15; font-variant-numeric: tabular-nums; padding: 18px 18px 6px; }
+.stack2 .op { color: var(--bad); padding-right: 14px; }
+.stack2 .line { grid-column: 1 / -1; justify-self: stretch; height: 6px; background: var(--ink); border-radius: 3px; margin-block: 4px; }
+.stack2 .res { color: var(--btn); }
+.stack2 .top { position: relative; }
+.stack2 .top s { opacity: .45; }
+.stack2 .now { position: absolute; top: -.55em; left: 50%; transform: translateX(-50%); font-size: .45em; color: var(--bad); white-space: nowrap; }
+.stack2 .hl { background: #fff3c4; border-radius: 8px; }
+@media (max-width: 420px) { .stack2 { font-size: 2.8rem; } }
+@media (prefers-reduced-motion: reduce) { .ans.pulse { animation: none; } }
+.pad { background: #fff3c4; border-radius: 20px; padding: 12px; display: grid; gap: 10px; }
+#padc { width: 100%; height: 320px; border-radius: 14px; touch-action: none; cursor: crosshair;
+  background-color: #fff; background-image: linear-gradient(#e6ecf7 1px, transparent 1px), linear-gradient(90deg, #e6ecf7 1px, transparent 1px);
+  background-size: 28px 28px; box-shadow: inset 0 0 0 3px #ffe08a; }
+.pad-tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.ink { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px rgba(35,48,90,.25); cursor: pointer; }
+.ink.on { box-shadow: 0 0 0 4px var(--ink); }
+.mini.on { background: var(--sun); }
+.hero { position: relative; background: linear-gradient(160deg, #e9e3ff, #d9f4ff); border-radius: 22px; padding: 18px 14px; overflow: hidden; }
+.floaty span { position: absolute; font-size: 1.6rem; opacity: .35; animation: floaty 6s ease-in-out infinite; }
+.floaty .f1 { left: 6%; top: 10%; color: #ff6b6b; }
+.floaty .f2 { right: 8%; top: 8%; color: #33c26b; animation-delay: -1.5s; }
+.floaty .f3 { left: 44%; bottom: 6%; color: #ff9f1c; animation-delay: -3s; }
+.floaty .f4 { right: 30%; top: 40%; color: #ffc93c; animation-delay: -4s; font-size: 1.2rem; }
+.floaty .f5 { left: 30%; top: 4%; color: #2ab7ca; animation-delay: -2s; font-size: 1.3rem; }
+@keyframes floaty { 50% { transform: translateY(-10px) rotate(12deg); } }
+.buddy-row { position: relative; display: flex; align-items: center; gap: 12px; text-align: left; }
+.buddy { width: 108px; flex: none; animation: bob 2.4s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+.wave { transform-origin: 98px 70px; animation: wave 1.2s ease-in-out infinite; }
+@keyframes wave { 50% { transform: rotate(-28deg); } }
+.bubble { position: relative; background: #fff; border-radius: 18px; padding: 12px 14px; font-weight: 800; font-size: 1.1rem; line-height: 1.35; box-shadow: 0 4px 0 rgba(35,48,90,.12); min-width: 0; }
+.bubble::before { content: ""; position: absolute; left: -10px; top: 50%; transform: translateY(-50%); border: 10px solid transparent; border-right-color: #fff; border-left: 0; }
+.bubble-hi { font-family: var(--display); font-size: 1.6rem; font-weight: 400; margin-bottom: 2px; }
+.menu-grid .big-choice { display: grid; justify-items: center; gap: 2px; }
+.big-choice .mi { font-size: 2rem; line-height: 1; margin-bottom: 4px; }
+.big-choice small { font-family: var(--body); font-weight: 800; font-size: .8rem; letter-spacing: 0; opacity: .92; }
+.howto { margin: 0; font-weight: 800; font-size: .95rem; opacity: .7; }
+@media (max-width: 420px) { .buddy { width: 84px; } .bubble { font-size: .98rem; } .bubble-hi { font-size: 1.3rem; } .big-choice small { font-size: .72rem; } }
+@media (prefers-reduced-motion: reduce) { .floaty span, .buddy, .wave { animation: none; } }
+.answers.menu-grid { grid-template-columns: 1fr 1fr; }
+.menu-grid .big-choice { font-size: 1.6rem; line-height: 1.3; padding: 18px 6px; }
+.ans.minus { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
+.ans.divide { background: #f15bb5; box-shadow: 0 6px 0 #c13a8c; }
+.stack { font-family: var(--body); font-weight: 900; font-size: 3.4rem; line-height: 1.1; text-align: right; font-variant-numeric: tabular-nums; display: inline-grid; gap: 2px; padding: 6px 18px; }
+.stack .op { margin-right: 14px; color: var(--bad); }
+.stack .line { height: 6px; background: var(--ink); border-radius: 3px; margin-block: 4px; }
+.stack .qm { color: var(--btn); }
+@media (max-width: 420px) { .menu-grid .big-choice { font-size: 1.25rem; } .stack { font-size: 2.8rem; } }
+.back { justify-self: center; font-family: var(--body); font-weight: 800; font-size: 1.1rem; background: none; border: 0; color: var(--ink); text-decoration: underline; cursor: pointer; padding: 6px 12px; }
+.back:focus-visible { outline: 3px solid var(--btn); border-radius: 8px; }
+.feedback { border-radius: 20px; padding: 16px; font-size: 1.25rem; font-weight: 800; line-height: 1.4; }
+.feedback.good { background: #dcf7e6; }
+.feedback.try { background: #fff0d6; }
+.feedback.bad { background: #ffe3e3; }
+.feedback .big { font-family: var(--display); font-weight: 400; font-size: 2rem; display: block; margin-bottom: 4px; }
+.next { font-family: var(--display); font-size: 1.8rem; border: 0; border-radius: 18px; padding: 14px; cursor: pointer; color: var(--ink); background: var(--sun); box-shadow: 0 6px 0 #d9a21a; }
+.next:focus-visible { outline: 4px solid var(--btn); outline-offset: 3px; }
+.end-stars { font-size: 3rem; letter-spacing: 6px; }
+.pop { animation: pop .35s ease-out; }
+@keyframes pop { 0% { transform: scale(.8); } 70% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.shake { animation: shake .4s; }
+@keyframes shake { 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-4px); } }
+#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+@media (prefers-reduced-motion: reduce) { .pop, .shake { animation: none; } .progress > div { transition: none; } }
+@media (max-width: 420px) { .question { font-size: 1.6rem; } .ans { font-size: 1.45rem; } h1 { font-size: 1.8rem; } }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <header>
+    <h1>Jayden's Quiz Quest</h1>
+    <div class="stars">⭐ <span id="score">0</span></div>
+  </header>
+  <div class="progress"><div id="bar"></div></div>
+  <main class="card" id="card"></main>
+</div>
+
+<script>
+const ROUND = 10;
+const COLORS = ["#ff6b6b", "#7b5cff", "#33c26b", "#ff9f1c", "#2ab7ca", "#f15bb5"];
+
+// regular shape points around the center of a 220 x 150 box
+function regular(n, r, startDeg) {
+  const p = [];
+  for (let k = 0; k < n; k++) {
+    const a = (startDeg + k * 360 / n) * Math.PI / 180;
+    p.push((110 + r * Math.cos(a)).toFixed(1) + "," + (75 + r * Math.sin(a)).toFixed(1));
+  }
+  return p.join(" ");
+}
+
+const SHAPES = {
+  circle:        { name: "Circle",        quad: false, sides: 0, round: "circle",
+                   why: "A circle is perfectly round, like a pizza. It has no straight sides and no corners." },
+  oval:          { name: "Oval",          quad: false, sides: 0, round: "oval",
+                   why: "An oval is round but stretched out, like an egg. It has no straight sides and no corners." },
+  triangle:      { name: "Triangle",      quad: false, sides: 3, pts: "110,10 200,135 20,135",
+                   why: "A triangle has 3 sides and 3 corners. \"Tri\" means 3, like a tricycle has 3 wheels!" },
+  square:        { name: "Square",        quad: true,  sides: 4, pts: "60,15 160,15 160,115 60,115",
+                   why: "A square has 4 sides that are all the same length, and 4 square corners." },
+  rectangle:     { name: "Rectangle",     quad: true,  sides: 4, pts: "20,30 200,30 200,115 20,115",
+                   why: "A rectangle has 4 square corners, with 2 long sides and 2 short sides, like a door." },
+  rhombus:       { name: "Rhombus",       quad: true,  sides: 4, pts: "110,8 180,75 110,142 40,75",
+                   why: "A rhombus has 4 sides that are all the same length, but it is tilted like a diamond. No square corners!" },
+  trapezoid:     { name: "Trapezoid",     quad: true,  sides: 4, pts: "70,25 150,25 205,120 15,120",
+                   why: "A trapezoid has 4 sides, but only 1 pair goes the same way. The top is short and the bottom is long." },
+  parallelogram: { name: "Parallelogram", quad: true,  sides: 4, pts: "60,25 205,25 160,120 15,120",
+                   why: "A parallelogram looks like a rectangle that got pushed over. Its opposite sides go the same way." },
+  pentagon:      { name: "Pentagon",      quad: false, sides: 5, pts: regular(5, 68, -90),
+                   why: "A pentagon has 5 sides and 5 corners. It looks like the shape of a house!" },
+  hexagon:       { name: "Hexagon",       quad: false, sides: 6, pts: regular(6, 68, 0),
+                   why: "A hexagon has 6 sides and 6 corners, just like the cells in a honeycomb." },
+  octagon:       { name: "Octagon",       quad: false, sides: 8, pts: regular(8, 68, 22.5),
+                   why: "An octagon has 8 sides and 8 corners, like a STOP sign. \"Oct\" means 8, like an octopus has 8 arms!" },
+};
+const ALL = Object.keys(SHAPES);
+const QUADS = ALL.filter(k => SHAPES[k].quad);
+const POLYS = ALL.filter(k => SHAPES[k].sides > 0);
+
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+function shapeSVG(key) {
+  const c = pick(COLORS), s = SHAPES[key];
+  const style = `fill="${c}" stroke="#23305a" stroke-width="5" stroke-linejoin="round"`;
+  const body = s.round === "circle" ? `<circle cx="110" cy="75" r="65" ${style}/>`
+             : s.round === "oval"   ? `<ellipse cx="110" cy="75" rx="95" ry="55" ${style}/>`
+             : `<polygon points="${s.pts}" ${style}/>`;
+  return `<svg viewBox="0 0 220 150" role="img" aria-label="a shape">${body}</svg>`;
+}
+
+const SHAPE_HINT = {
+  circle: "Look closely. Does it have any straight sides or corners? Is it perfectly round like a pizza?",
+  oval: "Is it round like a ball, or stretched out like an egg?",
+  triangle: "Count the sides. Remember: tri means 3, like a tricycle!",
+  square: "Count the sides. Are they all the same length? Are the corners square like a box?",
+  rectangle: "Are the corners square? Are all the sides the same, or are 2 long and 2 short?",
+  rhombus: "The sides look the same length, but are the corners square or slanted like a diamond?",
+  trapezoid: "Look at the top and the bottom. Are they the same length?",
+  parallelogram: "Does it look like a rectangle that got pushed over?",
+  pentagon: "Count the sides with your finger. It looks a little like a house!",
+  hexagon: "Count the sides with your finger. Think of a honeycomb!",
+  octagon: "Count the sides with your finger. Think of a STOP sign!",
+};
+
+const article = n => /^[AEIOU]/.test(n) ? "an " + n.toLowerCase() : "a " + n.toLowerCase();
+
+// Simple kinds of questions
+function makeName() {
+  const key = pick(ALL);
+  const wrongs = shuffle(ALL.filter(k => k !== key)).slice(0, 2);
+  return { shape: key, text: "What shape is this?",
+           options: shuffle([key, ...wrongs].map(k => SHAPES[k].name)),
+           answer: SHAPES[key].name, why: SHAPES[key].why, kind: "name", key };
+}
+function makeIsQuad() {
+  const key = Math.random() < 0.5 ? pick(QUADS) : pick(ALL.filter(k => !SHAPES[k].quad));
+  const s = SHAPES[key];
+  const why = s.quad
+    ? `Count the sides: 1, 2, 3, 4! It has 4 sides, so it IS a quadrilateral. "Quad" means 4.`
+    : s.sides === 0
+      ? `This is ${article(s.name)}. It has no straight sides at all! A quadrilateral must have exactly 4 straight sides.`
+      : `Count the sides: it has ${s.sides} sides. A quadrilateral must have exactly 4 sides, so this is NOT one. It is ${article(s.name)}.`;
+  return { shape: key, text: "Is this a quadrilateral?", options: ["Yes", "No"],
+           answer: s.quad ? "Yes" : "No", why, two: true, kind: "quad", key,
+           hint: "Quad means 4. Count the straight sides with your finger. Does it have exactly 4?" };
+}
+function makeSides() {
+  const key = pick(POLYS), n = SHAPES[key].sides;
+  const pool = shuffle([3, 4, 5, 6, 8].filter(x => x !== n)).slice(0, 2);
+  const count = Array.from({ length: n }, (_, k) => k + 1).join(", ");
+  return { shape: key, text: "How many sides does this shape have?",
+           options: shuffle([n, ...pool].map(String)), answer: String(n),
+           kind: "sides", key,
+           why: `Count them: ${count}! ${article(SHAPES[key].name).replace(/^./, c => c.toUpperCase())} has ${n} sides.` };
+}
+
+// Multiplication: a groups of b, shown as rows of dots
+function dotsSVG(a, b) {
+  const c = pick(COLORS), s = 26;
+  let dots = "";
+  for (let r = 0; r < a; r++) for (let k = 0; k < b; k++)
+    dots += `<circle data-r="${r}" data-k="${k}" cx="${k * s + s / 2}" cy="${r * s + s / 2}" r="9.5" fill="${c}" stroke="#23305a" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 ${b * s} ${a * s}" style="max-width:${Math.min(300, b * 34)}px;overflow:visible" role="img" aria-label="${a} rows of ${b} dots">${dots}</svg>`;
+}
+function makeTimes(table) {
+  const a = table || 2 + Math.floor(Math.random() * 9);
+  const b = 1 + Math.floor(Math.random() * 10);
+  const p = a * b;
+  const wrong = shuffle([...new Set([p + a, p - a, p + b, p - b, p + 1, p - 1, p + 10])]
+    .filter(x => x > 0 && x !== p)).slice(0, 2);
+  const groups = a === 1 ? "1 group" : `${a} groups`;
+  const add = a <= 10 ? Array(a).fill(b).join(" + ") + " = " + p : "";
+  return { shape: a + "x" + b, text: `What is ${a} × ${b}?`,
+           visual: dotsSVG(a, b), kind: "times", a, b,
+           options: shuffle([p, ...wrong].map(String)), answer: String(p),
+           hint: a > 2
+             ? `${a} × ${b} means ${a} rows of ${b}. Count the dots, or skip count by ${b}: ${b}, ${2 * b}, ... keep going until you count ${a} rows!`
+             : `${a} × ${b} means ${a} rows of ${b}. Count all the dots!`,
+           why: `${a} × ${b} means ${groups} of ${b}. Look at the dots: ${a} rows with ${b} in each row. ${add}` };
+}
+
+// Subtraction within 1000 (3rd grade), shown stacked like on paper
+const rnd = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
+function makeMinus() {
+  let a, b;
+  if (Math.random() < 0.5) { a = rnd(20, 99); b = rnd(10, a - 5); }
+  else { a = rnd(120, 999); b = rnd(20, a - 10); }
+  const d = a - b;
+  const wrong = shuffle([...new Set([d + 1, d - 1, d + 10, d - 10, d + 100, a + b])]
+    .filter(x => x > 0 && x !== d)).slice(0, 2);
+  return { shape: "m" + a + "-" + b, text: `What is ${a} − ${b}?`,
+           visual: stackHTML(a, b), kind: "minus", a, b,
+           options: shuffle([d, ...wrong].map(String)), answer: String(d),
+           hint: `Start with the ones place on the right. If the top number is smaller, borrow 10 from the next place. Or count up from ${b} to ${a}!`,
+           why: `${a} − ${b} = ${d}. Check it by adding back: ${b} + ${d} = ${a}. Adding back is a great way to check subtraction!` };
+}
+
+// Division: share into equal groups (facts up to 100)
+function makeDivide(div) {
+  const d = div || rnd(2, 10), q = rnd(1, 10), p = d * q;
+  const wrong = shuffle([...new Set([q + 1, q - 1, q + 2, d, p - d])]
+    .filter(x => x > 0 && x !== q)).slice(0, 2);
+  return { shape: "d" + p + "/" + d, text: `What is ${p} ÷ ${d}?`,
+           visual: dotsSVG(d, q), kind: "divide", d, q,
+           options: shuffle([q, ...wrong].map(String)), answer: String(q),
+           hint: `Count the dots in just ONE row. Or think: ${d} × what = ${p}?`,
+           why: `${p} ÷ ${d} means share ${p} into ${d} equal groups. Each row of dots is a group, and each group gets ${q}. Check: ${d} × ${q} = ${p}.` };
+}
+
+function buildRound(mode, table) {
+  const makers = mode === "times" ? [() => makeTimes(table)]
+               : mode === "minus" ? [makeMinus]
+               : mode === "divide" ? [() => makeDivide(table)]
+               : [makeName, makeName, makeName, makeSides, makeSides, makeIsQuad];
+  const qs = []; let last = "";
+  while (qs.length < ROUND) {
+    const q = pick(makers)();
+    if (q.shape + q.text === last) continue; // no two in a row the same
+    if (!q.visual) q.visual = shapeSVG(q.shape);
+    last = q.shape + q.text; qs.push(q);
+  }
+  return qs;
+}
+
+const card = document.getElementById("card");
+let qs, i, score, mode, table;
+
+function menu() {
+  document.getElementById("bar").style.width = "0%";
+  const h = new Date().getHours();
+  const hello = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  card.innerHTML = `
+    <div class="hero">
+      <div class="floaty" aria-hidden="true">
+        <span class="f1">▲</span><span class="f2">●</span><span class="f3">■</span><span class="f4">★</span><span class="f5">⬢</span>
+      </div>
+      <div class="buddy-row">
+        <svg class="buddy" viewBox="0 0 120 120" aria-label="Quinn the square, your quiz buddy">
+          <g class="wave"><rect x="92" y="38" width="12" height="34" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/></g>
+          <rect x="18" y="22" width="78" height="78" rx="16" fill="#7b5cff" stroke="#23305a" stroke-width="5"/>
+          <circle cx="42" cy="54" r="9" fill="#fff"/><circle cx="72" cy="54" r="9" fill="#fff"/>
+          <circle cx="44" cy="56" r="4.5" fill="#23305a"/><circle cx="74" cy="56" r="4.5" fill="#23305a"/>
+          <circle cx="32" cy="72" r="5" fill="#ff9ec7" opacity=".8"/><circle cx="84" cy="72" r="5" fill="#ff9ec7" opacity=".8"/>
+          <path d="M44 74 Q57 88 70 74" fill="none" stroke="#23305a" stroke-width="5" stroke-linecap="round"/>
+          <rect x="30" y="104" width="12" height="12" rx="4" fill="#23305a"/><rect x="72" y="104" width="12" height="12" rx="4" fill="#23305a"/>
+        </svg>
+        <div class="bubble pop">
+          <div class="bubble-hi">${hello}, Jayden! 👋</div>
+          I'm Quinn the Square. Let's learn and earn stars together!
+        </div>
+      </div>
+    </div>
+    <h2 class="question">What do you want to practice?</h2>
+    <div class="answers menu-grid">
+      <button class="ans big-choice" id="pick-shapes"><span class="mi">🔷</span>Shapes<small>Name shapes and count sides</small></button>
+      <button class="ans big-choice minus" id="pick-minus"><span class="mi">➖</span>Subtraction<small>Take away numbers</small></button>
+      <button class="ans big-choice times" id="pick-times"><span class="mi">✖️</span>Multiplication<small>Count groups of dots</small></button>
+      <button class="ans big-choice divide" id="pick-divide"><span class="mi">➗</span>Division<small>Share into equal groups</small></button>
+    </div>
+    <p class="howto">⭐ 10 questions each game &nbsp;·&nbsp; 💪 2 tries per question &nbsp;·&nbsp; 💡 Draw to help</p>`;
+  document.getElementById("pick-shapes").onclick = () => start("shapes");
+  document.getElementById("pick-minus").onclick = () => start("minus");
+  document.getElementById("pick-times").onclick = () => tableMenu("times");
+  document.getElementById("pick-divide").onclick = () => tableMenu("divide");
+}
+
+function tableMenu(m) {
+  const nums = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const isTimes = m === "times";
+  card.innerHTML = `
+    ${navBar("Pick a number")}
+    <h2 class="question pop">${isTimes ? "Which times table?" : "Divide by which number?"}</h2>
+    <div class="answers tables">
+      ${nums.map(n => `<button class="ans" data-t="${n}">${isTimes ? n + "s" : "÷ " + n}</button>`).join("")}
+    </div>
+    <button class="ans ${isTimes ? "times" : "divide"}" id="mix">🎲 Mix them all!</button>
+    ${helpBlock()}`;
+  wireHelp(isTimes
+    ? "Pick the times table you are learning in class, like the 2s or the 5s. Want a challenge? Tap Mix them all!"
+    : "Pick the number you want to divide by. If you know your 2s times table, try ÷ 2! Want a challenge? Tap Mix them all!");
+  card.querySelectorAll("[data-t]").forEach(b => b.onclick = () => start(m, +b.dataset.t));
+  document.getElementById("mix").onclick = () => start(m, 0);
+  wireNav(menu, () => tableMenu(m));
+}
+
+// Exit + Start over bar, shown on every screen after the start screen
+function navBar(label) {
+  return `<div class="quiz-bar">
+      <button class="mini" id="quit">🏠 Exit</button>
+      <div class="qnum">${label}</div>
+      <button class="mini" id="restart">🔄 Start over</button>
+    </div>`;
+}
+function wireNav(onExit, onRestart) {
+  document.getElementById("quit").onclick = () => { stopConfetti(); onExit(); };
+  document.getElementById("restart").onclick = () => { stopConfetti(); onRestart(); };
+}
+
+// ---------- Help me walkthrough ----------
+const NS = "http://www.w3.org/2000/svg";
+const cap = w => w[0].toUpperCase() + w.slice(1);
+function stackHTML(a, b) {
+  const n = String(a).length, A = String(a).padStart(n, " "), B = String(b).padStart(n, " ");
+  const col = i => n - 1 - i;
+  return `<div class="stack2" style="grid-template-columns:auto repeat(${n},0.72em)">`
+    + `<span></span>` + [...A].map((c, i) => `<span class="top" data-c="${col(i)}">${c.trim()}</span>`).join("")
+    + `<span class="op">−</span>` + [...B].map((c, i) => `<span data-c="${col(i)}">${c.trim()}</span>`).join("")
+    + `<span class="line"></span>`
+    + `<span></span>` + Array.from({ length: n }, (_, i) => `<span class="res" data-c="${col(i)}">?</span>`).join("")
+    + `</div>`;
+}
+function polyPts(key) { return SHAPES[key].pts.split(" ").map(p => p.split(",").map(Number)); }
+function markSide(box, key, idx) {
+  const svg = box.querySelector("svg"); svg.style.overflow = "visible";
+  const P = polyPts(key), A = P[idx], B = P[(idx + 1) % P.length];
+  const ln = document.createElementNS(NS, "line");
+  [["x1", A[0]], ["y1", A[1]], ["x2", B[0]], ["y2", B[1]], ["stroke", "#ffc93c"], ["stroke-width", 10], ["stroke-linecap", "round"]]
+    .forEach(([k, v]) => ln.setAttribute(k, v));
+  svg.appendChild(ln);
+  const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2;
+  const g = document.createElementNS(NS, "g");
+  g.innerHTML = `<circle cx="${mx}" cy="${my}" r="13" fill="#fff" stroke="#23305a" stroke-width="3"/>
+    <text x="${mx}" y="${my + 6}" text-anchor="middle" font-size="17" font-weight="900" fill="#23305a" font-family="Nunito, sans-serif">${idx + 1}</text>`;
+  svg.appendChild(g);
+}
+function litRows(box, upto) { box.querySelectorAll("circle[data-r]").forEach(c => c.classList.toggle("lit", +c.dataset.r < upto)); }
+function numberRow(box, row) {
+  const svg = box.querySelector("svg");
+  box.querySelectorAll(`circle[data-r="${row}"]`).forEach((c, k) => {
+    const t = document.createElementNS(NS, "text");
+    t.setAttribute("x", c.getAttribute("cx")); t.setAttribute("y", +c.getAttribute("cy") + 4.5);
+    t.setAttribute("text-anchor", "middle"); t.setAttribute("font-size", "12"); t.setAttribute("font-weight", "900");
+    t.setAttribute("fill", "#23305a"); t.textContent = k + 1; svg.appendChild(t);
+  });
+}
+
+const QUAD_CLUES = {
+  square: ["Look at the corners. They are all square corners, like the corner of a book.", "Now look at the sides. All 4 sides are the same length!"],
+  rectangle: ["Look at the corners. They are all square corners, like a door.", "Now look at the sides. 2 sides are long and 2 sides are short."],
+  rhombus: ["Look at the sides. All 4 sides are the same length.", "But the corners are slanted, not square. It looks like a diamond!"],
+  trapezoid: ["Look at the top and the bottom. The top is short and the bottom is long.", "Only the top and bottom go the same way. That's the trapezoid clue!"],
+  parallelogram: ["Look at the corners. They are slanted, not square.", "It looks like a rectangle that got pushed over, and the opposite sides go the same way."],
+};
+const OTHER_CLUES = {
+  triangle: "3 sides! Tri means 3, like a tricycle.",
+  pentagon: "5 sides! A shape with 5 sides is a pentagon. Penta means 5.",
+  hexagon: "6 sides! A shape with 6 sides is a hexagon, like a honeycomb.",
+  octagon: "8 sides! Oct means 8, like an octopus has 8 arms.",
+};
+
+function buildSteps(q) {
+  const tap = `Tap <b>${q.answer}</b> up above!`;
+  const S = (say, act) => ({ say, act });
+  if (q.kind === "times") {
+    const { a, b } = q, st = [S(`${a} × ${b} means <b>${a} rows</b> with <b>${b} dots</b> in each row. Let's count one row at a time!`)];
+    for (let r = 1; r <= a; r++)
+      st.push(S(r === 1 ? `Row 1: ${b}` : `Row ${r}: ${b * (r - 1)} + ${b} = <b>${b * r}</b>`, box => litRows(box, r)));
+    st.push(S(`${a} rows of ${b} makes <b>${a * b}</b>! ${tap}`));
+    return st;
+  }
+  if (q.kind === "divide") {
+    const { d, q: k } = q, p = d * k;
+    return [
+      S(`${p} ÷ ${d} means share ${p} dots into <b>${d} equal groups</b>. Each row is one group.`),
+      S(`Let's count the dots in just the first group.`, box => { litRows(box, 1); numberRow(box, 0); }),
+      S(`The first group has <b>${k}</b> dots. Every group gets the same amount!`),
+      S(`Check it: ${d} groups × ${k} = ${p}. ✓`, box => litRows(box, d)),
+      S(`So ${p} ÷ ${d} = <b>${k}</b>! ${tap}`),
+    ];
+  }
+  if (q.kind === "minus") {
+    const { a, b } = q, n = String(a).length;
+    const da = [...String(a)].reverse().map(Number), db = [...String(b)].reverse().map(Number);
+    const cur = da.slice(), place = ["ones", "tens", "hundreds"];
+    const st = [S(`Let's subtract one place at a time, starting on the <b>right</b> with the ones.`)];
+    for (let c = 0; c < n; c++) {
+      let top = cur[c]; const bot = db[c];
+      const changes = [];
+      let say = `<b>${cap(place[c])}:</b> `;
+      if (bot === undefined) {
+        say += top === 0 ? `There is 0 left here, so we don't need to write anything.` : `Nothing to take away from ${top}, so it stays <b>${top}</b>.`;
+      } else if (top < bot) {
+        const j = c + 1;
+        if (cur[j] === 0) {
+          cur[j + 1] -= 1; cur[j] = 9; changes.push([j + 1, cur[j + 1]], [j, cur[j]]);
+          say += `${top} is smaller than ${bot}. The ${place[j]} has 0, so we borrow from the ${place[j + 1]}. The 0 becomes 9.`;
+        } else {
+          cur[j] -= 1; changes.push([j, cur[j]]);
+          say += `${top} is smaller than ${bot}, so we borrow 1 from the ${place[j]}. It goes from ${cur[j] + 1} to ${cur[j]}.`;
+        }
+        top += 10; cur[c] = top; changes.push([c, top]);
+        say += ` Now we have ${top}. ${top} − ${bot} = <b>${top - bot}</b>.`;
+      } else {
+        say += `${top} − ${bot} = <b>${top - bot}</b>.`;
+      }
+      const res = top - (bot || 0), shown = (c === n - 1 && res === 0 && n > 1) ? "" : res;
+      const snap = changes.slice();
+      st.push(S(say, box => {
+        box.querySelectorAll("[data-c]").forEach(e => e.classList.toggle("hl", +e.dataset.c === c));
+        snap.forEach(([j, v]) => { const e = box.querySelector(`.top[data-c="${j}"]`); e.innerHTML = `<s>${da[j]}</s><b class="now">${v}</b>`; });
+        box.querySelector(`.res[data-c="${c}"]`).textContent = shown;
+      }));
+    }
+    st.push(S(`Check it by adding back: ${b} + ${a - b} = ${a}. ✓ So the answer is <b>${a - b}</b>! ${tap}`,
+      box => box.querySelectorAll("[data-c]").forEach(e => e.classList.remove("hl"))));
+    return st;
+  }
+  // shapes
+  const s = SHAPES[q.key], n = s.sides;
+  const countSteps = () => Array.from({ length: n }, (_, k) =>
+    S(k === 0 ? "That's side 1." : `Side ${k + 1}!`, box => markSide(box, q.key, k)));
+  if (q.kind === "sides")
+    return [S("Let's count the sides together. Watch for the yellow numbers!"), ...countSteps(), S(`We counted <b>${n}</b> sides! ${tap}`)];
+  if (q.kind === "quad") {
+    if (!n) return [S("Trace around the edge with your finger. Do you feel any straight sides?"),
+                    S("It's curvy all the way around! It has <b>0</b> straight sides and no corners."),
+                    S(`A quadrilateral needs exactly 4 straight sides. So the answer is <b>No</b>! ${tap}`)];
+    return [S("Quad means 4. Let's count the sides!"), ...countSteps(),
+      S(`It has ${n} sides. ${n === 4 ? "That's exactly 4, so it IS a quadrilateral" : "That's not 4, so it is NOT a quadrilateral"}! ${tap}`)];
+  }
+  // name
+  if (!n) return [S("Look at the edge. No straight sides and no corners, so it's a round shape."),
+    S(q.key === "circle" ? "Is it perfectly round like a pizza, or stretched out like an egg? It's perfectly round!" : "Is it perfectly round like a pizza, or stretched out like an egg? It's stretched out like an egg!"),
+    S(`So it's ${article(s.name)}! ${tap}`)];
+  const st = [S("Let's count the sides first!", box => { for (let k = 0; k < n; k++) markSide(box, q.key, k); }),
+              S(`It has <b>${n}</b> sides.`)];
+  if (s.quad) { st.push(S("4 sides means it's a quadrilateral! Now let's find out which kind.")); QUAD_CLUES[q.key].forEach(t => st.push(S(t))); }
+  else st.push(S(OTHER_CLUES[q.key]));
+  st.push(S(`So it's ${article(s.name)}! ${tap}`));
+  return st;
+}
+
+// Scratch pad: a blank page to draw on while solving
+function wirePad() {
+  const btn = document.getElementById("help");
+  btn.onclick = () => {
+    btn.hidden = true;
+    const inks = ["#23305a", "#ff6b6b", "#33c26b", "#7b5cff"];
+    document.getElementById("tip").innerHTML = `<div class="pad pop">
+        <div class="tutor-head">✏️ Draw to help you think!</div>
+        <canvas id="padc" aria-label="drawing space"></canvas>
+        <div class="pad-tools">
+          ${inks.map((c, k) => `<button class="ink${k ? "" : " on"}" data-ink="${c}" style="background:${c}" aria-label="pen color"></button>`).join("")}
+          <button class="mini" id="eraser">🧽 Eraser</button>
+          <button class="mini" id="clear">🗑️ Clear</button>
+          <button class="mini" id="closepad">✖ Close</button>
+        </div></div>`;
+    const cv = document.getElementById("padc"), ctx = cv.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    cv.width = cv.clientWidth * dpr; cv.height = cv.clientHeight * dpr;
+    ctx.scale(dpr, dpr); ctx.lineCap = "round"; ctx.lineJoin = "round";
+    let ink = inks[0], erase = false, drawing = false, last = null;
+    const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    cv.onpointerdown = e => { drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); dot(last); };
+    cv.onpointermove = e => { if (!drawing) return; const p = pos(e); line(last, p); last = p; };
+    cv.onpointerup = cv.onpointercancel = () => { drawing = false; };
+    function style() {
+      ctx.globalCompositeOperation = erase ? "destination-out" : "source-over";
+      ctx.strokeStyle = ctx.fillStyle = ink; ctx.lineWidth = erase ? 26 : 5;
+    }
+    function dot(p) { style(); ctx.beginPath(); ctx.arc(p[0], p[1], ctx.lineWidth / 2, 0, 7); ctx.fill(); }
+    function line(a, b) { style(); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); }
+    const tools = document.querySelectorAll(".ink, #eraser");
+    document.querySelectorAll(".ink").forEach(b => b.onclick = () => {
+      tools.forEach(t => t.classList.remove("on")); b.classList.add("on"); ink = b.dataset.ink; erase = false; });
+    document.getElementById("eraser").onclick = e => {
+      tools.forEach(t => t.classList.remove("on")); e.currentTarget.classList.add("on"); erase = true; };
+    document.getElementById("clear").onclick = () => ctx.clearRect(0, 0, cv.width, cv.height);
+    document.getElementById("closepad").onclick = () => { document.getElementById("tip").innerHTML = ""; btn.hidden = false; };
+  };
+}
+
+function wireTutor(q) {
+  const btn = document.getElementById("help");
+  btn.onclick = () => {
+    btn.hidden = true;
+    const steps = buildSteps(q), box = card.querySelector(".shape-box");
+    document.getElementById("tip").innerHTML = `<div class="tutor pop">
+        <div class="tutor-head">💡 Let's do it together!</div>
+        <ol class="tsteps" id="tsteps"></ol>
+        <button class="next" id="tnext">Next step ➜</button></div>`;
+    let k = 0;
+    const next = () => {
+      const st = steps[k];
+      if (st.act) st.act(box);
+      document.querySelectorAll("#tsteps li").forEach(x => x.classList.add("old"));
+      const li = document.createElement("li"); li.className = "pop"; li.innerHTML = st.say;
+      document.getElementById("tsteps").appendChild(li);
+      k++;
+      const nb = document.getElementById("tnext");
+      if (k >= steps.length) {
+        nb.hidden = true;
+        const ab = [...card.querySelectorAll(".ans")].find(b => b.dataset.a === q.answer);
+        if (ab && !ab.disabled) ab.classList.add("pulse");
+      } else nb.textContent = `Next step ➜  (${k + 1} of ${steps.length})`;
+    };
+    document.getElementById("tnext").onclick = next;
+    next();
+  };
+}
+
+// Help me button: shows a tip, and on a question also takes away one wrong answer
+function helpBlock() {
+  return `<button class="help-btn" id="help">💡 Help me</button><div id="tip"></div>`;
+}
+function wireHelp(text, onUse) {
+  const b = document.getElementById("help");
+  b.onclick = () => {
+    document.getElementById("tip").innerHTML = `<div class="tip pop">💡 ${text}</div>`;
+    b.hidden = true;
+    if (onUse) onUse();
+  };
+}
+
+function start(m, t) {
+  if (m) { mode = m; table = t; }
+  qs = buildRound(mode, table); i = 0; score = 0;
+  document.getElementById("score").textContent = 0;
+  show();
+}
+
+function show() {
+  document.getElementById("bar").style.width = (i / ROUND * 100) + "%";
+  const q = qs[i];
+  card.innerHTML = `
+    ${navBar(`Question ${i + 1} of ${ROUND}`)}
+    <h2 class="question">${q.text}</h2>
+    <div class="shape-box pop">${q.visual}</div>
+    <div class="answers ${q.two ? "two" : ""}">
+      ${q.options.map(o => `<button class="ans" data-a="${o}">${o}</button>`).join("")}
+    </div>
+    ${helpBlock()}
+    <div id="fb"></div>`;
+  card.querySelectorAll(".ans").forEach(b => b.onclick = () => answer(b));
+  wirePad();
+  wireNav(menu, () => start());
+}
+
+const CHEERS = ["Awesome!", "You got it!", "Super smart!", "Way to go!", "Nailed it!", "Shape master!"];
+
+function answer(btn) {
+  const q = qs[i];
+  const ok = btn.dataset.a === q.answer;
+  // First wrong try: second chance, no answer shown yet
+  if (!ok && !q.tried) {
+    q.tried = true;
+    btn.classList.add("wrong"); btn.disabled = true;
+    document.getElementById("fb").innerHTML = `<div class="feedback try pop"><span class="big">Not quite! Try again 💪</span>You get one more chance. Tap 💡 Help me if you want me to walk you through it.</div>`;
+    card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 400);
+    beep(false);
+    return;
+  }
+  card.querySelectorAll(".ans").forEach(b => {
+    b.disabled = true;
+    if (b.dataset.a === q.answer) b.classList.add("right");
+  });
+  const tn = document.getElementById("tnext"); if (tn) tn.hidden = true;
+  card.querySelectorAll(".pulse").forEach(b => b.classList.remove("pulse"));
+  const fb = document.getElementById("fb");
+  if (ok) {
+    score++; document.getElementById("score").textContent = score;
+    const cheer = q.tried ? "You got it on the second try! 🎉" : "🎉 " + pick(CHEERS);
+    fb.innerHTML = `<div class="feedback good pop"><span class="big">${cheer}</span>${q.why}</div>`;
+    beep(true); confetti(40);
+  } else {
+    btn.classList.add("wrong");
+    fb.innerHTML = `<div class="feedback bad pop"><span class="big">Good try! The answer is ${q.answer}</span>${q.why}</div>`;
+    card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 400);
+    beep(false);
+  }
+  fb.insertAdjacentHTML("beforeend", `<button class="next" id="next">${i + 1 < ROUND ? "Next ➜" : "See my stars!"}</button>`);
+  const nb = document.getElementById("next");
+  nb.onclick = () => { i++; i < ROUND ? show() : finish(); };
+  nb.focus();
+}
+
+function finish() {
+  document.getElementById("bar").style.width = "100%";
+  const n = score >= 9 ? 3 : score >= 6 ? 2 : 1;
+  const champ = "You are a " + ({ times: "Multiplication", minus: "Subtraction", divide: "Division" }[mode] || "Shape") + " Champion!";
+  const msg = score >= 9 ? champ : score >= 6 ? "Great job, Jayden!" : "Good try! Let's play again!";
+  card.innerHTML = `
+    ${navBar("All done!")}
+    <div class="end-stars pop">${"⭐".repeat(n)}</div>
+    <h2 class="question">${msg}</h2>
+    <p style="font-size:1.4rem;font-weight:900;margin:0">You got ${score} out of ${ROUND} right!</p>
+    <button class="next" id="again">🔄 Start over</button>
+    <button class="ans times" id="other">🏠 Exit and pick something else</button>
+    ${helpBlock()}`;
+  wireHelp("Tap Start over to play the same game again with new questions. Tap Exit to go back and pick something new to practice!");
+  document.getElementById("again").onclick = () => { stopConfetti(); start(); };
+  document.getElementById("other").onclick = () => { stopConfetti(); menu(); };
+  wireNav(menu, () => start());
+  confetti(score >= 6 ? 160 : 60);
+}
+
+// little sounds
+let ac;
+function beep(good) {
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const notes = good ? [523, 659, 784] : [300, 220];
+    notes.forEach((f, k) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = "triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(.15, ac.currentTime + k * .1);
+      g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + k * .1 + .25);
+      o.connect(g).connect(ac.destination);
+      o.start(ac.currentTime + k * .1); o.stop(ac.currentTime + k * .1 + .3);
+    });
+  } catch (e) {}
+}
+
+// confetti
+const cv = document.getElementById("confetti"), cx = cv.getContext("2d");
+let bits = [], running = false;
+function confetti(n) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  cv.width = innerWidth; cv.height = innerHeight;
+  for (let k = 0; k < n; k++) bits.push({ x: Math.random() * cv.width, y: -20 - Math.random() * 200,
+    vx: (Math.random() - .5) * 4, vy: 2 + Math.random() * 4, s: 6 + Math.random() * 8,
+    r: Math.random() * 6, c: pick(COLORS.concat(["#ffc93c"])), four: Math.random() < .5 });
+  if (!running) { running = true; requestAnimationFrame(tick); }
+}
+function stopConfetti() { bits = []; }
+function tick() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  bits.forEach(b => {
+    b.x += b.vx; b.y += b.vy; b.r += .1;
+    cx.save(); cx.translate(b.x, b.y); cx.rotate(b.r); cx.fillStyle = b.c;
+    b.four ? cx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s) : cx.fillRect(-b.s, -b.s / 3, b.s * 2, b.s / 1.5);
+    cx.restore();
+  });
+  bits = bits.filter(b => b.y < cv.height + 30);
+  if (bits.length) requestAnimationFrame(tick); else { running = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
+
+menu();
+</script>
+</body>
+</html>
