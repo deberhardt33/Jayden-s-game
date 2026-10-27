@@ -151,7 +151,7 @@ svg circle.lit { fill: #ffc93c; }
 @keyframes talk { to { transform: scaleY(2.6); } }
 .robot .bulb { animation: bulb 1.6s ease-in-out infinite; }
 @keyframes bulb { 50% { fill: #ffc93c; } }
-.robot .wave { transform-origin: 113px 100px; }
+.robot .wave { transform-origin: 107px 100px; }
 .intro .buddy { width: 130px; }
 .caret { animation: caret 1s steps(1) infinite; color: var(--btn); }
 @keyframes caret { 50% { opacity: 0; } }
@@ -379,20 +379,28 @@ function buildRound(mode, table) {
 const card = document.getElementById("card");
 let qs, i, score, mode, table;
 
-const BUDDY = `<svg class="buddy robot" viewBox="0 0 140 160" aria-label="Bolt the robot, your computer sidekick">
-  <line x1="70" y1="10" x2="70" y2="28" stroke="#23305a" stroke-width="5" stroke-linecap="round"/>
-  <circle class="bulb" cx="70" cy="10" r="8" fill="#ff6b6b" stroke="#23305a" stroke-width="3"/>
-  <rect x="10" y="52" width="14" height="30" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/>
-  <rect x="116" y="52" width="14" height="30" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/>
-  <rect x="20" y="26" width="100" height="82" rx="20" fill="#d6e3ff" stroke="#23305a" stroke-width="5"/>
-  <rect x="32" y="38" width="76" height="56" rx="12" fill="#23305a"/>
-  <g class="eyes"><rect x="46" y="51" width="14" height="17" rx="5" fill="#5ef2e0"/><rect x="80" y="51" width="14" height="17" rx="5" fill="#5ef2e0"/></g>
-  <rect class="mouth" x="56" y="77" width="28" height="6" rx="3" fill="#5ef2e0"/>
-  <rect x="58" y="106" width="24" height="8" fill="#23305a"/>
-  <g class="arm-l"><rect x="20" y="118" width="14" height="32" rx="7" fill="#d6e3ff" stroke="#23305a" stroke-width="4"/></g>
-  <g class="wave"><rect x="106" y="96" width="14" height="32" rx="7" fill="#d6e3ff" stroke="#23305a" stroke-width="4"/></g>
-  <rect x="36" y="112" width="68" height="44" rx="14" fill="#7b5cff" stroke="#23305a" stroke-width="5"/>
-  <circle class="core" cx="70" cy="132" r="8" fill="#ffc93c" stroke="#23305a" stroke-width="3"/>
+const BUDDY = `<svg class="buddy robot" viewBox="0 0 140 160" aria-label="Foxy Fox, your computer sidekick">
+  <path d="M98 146 Q142 140 132 96 Q122 122 94 126 Z" fill="#ff8a3d" stroke="#23305a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M120 128 Q134 124 132 104 Q127 116 114 120 Z" fill="#fff"/>
+  <polygon points="26,52 34,6 64,36" fill="#ff8a3d" stroke="#23305a" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="114,52 106,6 76,36" fill="#ff8a3d" stroke="#23305a" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="34,40 37,18 52,34" fill="#23305a" opacity=".85"/>
+  <polygon points="106,40 103,18 88,34" fill="#23305a" opacity=".85"/>
+  <ellipse cx="70" cy="64" rx="48" ry="40" fill="#ff8a3d" stroke="#23305a" stroke-width="5"/>
+  <path d="M24 70 Q70 124 116 70 Q94 86 70 82 Q46 86 24 70 Z" fill="#fff"/>
+  <g class="eyes"><ellipse cx="52" cy="60" rx="5.5" ry="7.5" fill="#23305a"/><ellipse cx="88" cy="60" rx="5.5" ry="7.5" fill="#23305a"/></g>
+  <circle cx="54" cy="57" r="2" fill="#fff"/><circle cx="90" cy="57" r="2" fill="#fff"/>
+  <ellipse cx="70" cy="80" rx="7" ry="5" fill="#23305a"/>
+  <rect class="mouth" x="63" y="89" width="14" height="4" rx="2" fill="#23305a"/>
+  <path d="M22 62 Q22 14 70 14 Q118 14 118 62" fill="none" stroke="#23305a" stroke-width="6" stroke-linecap="round"/>
+  <rect x="12" y="52" width="16" height="24" rx="7" fill="#5ef2e0" stroke="#23305a" stroke-width="4"/>
+  <rect x="112" y="52" width="16" height="24" rx="7" fill="#5ef2e0" stroke="#23305a" stroke-width="4"/>
+  <path d="M20 74 Q24 96 48 96" fill="none" stroke="#23305a" stroke-width="4" stroke-linecap="round"/>
+  <circle class="bulb" cx="50" cy="96" r="4.5" fill="#ff6b6b" stroke="#23305a" stroke-width="2.5"/>
+  <g class="arm-l"><rect x="26" y="112" width="14" height="30" rx="7" fill="#ff8a3d" stroke="#23305a" stroke-width="4"/></g>
+  <g class="wave"><rect x="100" y="96" width="14" height="30" rx="7" fill="#ff8a3d" stroke="#23305a" stroke-width="4"/></g>
+  <ellipse cx="70" cy="132" rx="32" ry="26" fill="#ff8a3d" stroke="#23305a" stroke-width="5"/>
+  <ellipse cx="70" cy="136" rx="17" ry="18" fill="#fff"/>
 </svg>`;
 
 let welcomed = false;
@@ -444,10 +452,10 @@ function splash() {
   document.getElementById("go").onclick = () => { jingle(); intro(); };
 }
 
-// Bolt the robot introduces himself, one line at a time
+// Foxy Fox introduces himself, one line at a time
 function intro() {
   const lines = [
-    "Hey Jayden! I'm Bolt, your computer sidekick.",
+    "Hey Jayden! I'm Foxy Fox, your computer sidekick.",
     "I loaded 4 missions for you: Shapes, Subtraction, Multiplication, and Division.",
     "Every right answer earns you a star. If a problem is tricky, you get a second try, and you can use the drawing pad to work it out.",
     "Ready to play, Jayden?",
@@ -457,7 +465,7 @@ function intro() {
     <div class="hero intro">
       <div class="buddy-row">
         ${BUDDY}
-        <div class="bubble"><div class="bubble-hi">BOLT</div><span id="say"></span><span class="caret">▍</span></div>
+        <div class="bubble"><div class="bubble-hi">FOXY FOX</div><span id="say"></span><span class="caret">▍</span></div>
       </div>
     </div>
     <button class="next" id="inext">Next ➜</button>
@@ -480,7 +488,7 @@ function intro() {
   setTimeout(sayLine, 500);
 }
 
-// speak and move Bolt's mouth until he finishes
+// speak and move Foxy's mouth until he finishes
 function talk(text, robot) {
   const stop = () => robot && robot.classList.remove("talking");
   if (robot) robot.classList.add("talking");
