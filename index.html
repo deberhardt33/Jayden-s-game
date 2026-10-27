@@ -134,6 +134,16 @@ svg circle.lit { fill: #ffc93c; }
 .howto { margin: 0; font-weight: 800; font-size: .95rem; opacity: .7; }
 @media (max-width: 420px) { .buddy { width: 84px; } .bubble { font-size: .98rem; } .bubble-hi { font-size: 1.3rem; } .big-choice small { font-size: .72rem; } }
 @media (prefers-reduced-motion: reduce) { .floaty span, .buddy, .wave { animation: none; } }
+.top-right { display: flex; align-items: center; gap: 8px; }
+.sound { font-size: 1.3rem; background: #fff; border: 0; border-radius: 999px; width: 44px; height: 40px; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,.12); }
+.sound:focus-visible { outline: 3px solid var(--btn); outline-offset: 2px; }
+.splash { display: grid; justify-items: center; gap: 4px; padding-block: 26px 22px; }
+.splash-buddy { position: relative; }
+.splash-buddy .buddy { width: 150px; }
+.splash-title { position: relative; font-family: var(--display); font-weight: 400; font-size: 3rem; margin: 0; color: var(--btn-dark); }
+.splash-sub { position: relative; margin: 0; font-weight: 900; font-size: 1.2rem; }
+.big-start { font-size: 2.2rem; padding: 18px; animation: pulse 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .big-start { animation: none; } }
 .answers.menu-grid { grid-template-columns: 1fr 1fr; }
 .menu-grid .big-choice { font-size: 1.6rem; line-height: 1.3; padding: 18px 6px; }
 .ans.minus { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
@@ -167,7 +177,7 @@ svg circle.lit { fill: #ffc93c; }
 <div class="wrap">
   <header>
     <h1>Jayden's Quiz Quest</h1>
-    <div class="stars">⭐ <span id="score">0</span></div>
+    <div class="top-right"><button class="sound" id="sound" aria-label="Sound on or off">🔊</button><div class="stars">⭐ <span id="score">0</span></div></div>
   </header>
   <div class="progress"><div id="bar"></div></div>
   <main class="card" id="card"></main>
@@ -344,7 +354,19 @@ function buildRound(mode, table) {
 const card = document.getElementById("card");
 let qs, i, score, mode, table;
 
+const BUDDY = `<svg class="buddy" viewBox="0 0 120 120" aria-label="Quinn the square, your quiz buddy">
+          <g class="wave"><rect x="92" y="38" width="12" height="34" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/></g>
+          <rect x="18" y="22" width="78" height="78" rx="16" fill="#7b5cff" stroke="#23305a" stroke-width="5"/>
+          <circle cx="42" cy="54" r="9" fill="#fff"/><circle cx="72" cy="54" r="9" fill="#fff"/>
+          <circle cx="44" cy="56" r="4.5" fill="#23305a"/><circle cx="74" cy="56" r="4.5" fill="#23305a"/>
+          <circle cx="32" cy="72" r="5" fill="#ff9ec7" opacity=".8"/><circle cx="84" cy="72" r="5" fill="#ff9ec7" opacity=".8"/>
+          <path d="M44 74 Q57 88 70 74" fill="none" stroke="#23305a" stroke-width="5" stroke-linecap="round"/>
+          <rect x="30" y="104" width="12" height="12" rx="4" fill="#23305a"/><rect x="72" y="104" width="12" height="12" rx="4" fill="#23305a"/>
+        </svg>`;
+
+let welcomed = false;
 function menu() {
+  if (welcomed) { chime(); speak("Welcome back, Jayden! What do you want to practice?"); }
   document.getElementById("bar").style.width = "0%";
   const h = new Date().getHours();
   const hello = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
@@ -354,15 +376,7 @@ function menu() {
         <span class="f1">▲</span><span class="f2">●</span><span class="f3">■</span><span class="f4">★</span><span class="f5">⬢</span>
       </div>
       <div class="buddy-row">
-        <svg class="buddy" viewBox="0 0 120 120" aria-label="Quinn the square, your quiz buddy">
-          <g class="wave"><rect x="92" y="38" width="12" height="34" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/></g>
-          <rect x="18" y="22" width="78" height="78" rx="16" fill="#7b5cff" stroke="#23305a" stroke-width="5"/>
-          <circle cx="42" cy="54" r="9" fill="#fff"/><circle cx="72" cy="54" r="9" fill="#fff"/>
-          <circle cx="44" cy="56" r="4.5" fill="#23305a"/><circle cx="74" cy="56" r="4.5" fill="#23305a"/>
-          <circle cx="32" cy="72" r="5" fill="#ff9ec7" opacity=".8"/><circle cx="84" cy="72" r="5" fill="#ff9ec7" opacity=".8"/>
-          <path d="M44 74 Q57 88 70 74" fill="none" stroke="#23305a" stroke-width="5" stroke-linecap="round"/>
-          <rect x="30" y="104" width="12" height="12" rx="4" fill="#23305a"/><rect x="72" y="104" width="12" height="12" rx="4" fill="#23305a"/>
-        </svg>
+        ${BUDDY}
         <div class="bubble pop">
           <div class="bubble-hi">${hello}, Jayden! 👋</div>
           I'm Quinn the Square. Let's learn and earn stars together!
@@ -381,6 +395,24 @@ function menu() {
   document.getElementById("pick-minus").onclick = () => start("minus");
   document.getElementById("pick-times").onclick = () => tableMenu("times");
   document.getElementById("pick-divide").onclick = () => tableMenu("divide");
+}
+
+function splash() {
+  card.innerHTML = `
+    <div class="hero splash">
+      <div class="floaty" aria-hidden="true">
+        <span class="f1">▲</span><span class="f2">●</span><span class="f3">■</span><span class="f4">★</span><span class="f5">⬢</span>
+      </div>
+      <div class="splash-buddy">${BUDDY}</div>
+      <h2 class="splash-title">Quiz Quest</h2>
+      <p class="splash-sub">Made just for Jayden!</p>
+    </div>
+    <button class="next big-start pop" id="go">▶ Tap to start!</button>`;
+  document.getElementById("go").onclick = () => {
+    jingle();
+    setTimeout(() => speak("Hi Jayden! Welcome to Quiz Quest! I'm Quinn the Square. Let's learn and have fun!"), 700);
+    menu(); welcomed = true;
+  };
 }
 
 function tableMenu(m) {
@@ -714,8 +746,45 @@ function finish() {
 }
 
 // little sounds
-let ac;
+let ac, soundOn = true;
+try { soundOn = localStorage.getItem("qq-sound") !== "off"; } catch (e) {}
+function sndBtn() { const b = document.getElementById("sound"); b.textContent = soundOn ? "🔊" : "🔇"; }
+sndBtn();
+document.getElementById("sound").onclick = () => {
+  soundOn = !soundOn; sndBtn();
+  try { localStorage.setItem("qq-sound", soundOn ? "on" : "off"); } catch (e) {}
+  if (!soundOn && window.speechSynthesis) speechSynthesis.cancel();
+};
+function tones(list) {
+  if (!soundOn) return;
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    if (ac.state === "suspended") ac.resume();
+    list.forEach(([f, t, len, type]) => {
+      const o = ac.createOscillator(), g = ac.createGain(), at = ac.currentTime + t;
+      o.type = type || "triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.18, at + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, at + len);
+      o.connect(g).connect(ac.destination); o.start(at); o.stop(at + len + 0.05);
+    });
+  } catch (e) {}
+}
+// happy welcome tune: C E G C, then a sparkle
+function jingle() {
+  tones([[523, 0, .25], [659, .15, .25], [784, .3, .25], [1047, .45, .5], [1319, .8, .18, "sine"], [1568, .9, .18, "sine"], [2093, 1.0, .4, "sine"]]);
+}
+function chime() { tones([[784, 0, .2], [1047, .12, .35]]); }
+function speak(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.95; u.pitch = 1.25; u.lang = "en-US";
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
 function beep(good) {
+  if (!soundOn) return;
   try {
     ac = ac || new (window.AudioContext || window.webkitAudioContext)();
     const notes = good ? [523, 659, 784] : [300, 220];
@@ -754,7 +823,7 @@ function tick() {
   if (bits.length) requestAnimationFrame(tick); else { running = false; cx.clearRect(0, 0, cv.width, cv.height); }
 }
 
-menu();
+splash();
 </script>
 </body>
 </html>
