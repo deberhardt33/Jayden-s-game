@@ -144,6 +144,31 @@ svg circle.lit { fill: #ffc93c; }
 .splash-sub { position: relative; margin: 0; font-weight: 900; font-size: 1.2rem; }
 .big-start { font-size: 2.2rem; padding: 18px; animation: pulse 1.4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .big-start { animation: none; } }
+.robot .eyes, .robot .mouth { transform-box: fill-box; transform-origin: center; }
+.robot .eyes { animation: blink 4.5s infinite; }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+.robot.talking .mouth { animation: talk .22s ease-in-out infinite alternate; }
+@keyframes talk { to { transform: scaleY(2.6); } }
+.robot .bulb { animation: bulb 1.6s ease-in-out infinite; }
+@keyframes bulb { 50% { fill: #ffc93c; } }
+.robot .wave { transform-origin: 113px 100px; }
+.intro .buddy { width: 130px; }
+.caret { animation: caret 1s steps(1) infinite; color: var(--btn); }
+@keyframes caret { 50% { opacity: 0; } }
+.screen { position: relative; overflow: hidden; background: #1b2347; border: 6px solid #23305a; border-radius: 24px; padding: 26px 16px 22px; color: #e8f4ff; display: grid; justify-items: center; gap: 6px; box-shadow: inset 0 0 40px rgba(94,242,224,.18); }
+.scan { position: absolute; inset: 0; background: repeating-linear-gradient(transparent 0 3px, rgba(255,255,255,.04) 3px 4px); pointer-events: none; }
+.p1 { font-weight: 900; letter-spacing: .3em; font-size: .9rem; color: #5ef2e0; }
+.pname { font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 14vw, 4.6rem); margin: 0; letter-spacing: .06em; line-height: 1; }
+.pname span { display: inline-block; animation: hop .6s ease-out both; }
+.pname span:nth-child(6n+1) { color: #ff6b6b; } .pname span:nth-child(6n+2) { color: #ffc93c; } .pname span:nth-child(6n+3) { color: #33c26b; }
+.pname span:nth-child(6n+4) { color: #5ef2e0; } .pname span:nth-child(6n+5) { color: #a08bff; } .pname span:nth-child(6n) { color: #ff9f1c; }
+@keyframes hop { from { transform: translateY(-14px); } }
+.ptitle { font-family: var(--display); font-size: 1.6rem; letter-spacing: .08em; color: #fff; }
+.load { width: min(260px, 80%); height: 12px; border-radius: 999px; background: rgba(255,255,255,.12); overflow: hidden; margin-top: 8px; }
+.load > div { height: 100%; width: 100%; background: linear-gradient(90deg, #5ef2e0, #7b5cff); border-radius: 999px; animation: fill 1.4s ease-out both; }
+@keyframes fill { from { width: 8%; } }
+.loadtxt { font-weight: 800; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: #9fb4d8; }
+@media (prefers-reduced-motion: reduce) { .robot .eyes, .robot.talking .mouth, .robot .bulb, .caret, .pname span, .load > div { animation: none; } }
 .answers.menu-grid { grid-template-columns: 1fr 1fr; }
 .menu-grid .big-choice { font-size: 1.6rem; line-height: 1.3; padding: 18px 6px; }
 .ans.minus { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
@@ -354,19 +379,25 @@ function buildRound(mode, table) {
 const card = document.getElementById("card");
 let qs, i, score, mode, table;
 
-const BUDDY = `<svg class="buddy" viewBox="0 0 120 120" aria-label="Quinn the square, your quiz buddy">
-          <g class="wave"><rect x="92" y="38" width="12" height="34" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/></g>
-          <rect x="18" y="22" width="78" height="78" rx="16" fill="#7b5cff" stroke="#23305a" stroke-width="5"/>
-          <circle cx="42" cy="54" r="9" fill="#fff"/><circle cx="72" cy="54" r="9" fill="#fff"/>
-          <circle cx="44" cy="56" r="4.5" fill="#23305a"/><circle cx="74" cy="56" r="4.5" fill="#23305a"/>
-          <circle cx="32" cy="72" r="5" fill="#ff9ec7" opacity=".8"/><circle cx="84" cy="72" r="5" fill="#ff9ec7" opacity=".8"/>
-          <path d="M44 74 Q57 88 70 74" fill="none" stroke="#23305a" stroke-width="5" stroke-linecap="round"/>
-          <rect x="30" y="104" width="12" height="12" rx="4" fill="#23305a"/><rect x="72" y="104" width="12" height="12" rx="4" fill="#23305a"/>
-        </svg>`;
+const BUDDY = `<svg class="buddy robot" viewBox="0 0 140 160" aria-label="Bolt the robot, your computer sidekick">
+  <line x1="70" y1="10" x2="70" y2="28" stroke="#23305a" stroke-width="5" stroke-linecap="round"/>
+  <circle class="bulb" cx="70" cy="10" r="8" fill="#ff6b6b" stroke="#23305a" stroke-width="3"/>
+  <rect x="10" y="52" width="14" height="30" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/>
+  <rect x="116" y="52" width="14" height="30" rx="6" fill="#7b5cff" stroke="#23305a" stroke-width="4"/>
+  <rect x="20" y="26" width="100" height="82" rx="20" fill="#d6e3ff" stroke="#23305a" stroke-width="5"/>
+  <rect x="32" y="38" width="76" height="56" rx="12" fill="#23305a"/>
+  <g class="eyes"><rect x="46" y="51" width="14" height="17" rx="5" fill="#5ef2e0"/><rect x="80" y="51" width="14" height="17" rx="5" fill="#5ef2e0"/></g>
+  <rect class="mouth" x="56" y="77" width="28" height="6" rx="3" fill="#5ef2e0"/>
+  <rect x="58" y="106" width="24" height="8" fill="#23305a"/>
+  <g class="arm-l"><rect x="20" y="118" width="14" height="32" rx="7" fill="#d6e3ff" stroke="#23305a" stroke-width="4"/></g>
+  <g class="wave"><rect x="106" y="96" width="14" height="32" rx="7" fill="#d6e3ff" stroke="#23305a" stroke-width="4"/></g>
+  <rect x="36" y="112" width="68" height="44" rx="14" fill="#7b5cff" stroke="#23305a" stroke-width="5"/>
+  <circle class="core" cx="70" cy="132" r="8" fill="#ffc93c" stroke="#23305a" stroke-width="3"/>
+</svg>`;
 
 let welcomed = false;
-function menu() {
-  if (welcomed) { chime(); speak("Welcome back, Jayden! What do you want to practice?"); }
+function menu(first) {
+  if (welcomed && !first) chime();
   document.getElementById("bar").style.width = "0%";
   const h = new Date().getHours();
   const hello = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
@@ -378,12 +409,12 @@ function menu() {
       <div class="buddy-row">
         ${BUDDY}
         <div class="bubble pop">
-          <div class="bubble-hi">${hello}, Jayden! 👋</div>
-          I'm Quinn the Square. Let's learn and earn stars together!
+          <div class="bubble-hi">${hello}, Jayden!</div>
+          Pick a mission and let's play.
         </div>
       </div>
     </div>
-    <h2 class="question">What do you want to practice?</h2>
+    <h2 class="question">Choose your mission</h2>
     <div class="answers menu-grid">
       <button class="ans big-choice" id="pick-shapes"><span class="mi">🔷</span>Shapes<small>Name shapes and count sides</small></button>
       <button class="ans big-choice minus" id="pick-minus"><span class="mi">➖</span>Subtraction<small>Take away numbers</small></button>
@@ -391,6 +422,7 @@ function menu() {
       <button class="ans big-choice divide" id="pick-divide"><span class="mi">➗</span>Division<small>Share into equal groups</small></button>
     </div>
     <p class="howto">⭐ 10 questions each game &nbsp;·&nbsp; 💪 2 tries per question &nbsp;·&nbsp; 💡 Draw to help</p>`;
+  if (welcomed) talk(first ? "Awesome! Pick a mission." : "Welcome back, Jayden! Pick a mission.", card.querySelector(".robot"));
   document.getElementById("pick-shapes").onclick = () => start("shapes");
   document.getElementById("pick-minus").onclick = () => start("minus");
   document.getElementById("pick-times").onclick = () => tableMenu("times");
@@ -398,21 +430,69 @@ function menu() {
 }
 
 function splash() {
+  const name = "JAYDEN".split("").map((c, k) => `<span style="animation-delay:${k * .08}s">${c}</span>`).join("");
   card.innerHTML = `
-    <div class="hero splash">
-      <div class="floaty" aria-hidden="true">
-        <span class="f1">▲</span><span class="f2">●</span><span class="f3">■</span><span class="f4">★</span><span class="f5">⬢</span>
-      </div>
-      <div class="splash-buddy">${BUDDY}</div>
-      <h2 class="splash-title">Quiz Quest</h2>
-      <p class="splash-sub">Made just for Jayden!</p>
+    <div class="screen">
+      <div class="scan" aria-hidden="true"></div>
+      <div class="p1">PLAYER 1</div>
+      <h2 class="pname" aria-label="Jayden">${name}</h2>
+      <div class="ptitle">Quiz Quest</div>
+      <div class="load"><div></div></div>
+      <div class="loadtxt">4 missions loaded · Grade 3</div>
     </div>
-    <button class="next big-start pop" id="go">▶ Tap to start!</button>`;
-  document.getElementById("go").onclick = () => {
-    jingle();
-    setTimeout(() => speak("Hi Jayden! Welcome to Quiz Quest! I'm Quinn the Square. Let's learn and have fun!"), 700);
-    menu(); welcomed = true;
+    <button class="next big-start" id="go">▶ Press Start</button>`;
+  document.getElementById("go").onclick = () => { jingle(); intro(); };
+}
+
+// Bolt the robot introduces himself, one line at a time
+function intro() {
+  const lines = [
+    "Hey Jayden! I'm Bolt, your computer sidekick.",
+    "I loaded 4 missions for you: Shapes, Subtraction, Multiplication, and Division.",
+    "Every right answer earns you a star. If a problem is tricky, you get a second try, and you can use the drawing pad to work it out.",
+    "Ready to play, Player 1?",
+  ];
+  let k = 0;
+  card.innerHTML = `
+    <div class="hero intro">
+      <div class="buddy-row">
+        ${BUDDY}
+        <div class="bubble"><div class="bubble-hi">BOLT</div><span id="say"></span><span class="caret">▍</span></div>
+      </div>
+    </div>
+    <button class="next" id="inext">Next ➜</button>
+    <button class="back" id="skip">Skip intro</button>`;
+  const robot = card.querySelector(".robot"), out = document.getElementById("say"), nb = document.getElementById("inext");
+  let typer;
+  const sayLine = () => {
+    const t = lines[k];
+    clearInterval(typer); out.textContent = "";
+    robot.classList.add("talking");
+    let n = 0;
+    typer = setInterval(() => { out.textContent = t.slice(0, ++n); if (n >= t.length) clearInterval(typer); }, 28);
+    talk(t, robot);
+    const last = k === lines.length - 1;
+    nb.textContent = last ? "Let's go! 🎮" : "Next ➜";
   };
+  const done = () => { clearInterval(typer); welcomed = true; menu(true); };
+  nb.onclick = () => { k++; k < lines.length ? sayLine() : done(); };
+  document.getElementById("skip").onclick = done;
+  setTimeout(sayLine, 500);
+}
+
+// speak and move Bolt's mouth until he finishes
+function talk(text, robot) {
+  const stop = () => robot && robot.classList.remove("talking");
+  if (robot) robot.classList.add("talking");
+  if (!soundOn || !window.speechSynthesis) { setTimeout(stop, text.length * 45); return; }
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1; u.pitch = 1.1; u.lang = "en-US";
+    u.onend = stop; u.onerror = stop;
+    speechSynthesis.speak(u);
+    setTimeout(stop, text.length * 90);
+  } catch (e) { stop(); }
 }
 
 function tableMenu(m) {
@@ -698,7 +778,7 @@ function answer(btn) {
     btn.classList.add("wrong"); btn.disabled = true;
     document.getElementById("fb").innerHTML = `<div class="feedback try pop"><span class="big">Not quite! Try again 💪</span>You get one more chance. Tap 💡 Help me if you want me to walk you through it.</div>`;
     card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 400);
-    beep(false);
+    beep(false); speak("Not quite. Try again!");
     return;
   }
   card.querySelectorAll(".ans").forEach(b => {
@@ -712,10 +792,11 @@ function answer(btn) {
     score++; document.getElementById("score").textContent = score;
     const cheer = q.tried ? "You got it on the second try! 🎉" : "🎉 " + pick(CHEERS);
     fb.innerHTML = `<div class="feedback good pop"><span class="big">${cheer}</span>${q.why}</div>`;
-    beep(true); confetti(40);
+    beep(true); confetti(40); speak(cheer.replace(/🎉/g, ""));
   } else {
     btn.classList.add("wrong");
     fb.innerHTML = `<div class="feedback bad pop"><span class="big">Good try! The answer is ${q.answer}</span>${q.why}</div>`;
+    speak("Good try! The answer is " + q.answer);
     card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 400);
     beep(false);
   }
