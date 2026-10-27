@@ -811,7 +811,12 @@ function answer(btn) {
   fb.insertAdjacentHTML("beforeend", `<button class="next" id="next">${i + 1 < ROUND ? "Next ➜" : "See my stars!"}</button>`);
   const nb = document.getElementById("next");
   nb.onclick = () => { i++; i < ROUND ? show() : finish(); };
-  nb.focus();
+  nb.focus({ preventScroll: true });
+  // bring the explanation and Next button into view automatically
+  setTimeout(() => {
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    fb.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "end" });
+  }, 150);
 }
 
 function finish() {
