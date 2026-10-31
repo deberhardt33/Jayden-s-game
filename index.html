@@ -274,6 +274,8 @@ svg circle.lit { fill: #ffc93c; }
 .wait-dots { margin: 0; font-weight: 900; font-size: 1.2rem; }
 .wait-dots span { animation: caret 1.2s infinite; }
 .wait-dots span:nth-child(2) { animation-delay: .2s; } .wait-dots span:nth-child(3) { animation-delay: .4s; }
+.mnote { background: #e6f7ee; border-radius: 14px; padding: 10px 12px; font-weight: 800; font-size: 1.05rem; line-height: 1.35; }
+.mnote.differs { background: #fff3c4; border: 3px solid var(--sun); }
 .demo-note { margin: 0; font-size: .85rem; font-weight: 800; background: #fff3c4; border-radius: 12px; padding: 8px 10px; }
 .mini-spacer { width: 1px; }
 .mp-head { display: grid; gap: 6px; }
@@ -302,7 +304,11 @@ svg circle.lit { fill: #ffc93c; }
 .srow .spts { font-variant-numeric: tabular-nums; }
 .delta { font-size: .9rem; color: #8a93ad; font-variant-numeric: tabular-nums; }
 .delta.up { color: #22924f; }
-.nextin { margin: 0; font-weight: 900; opacity: .7; }
+.total-line { display: block; margin-top: 6px; font-family: var(--display); font-size: 1.35rem; color: var(--btn-dark); }
+.scores.withd .srow { grid-template-columns: 44px minmax(0, 1fr) 104px 84px; }
+.scores.withd .delta, .scores.withd .spts { text-align: right; }
+.srow.shead { background: none; border: 0; padding: 0 12px; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; opacity: .65; }
+.srow.shead span:nth-child(3), .srow.shead span:nth-child(4) { text-align: right; }
 .final-sub { margin: 0; font-weight: 900; font-size: 1.15rem; }
 .pin-dots { display: flex; justify-content: center; gap: 14px; }
 .pin-dots span { width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--btn); }
@@ -313,6 +319,13 @@ svg circle.lit { fill: #ffc93c; }
 @media (orientation: landscape) and (min-width: 700px) {
   .card.quiz > .mp-head { grid-area: bar; }
   .card.mp.quiz .shape-box svg { max-height: 48vh; max-height: 48dvh; }
+  .card.mp .small-q { font-size: 1.35rem; }
+  .card.mp .reveal-ans .ans { padding: 6px 10px; font-size: 1.2rem; }
+  .card.mp .feedback { padding: 10px 14px; font-size: 1.1rem; }
+  .card.mp .feedback .big { font-size: 1.6rem; }
+  .card.mp .total-line { font-size: 1.15rem; margin-top: 2px; }
+  .card.mp .srow { padding: 5px 12px; }
+  .card.mp .sub { font-size: 1.3rem; }
   .count-grid { grid-template-columns: repeat(4, 1fr); }
   .answers.level-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -441,9 +454,9 @@ function dotsSVG(a, b) {
     dots += `<circle data-r="${r}" data-k="${k}" cx="${k * s + s / 2}" cy="${r * s + s / 2}" r="9.5" fill="${c}" stroke="#23305a" stroke-width="2"/>`;
   return `<svg viewBox="0 0 ${b * s} ${a * s}" style="max-width:${Math.min(300, b * 34)}px;overflow:visible" role="img" aria-label="${a} rows of ${b} dots">${dots}</svg>`;
 }
-function makeTimes(table) {
+function makeTimes(table, lo = 1, hi = 10) {
   const a = table || 2 + Math.floor(Math.random() * 9);
-  const b = 1 + Math.floor(Math.random() * 10);
+  const b = lo + Math.floor(Math.random() * (hi - lo + 1));
   const p = a * b;
   const wrong = shuffle([...new Set([p + a, p - a, p + b, p - b, p + 1, p - 1, p + 10])]
     .filter(x => x > 0 && x !== p)).slice(0, 2);
@@ -476,8 +489,8 @@ function makeMinus(a, b) {
 }
 
 // Division: share into equal groups (facts up to 100)
-function makeDivide(div) {
-  const d = div || rnd(2, 10), q = rnd(1, 10), p = d * q;
+function makeDivide(div, lo = 1, hi = 10) {
+  const d = div || rnd(2, 10), q = rnd(lo, hi), p = d * q;
   const wrong = shuffle([...new Set([q + 1, q - 1, q + 2, d, p - d])]
     .filter(x => x > 0 && x !== q)).slice(0, 2);
   return { shape: "d" + p + "/" + d, text: `What is ${p} ÷ ${d}?`,
@@ -1061,18 +1074,18 @@ const CONFIG = {
   ROOM_PASSWORD: "foxy",    // password you share with the people you invite
   FIREBASE: null,           // paste the Firebase web app settings here to play across devices
   Q_TIME: 20,               // seconds per question
-  REVEAL_TIME: 6,           // seconds to show the answer and the scores
 };
 if (window.QQ_FIREBASE_OVERRIDE) CONFIG.FIREBASE = window.QQ_FIREBASE_OVERRIDE; // used only for testing
+const READY_MS = 3400; // the 3, 2, 1 countdown before each question, plus a moment for every device to catch up
 const SPEED = Math.max(1, +(new URLSearchParams(location.search).get("speed") || 1)); // used only for testing
 
 const MISSION_NAMES = { shapes: "Shapes", minus: "Subtraction", times: "Multiplication", divide: "Division" };
 const MISSION_ICONS = { shapes: "🔷", minus: "➖", times: "✖️", divide: "➗" };
 const LEVEL_NAMES = { easy: "Easy", normal: "Normal", hard: "Hard" };
 const LEVELS = {
-  minus: { easy: "2 digit numbers, no borrowing", normal: "2 digit numbers with borrowing", hard: "3 digit numbers with borrowing" },
-  times: { easy: "The 2s, 5s and 10s", normal: "The 2s through the 10s", hard: "Mostly the 6s, 7s, 8s and 9s" },
-  divide: { easy: "Divide by 2, 5 and 10", normal: "Divide by 2 through 10", hard: "Mostly divide by 6, 7, 8 and 9" },
+  minus: { easy: "Small numbers, no borrowing (like 37 − 5)", normal: "2 digit numbers with borrowing (like 52 − 27)", hard: "3 digit numbers with borrowing (like 503 − 178)" },
+  times: { easy: "The 2s, 5s and 10s, times 1 to 5", normal: "The 2s, 3s, 4s, 5s and 10s", hard: "The 6s, 7s, 8s and 9s" },
+  divide: { easy: "Divide by 2, 5 and 10, answers up to 5", normal: "Divide by 2, 3, 4, 5 and 10", hard: "Divide by 6, 7, 8 and 9" },
 };
 
 function recall(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -1089,17 +1102,20 @@ function toast(msg) {
 }
 
 // ---------- difficulty levels ----------
-function levelTable(level) {
-  if (level === "easy") return pick([2, 5, 10]);
-  if (level === "hard") return Math.random() < 0.8 ? pick([6, 7, 8, 9]) : rnd(2, 10);
-  return rnd(2, 10);
-}
+// Easy: small facts. Normal: regular 3rd grade facts. Hard: the tough facts.
+const LEVEL_FACTS = {
+  easy: { tables: [2, 5, 10], lo: 1, hi: 5 },
+  normal: { tables: [2, 3, 4, 5, 10], lo: 1, hi: 10 },
+  hard: { tables: [6, 7, 8, 9], lo: 2, hi: 10 },
+};
 function minusAt(level) {
   let a, b;
   const borrow = (x, y) => x % 10 < y % 10 || Math.floor(x / 10) % 10 < Math.floor(y / 10) % 10;
   if (level === "easy") {
-    const ta = rnd(2, 9), oa = rnd(1, 9), tb = rnd(1, ta - 1), ob = rnd(0, oa);
-    a = ta * 10 + oa; b = tb * 10 + ob;
+    const ta = rnd(1, 4), oa = rnd(2, 9);
+    a = ta * 10 + oa;
+    if (ta >= 2 && Math.random() < 0.4) b = rnd(1, ta - 1) * 10 + rnd(0, oa - 1); // like 35 − 12
+    else b = rnd(1, oa);                                                         // like 37 − 5
   } else if (level === "hard") {
     do { a = rnd(200, 999); b = rnd(100, a - 11); } while (!borrow(a, b));
   } else {
@@ -1108,8 +1124,9 @@ function minusAt(level) {
   return makeMinus(a, b);
 }
 function levelMaker(mission, level) {
-  if (mission === "times") return () => makeTimes(levelTable(level));
-  if (mission === "divide") return () => makeDivide(levelTable(level));
+  const f = LEVEL_FACTS[level] || LEVEL_FACTS.normal;
+  if (mission === "times") return () => makeTimes(pick(f.tables), f.lo, f.hi);
+  if (mission === "divide") return () => makeDivide(pick(f.tables), f.lo, f.hi);
   if (mission === "minus") return () => minusAt(level);
   return () => pick([makeName, makeName, makeName, makeSides, makeSides, makeIsQuad])();
 }
@@ -1306,7 +1323,7 @@ async function hostOpen(m, level, n) {
   const g = (await Net.get(rp("game"))) || {};
   const upd = {
     host: { online: true },
-    game: { status: "lobby", mission: m, level: level || "", count: n, qTime: CONFIG.Q_TIME / SPEED, reveal: CONFIG.REVEAL_TIME / SPEED, round: (g.round || 0) + 1 },
+    game: { status: "lobby", mission: m, level: level || "", count: n, qTime: CONFIG.Q_TIME / SPEED, round: (g.round || 0) + 1 },
     answers: null,
     "players/jayden": { name: "Jayden", admin: true, joined: Net.now(), score: 0, in: true },
   };
@@ -1365,7 +1382,7 @@ function guestJoin(m, err) {
     await Net.set(rp("players/" + pid), me);
     Net.disconnectRemove(rp("players/" + pid));
     store("qq-name", name); store("qq-room", pass);
-    enterRoom(freshMP({ pid, name }));
+    enterRoom(freshMP({ pid, name, picked: m }));
   };
 }
 
@@ -1444,15 +1461,17 @@ function tick() {
       if (fb) fb.innerHTML = `<div class="feedback try pop"><span class="big">⏰ Time's up!</span>Let's see the answer…</div>`;
     }
   }
-  const nx = document.getElementById("nextin");
-  if (nx && g.status === "reveal") {
-    const s = Math.max(0, Math.ceil((g.revealEnd - Net.now()) / 1000));
-    nx.textContent = g.qi + 1 < g.count ? `Next question in ${s}…` : `Final scores in ${s}…`;
-  }
-  const rd = document.getElementById("readyn");
-  if (rd) rd.textContent = Math.max(1, Math.ceil((g.qStart - Net.now()) / 1000));
+  readyTick(g);
   const paused = !MP.isHost && MP.state.host && MP.state.host.online === false && ["question", "reveal", "lobby"].includes(g.status);
   document.getElementById("pause").hidden = !paused;
+}
+
+// the big 3, 2, 1 before each question
+function readyTick(g) {
+  const rd = document.getElementById("readyn");
+  if (!rd) return;
+  const n = Math.min(3, Math.max(1, Math.ceil((g.qStart - Net.now()) / (1000 / SPEED))));
+  if (rd.textContent !== String(n)) { rd.textContent = n; rd.classList.remove("pop"); void rd.offsetWidth; rd.classList.add("pop"); tones([[n === 1 ? 784 : 587, 0, .12]]); }
 }
 
 // the host's computer runs the game clock and the scoring
@@ -1475,14 +1494,20 @@ function hostLoop() {
         upd[`players/${pid}/last`] = { pts, ok, a: a ? String(a.a) : "" };
       });
       upd["game/status"] = "reveal";
-      upd["game/revealEnd"] = now + g.reveal * 1000;
       Net.update(rp(), upd);
     }
-  } else if (g.status === "reveal" && now >= g.revealEnd) {
-    const k = `${g.round}_${g.qi}`;
-    if (MP.lastAdv === k) return;
-    MP.lastAdv = k;
-    if (g.qi + 1 < g.count) Net.update(rp("game"), { status: "question", qi: g.qi + 1, qStart: now + 1500 / SPEED });
+  }
+}
+
+// Jayden taps Next to move everyone on
+function hostNext() {
+  const s = MP.state, g = s.game, players = s.players || {}, now = Net.now();
+  if (!g || g.status !== "reveal") return;
+  const k = `${g.round}_${g.qi}`;
+  if (MP.lastAdv === k) return;
+  MP.lastAdv = k;
+  {
+    if (g.qi + 1 < g.count) Net.update(rp("game"), { status: "question", qi: g.qi + 1, qStart: now + READY_MS / SPEED });
     else {
       const upd = { "game/status": "final" };
       for (const pid in players) if (pid !== "jayden") upd[`players/${pid}/again`] = players[pid].in ? "pending" : "yes";
@@ -1491,22 +1516,30 @@ function hostLoop() {
   }
 }
 
+// questions for a multiplayer game: no repeats while new ones are left, never the same one twice in a row
+function buildMpList(mission, level, count) {
+  const maker = levelMaker(mission, level), list = [], same = (x, q) => x.text === q.text && x.key === q.key;
+  let tries = 0;
+  while (list.length < count) {
+    const q = stripQ(maker()); tries++;
+    const prev = list[list.length - 1];
+    if (prev && same(prev, q)) continue;
+    if (tries < 300 && list.some(x => same(x, q))) continue;
+    list.push(q);
+  }
+  return list;
+}
+
 async function hostStart() {
   const s = MP.state, g = s.game, players = s.players || {};
   const btn = document.getElementById("startbtn"); if (btn) btn.disabled = true;
-  const maker = levelMaker(g.mission, g.level);
-  let list = [], tries = 0;
-  while (list.length < g.count && tries++ < 400) {
-    const q = maker();
-    if (list.some(x => x.text === q.text && x.key === q.key && x.a === q.a && x.b === q.b && x.d === q.d)) continue;
-    list.push(stripQ(q));
-  }
+  const list = buildMpList(g.mission, g.level, g.count);
   const upd = { answers: null };
   for (const pid in players) {
     if (players[pid].again === "pending") { upd["players/" + pid] = null; continue; }
     Object.assign(upd, { [`players/${pid}/in`]: true, [`players/${pid}/score`]: 0, [`players/${pid}/last`]: null, [`players/${pid}/again`]: null });
   }
-  Object.assign(upd, { "game/status": "question", "game/questions": JSON.stringify(list), "game/qi": 0, "game/qStart": Net.now() + 3000 / SPEED, "game/round": (g.round || 0) + 1 });
+  Object.assign(upd, { "game/status": "question", "game/questions": JSON.stringify(list), "game/qi": 0, "game/qStart": Net.now() + READY_MS / SPEED, "game/round": (g.round || 0) + 1 });
   MP.finalSnap = null;
   await Net.update(rp(), upd);
 }
@@ -1567,6 +1600,7 @@ function rLobby() {
         ${MP.isHost ? "Players show up below as they join. Tap Start when everyone is in." : "You're in Jayden's room. The game starts when Jayden taps Start."}</div>
     </div>
     <div id="msum">${missionLine(g)}</div>
+    ${MP.isHost ? "" : `<div class="mnote" id="mnote" hidden></div>`}
     ${MP.isHost && g.mission ? `<div class="rules" id="rules"></div>` : ""}
     <h3 class="sub">Players in the room <span id="pcount"></span></h3>
     <div class="plist" id="plist"></div>
@@ -1588,9 +1622,9 @@ function rReady() {
   card.innerHTML = `
     ${mpBar(`Question ${g.qi + 1} of ${g.count}`, true)}
     <div class="board" id="board"></div>
-    <div class="ready pop"><p>Get ready!</p><div class="ready-n" id="readyn">3</div><p class="ready-sub">${MISSION_ICONS[g.mission]} ${MISSION_NAMES[g.mission]}${g.level ? " · " + LEVEL_NAMES[g.level] : ""}</p></div>`;
+    <div class="ready pop"><p>Get ready!</p><div class="ready-n" id="readyn"></div><p class="ready-sub">${MISSION_ICONS[g.mission]} ${MISSION_NAMES[g.mission]}${g.level ? " · " + LEVEL_NAMES[g.level] : ""}</p></div>`;
   wireMpBar();
-  if (g.qi === 0) chime();
+  readyTick(g);
 }
 function rQuestion() {
   card.classList.add("quiz");
@@ -1633,6 +1667,8 @@ function rReveal() {
   if (last.ok) head = `<span class="big">🎉 Correct! +${fmt(last.pts)} points</span>`;
   else if (last.a) head = `<span class="big">Good try! The answer is ${esc(q.answer)}</span>`;
   else head = `<span class="big">⏰ Time ran out. The answer is ${esc(q.answer)}</span>`;
+  head += `<span class="total-line">Your total: ${fmt(me.score)} points</span>`;
+  const lastQ = g.qi + 1 >= g.count;
   card.innerHTML = `
     ${mpBar(`Question ${g.qi + 1} of ${g.count}`, true)}
     <h2 class="question small-q">${esc(q.text)}</h2>
@@ -1640,19 +1676,23 @@ function rReveal() {
       ${q.options.map(o => `<div class="ans ${o === q.answer ? "right" : (o === last.a ? "wrong" : "dim")}">${esc(o)}</div>`).join("")}
     </div>
     <div class="feedback ${last.ok ? "good" : "bad"} pop">${head}${esc(q.why)}</div>
-    <h3 class="sub">Scores</h3>
-    <div class="scores" id="scores"></div>
-    <p class="nextin" id="nextin"></p>`;
+    <h3 class="sub">Total points</h3>
+    <div class="scores withd" id="scores"></div>
+    ${MP.isHost
+      ? `<button class="next" id="nextq">${lastQ ? "See final scores 🏆" : "Next question ➜"}</button>`
+      : `<p class="wait-dots">Waiting for Jayden to tap Next<span>.</span><span>.</span><span>.</span></p>`}`;
   wireMpBar();
+  if (MP.isHost) document.getElementById("nextq").onclick = e => { e.currentTarget.disabled = true; stopConfetti(); hostNext(); };
   if (last.ok) { beep(true); confetti(30); speak(pick(CHEERS) + " Plus " + last.pts + " points!"); }
   else { beep(false); speak("The answer is " + q.answer); }
   setTimeout(() => { const sc = document.getElementById("scores"); if (sc && sc.getBoundingClientRect().top > innerHeight * 0.6) sc.scrollIntoView({ behavior: "smooth", block: "center" }); }, 900);
 }
 function scoresHTML(list, showDelta) {
-  return list.map((p, n) => `<div class="srow${p.pid === MP.pid ? " me" : ""}">
+  const head = showDelta ? `<div class="srow shead"><span></span><span>Player</span><span>This question</span><span>Total</span></div>` : "";
+  return head + list.map((p, n) => `<div class="srow${p.pid === MP.pid ? " me" : ""}">
       <span class="rank">${MEDALS[n] || n + 1}</span>
       <span class="sname">${p.admin ? "👑 " : ""}${esc(p.name)}${p.pid === MP.pid ? " (you)" : ""}</span>
-      ${showDelta && p.last ? `<span class="delta ${p.last.ok ? "up" : ""}">${p.last.ok ? "+" + fmt(p.last.pts) : "+0"}</span>` : ""}
+      ${showDelta ? `<span class="delta ${p.last && p.last.ok ? "up" : ""}">${p.last && p.last.ok ? "+" + fmt(p.last.pts) : "+0"}</span>` : ""}
       <span class="spts">${fmt(p.score)}</span></div>`).join("");
 }
 function rFinal() {
@@ -1722,6 +1762,24 @@ function refresh() {
   }
   const msum = document.getElementById("msum");
   if (msum) msum.innerHTML = missionLine(g);
+  // tell guests which mission Jayden picked, especially when it's not the one they chose
+  const mnote = document.getElementById("mnote");
+  if (mnote) {
+    if (g.mission && MP.picked) {
+      const mine = MISSION_NAMES[MP.picked], his = MISSION_NAMES[g.mission];
+      const differs = g.mission !== MP.picked;
+      mnote.hidden = false;
+      mnote.className = "mnote pop" + (differs ? " differs" : "");
+      mnote.innerHTML = differs
+        ? `<b>Heads up!</b> You picked ${MISSION_ICONS[MP.picked]} ${mine}, but Jayden chose ${MISSION_ICONS[g.mission]} <b>${his}</b>. Everyone in the room plays ${his}.`
+        : `You'll be playing ${MISSION_ICONS[g.mission]} <b>${his}</b>, the same mission you picked!`;
+      if (MP.toldMission !== g.mission) {
+        MP.toldMission = g.mission;
+        const say = differs ? `Heads up! Jayden chose ${his}, so everyone will play ${his}.` : `Great news! Jayden chose ${his} too.`;
+        setTimeout(() => { if (document.getElementById("mnote")) talk(say, card.querySelector(".robot")); }, 1600);
+      }
+    } else mnote.hidden = true;
+  }
   const rules = document.getElementById("rules");
   if (rules && g.mission) {
     rules.innerHTML = rulesHTML(g);
