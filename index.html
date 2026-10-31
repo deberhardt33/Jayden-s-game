@@ -531,7 +531,8 @@ function makeDivide(div, lo = 1, hi = 10) {
 }
 
 function buildRound(mode, table) {
-  const makers = mode === "times" ? [() => makeTimes(table)]
+  const makers = LEVEL_NAMES[table] && mode !== "shapes" ? [levelMaker(mode, table)] // Easy, Normal or Hard
+               : mode === "times" ? [() => makeTimes(table)]
                : mode === "minus" ? [makeMinus]
                : mode === "plus" ? [makePlus]
                : mode === "divide" ? [() => makeDivide(table)]
@@ -943,7 +944,7 @@ function show() {
   document.getElementById("bar").style.width = (i / ROUND * 100) + "%";
   const q = qs[i];
   card.innerHTML = `
-    ${navBar(`Question ${i + 1} of ${ROUND}`)}
+    ${navBar(`Question ${i + 1} of ${ROUND}${LEVEL_NAMES[table] ? " · " + LEVEL_NAMES[table] : ""}`)}
     <h2 class="question">${q.text}</h2>
     <div class="shape-box pop">${q.visual}</div>
     <div class="answers ${q.two ? "two" : ""}">
@@ -1294,7 +1295,7 @@ function modeMenu(m) {
     </div>
     ${helpBlock()}`;
   wireHelp("Single player is practice for just you. Multiplayer is a race with friends in Jayden's room!");
-  document.getElementById("solo").onclick = () => (m === "times" || m === "divide") ? tableMenu(m) : start(m);
+  document.getElementById("solo").onclick = () => m === "shapes" ? start(m) : soloLevel(m);
   document.getElementById("multi").onclick = () => whoScreen(m);
   wireNav(menu, () => modeMenu(m));
 }
@@ -1352,6 +1353,23 @@ function resumeAsk(m) {
   document.getElementById("resume").onclick = () => hostResume();
   document.getElementById("fresh").onclick = () => m === "shapes" ? countMenu(m, "") : levelMenu(m);
   wireNav(menu, () => resumeAsk(m));
+}
+// Single player: pick Easy, Normal or Hard, the same levels as multiplayer
+function soloLevel(m) {
+  card.classList.remove("quiz", "mp");
+  const tables = m === "times" || m === "divide";
+  card.innerHTML = `
+    ${navBar(MISSION_ICONS[m] + " " + MISSION_NAMES[m] + " · Single player")}
+    <h2 class="question pop">Pick the difficulty</h2>
+    <div class="answers">
+      ${["easy", "normal", "hard"].map(l => `<button class="ans level-btn lv-${l}" data-l="${l}">${LEVEL_NAMES[l]}<small>${LEVELS[m][l]}</small></button>`).join("")}
+    </div>
+    ${tables ? `<button class="back" id="onetable">${m === "times" ? "Or practice just one times table" : "Or practice dividing by just one number"}</button>` : ""}
+    ${helpBlock()}`;
+  wireHelp("Easy is a warm up, Normal is regular 3rd grade work, and Hard is a real challenge. Pick the one that feels right!");
+  card.querySelectorAll("[data-l]").forEach(b => b.onclick = () => start(m, b.dataset.l));
+  if (tables) document.getElementById("onetable").onclick = () => tableMenu(m);
+  wireNav(menu, () => soloLevel(m));
 }
 function levelMenu(m) {
   card.classList.remove("quiz", "mp");
