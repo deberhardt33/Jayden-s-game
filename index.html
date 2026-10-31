@@ -223,10 +223,105 @@ svg circle.lit { fill: #ffc93c; }
 @media (orientation: portrait) and (min-width: 700px) {
   .wrap { max-width: 640px; }
 }
+
+/* ---------- multiplayer ---------- */
+.toast { position: fixed; left: 50%; top: calc(14px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 20; background: var(--ink); color: #fff; font-weight: 800; padding: 12px 18px; border-radius: 16px; box-shadow: 0 6px 0 rgba(0,0,0,.2); max-width: min(92vw, 520px); text-align: center; }
+.pause { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: var(--sun); color: var(--ink); font-weight: 900; text-align: center; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.who { font-size: .95rem; }
+.pname.guest { font-size: clamp(2.2rem, 10vw, 3.6rem); }
+.mode-grid, .count-grid { grid-template-columns: 1fr 1fr; }
+.mode-grid .big-choice { display: grid; justify-items: center; gap: 2px; font-size: 1.7rem; line-height: 1.25; padding: 18px 8px; }
+.count-grid .ans { font-size: 2.4rem; padding: 22px 10px; }
+.level-btn { display: grid; gap: 2px; justify-items: center; }
+.level-btn small, .mode-grid small { font-family: var(--body); font-weight: 800; font-size: .85rem; letter-spacing: 0; opacity: .92; }
+.lv-easy { background: #33c26b; box-shadow: 0 6px 0 #22924f; }
+.lv-hard { background: #ff6b6b; box-shadow: 0 6px 0 #c94848; }
+.loading { display: grid; justify-items: center; gap: 12px; padding: 30px 0; font-weight: 900; font-size: 1.2rem; }
+.spinner { width: 46px; height: 46px; border-radius: 50%; border: 6px solid #e2dcff; border-top-color: var(--btn); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.join { display: grid; gap: 8px; text-align: left; }
+.join label { font-weight: 900; font-size: 1.05rem; }
+.join input { font: 800 1.35rem var(--body); color: var(--ink); background: #fff; border: 3px solid #d9d2ff; border-radius: 14px; padding: 12px 14px; width: 100%; }
+.join input:focus { outline: none; border-color: var(--btn); }
+.join .next { margin-top: 6px; }
+.join-err { min-height: 1.4em; color: #c94848; font-weight: 900; }
+.join-note { margin: 0; font-weight: 800; opacity: .7; font-size: .95rem; }
+.lobby-head { display: flex; align-items: center; gap: 10px; text-align: left; }
+.lobby-fox .buddy { width: 86px; }
+.mission-sum { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; background: #efeaff; border-radius: 16px; padding: 10px 12px; font-size: 1.25rem; }
+.mission-sum .mi { font-size: 1.5rem; }
+.mission-sum.waiting { font-weight: 900; font-size: 1.05rem; }
+.tag { background: #fff; border-radius: 999px; padding: 3px 10px; font-weight: 900; font-size: .9rem; }
+.tag.lv-easy, .tag.lv-hard, .tag.lv-normal { color: #fff; box-shadow: none; }
+.tag.lv-normal { background: var(--btn); }
+.tag.lv-easy { background: #33c26b; }
+.tag.lv-hard { background: #ff6b6b; }
+.rules { display: grid; gap: 8px; }
+.rule-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-weight: 900; }
+.rule-row > span { min-width: 90px; text-align: right; margin-right: 4px; }
+.rchip { font: 900 1rem var(--body); color: var(--ink); background: #eef1fb; border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; box-shadow: 0 3px 0 rgba(35,48,90,.18); }
+.rchip.on { background: var(--btn); color: #fff; }
+.rchip:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.sub { margin: 4px 0 0; font-family: var(--display); font-weight: 400; font-size: 1.5rem; }
+.plist { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 48px; }
+.pchip { display: flex; align-items: center; gap: 8px; background: #fff; border: 3px solid #e6e0ff; border-radius: 999px; padding: 6px 14px 6px 6px; font-weight: 900; font-size: 1.1rem; animation: pop .35s ease-out; }
+.pchip.me { border-color: var(--btn); }
+.pchip.deciding { opacity: .55; }
+.pchip small { font-size: .75rem; background: #efeaff; border-radius: 999px; padding: 2px 8px; }
+.pav { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--sun); font-size: 1.1rem; }
+.wait-dots { margin: 0; font-weight: 900; font-size: 1.2rem; }
+.wait-dots span { animation: caret 1.2s infinite; }
+.wait-dots span:nth-child(2) { animation-delay: .2s; } .wait-dots span:nth-child(3) { animation-delay: .4s; }
+.demo-note { margin: 0; font-size: .85rem; font-weight: 800; background: #fff3c4; border-radius: 12px; padding: 8px 10px; }
+.mini-spacer { width: 1px; }
+.mp-head { display: grid; gap: 6px; }
+.tnum b { font-variant-numeric: tabular-nums; }
+.tbar { height: 10px; background: #eef1fb; border-radius: 999px; overflow: hidden; }
+.tbar > div { height: 100%; width: 100%; background: var(--good); border-radius: 999px; transition: width .2s linear; }
+.tbar > div.low { background: var(--bad); }
+.board { display: flex; gap: 6px; overflow-x: auto; justify-content: center; flex-wrap: wrap; }
+.chip { white-space: nowrap; background: #eef1fb; border-radius: 999px; padding: 4px 10px; font-weight: 800; font-size: .9rem; }
+.chip.me { background: #e2dcff; }
+.chip b { font-variant-numeric: tabular-nums; }
+.ans.picked { outline: 4px solid var(--sun); outline-offset: 3px; opacity: 1 !important; }
+.ready { display: grid; justify-items: center; gap: 4px; padding: 18px 0; }
+.ready p { margin: 0; font-family: var(--display); font-size: 2rem; }
+.ready .ready-sub { font-family: var(--body); font-weight: 900; font-size: 1.1rem; opacity: .7; }
+.ready-n { font-family: var(--display); font-size: 6rem; line-height: 1; color: var(--btn); }
+.small-q { font-size: 1.6rem; }
+.reveal-ans { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+.reveal-ans .ans { cursor: default; font-size: 1.4rem; padding: 10px; }
+.reveal-ans .ans.dim { opacity: .35; }
+.scores { display: grid; gap: 6px; }
+.srow { display: grid; grid-template-columns: 44px 1fr auto auto; align-items: center; gap: 8px; background: #fff; border: 3px solid #eef1fb; border-radius: 14px; padding: 8px 12px; font-weight: 900; font-size: 1.1rem; text-align: left; }
+.srow.me { border-color: var(--btn); background: #f6f3ff; }
+.srow .rank { font-size: 1.3rem; text-align: center; }
+.srow .sname { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.srow .spts { font-variant-numeric: tabular-nums; }
+.delta { font-size: .9rem; color: #8a93ad; font-variant-numeric: tabular-nums; }
+.delta.up { color: #22924f; }
+.nextin { margin: 0; font-weight: 900; opacity: .7; }
+.final-sub { margin: 0; font-weight: 900; font-size: 1.15rem; }
+.pin-dots { display: flex; justify-content: center; gap: 14px; }
+.pin-dots span { width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--btn); }
+.pin-dots span.on { background: var(--btn); }
+.pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 320px; margin: 0 auto; width: 100%; }
+.pin-key { font-size: 2rem; padding: 12px; }
+.card.mp.quiz .shape-box svg { max-height: 26vh; max-height: 26dvh; }
+@media (orientation: landscape) and (min-width: 700px) {
+  .card.quiz > .mp-head { grid-area: bar; }
+  .card.mp.quiz .shape-box svg { max-height: 48vh; max-height: 48dvh; }
+  .count-grid { grid-template-columns: repeat(4, 1fr); }
+  .answers.level-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 420px) { .mode-grid { grid-template-columns: 1fr; } .rule-row > span { min-width: 0; width: 100%; text-align: center; } }
+@media (prefers-reduced-motion: reduce) { .spinner, .wait-dots span, .pchip { animation: none; } }
 </style>
 </head>
 <body>
 <canvas id="confetti"></canvas>
+<div id="toast" class="toast" role="status" hidden></div>
+<div id="pause" class="pause" role="status" hidden>⏸ Jayden stepped away. The game will keep going when he comes back.</div>
 <div class="wrap">
   <header>
     <h1>Jayden's Quiz Quest</h1>
@@ -363,10 +458,11 @@ function makeTimes(table) {
 
 // Subtraction within 1000 (3rd grade), shown stacked like on paper
 const rnd = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
-function makeMinus() {
-  let a, b;
-  if (Math.random() < 0.5) { a = rnd(20, 99); b = rnd(10, a - 5); }
-  else { a = rnd(120, 999); b = rnd(20, a - 10); }
+function makeMinus(a, b) {
+  if (a === undefined) {
+    if (Math.random() < 0.5) { a = rnd(20, 99); b = rnd(10, a - 5); }
+    else { a = rnd(120, 999); b = rnd(20, a - 10); }
+  }
   const d = a - b;
   const wrong = shuffle([...new Set([d + 1, d - 1, d + 10, d - 10, d + 100, a + b])]
     .filter(x => x > 0 && x !== d)).slice(0, 2);
@@ -433,7 +529,7 @@ const BUDDY = `<svg class="buddy robot" viewBox="0 0 140 160" aria-label="Foxy F
 
 let welcomed = false;
 function menu(first) {
-  card.classList.remove("quiz");
+  card.classList.remove("quiz", "mp");
   if (welcomed && !first) chime();
   document.getElementById("bar").style.width = "0%";
   const h = new Date().getHours();
@@ -446,7 +542,7 @@ function menu(first) {
       <div class="buddy-row">
         ${BUDDY}
         <div class="bubble pop">
-          <div class="bubble-hi">${hello}, Jayden!</div>
+          <div class="bubble-hi">${hello}${isAdmin() ? ", Jayden" : ""}!</div>
           Pick a mission and let's play.
         </div>
       </div>
@@ -458,38 +554,45 @@ function menu(first) {
       <button class="ans big-choice times" id="pick-times"><span class="mi">✖️</span>Multiplication<small>Count groups of dots</small></button>
       <button class="ans big-choice divide" id="pick-divide"><span class="mi">➗</span>Division<small>Share into equal groups</small></button>
     </div>
-    <p class="howto">⭐ 10 questions each game &nbsp;·&nbsp; 💪 2 tries per question &nbsp;·&nbsp; 💡 Draw to help</p>`;
-  if (welcomed) talk(first ? "Awesome! Pick a mission." : "Welcome back, Jayden! Pick a mission.", card.querySelector(".robot"));
-  document.getElementById("pick-shapes").onclick = () => start("shapes");
-  document.getElementById("pick-minus").onclick = () => start("minus");
-  document.getElementById("pick-times").onclick = () => tableMenu("times");
-  document.getElementById("pick-divide").onclick = () => tableMenu("divide");
+    <p class="howto">🎯 Play solo &nbsp;·&nbsp; 👥 Race friends in multiplayer &nbsp;·&nbsp; 💡 Draw to help</p>`;
+  if (welcomed) talk(first ? "Awesome! Pick a mission." : `Welcome back${isAdmin() ? ", Jayden" : ""}! Pick a mission.`, card.querySelector(".robot"));
+  ["shapes", "minus", "times", "divide"].forEach(m => document.getElementById("pick-" + m).onclick = () => modeMenu(m));
 }
 
 function splash() {
-  card.classList.remove("quiz");
-  const name = "JAYDEN".split("").map((c, k) => `<span style="animation-delay:${k * .08}s">${c}</span>`).join("");
+  card.classList.remove("quiz", "mp");
+  const admin = isAdmin();
+  const word = admin ? "JAYDEN" : "QUIZ QUEST";
+  const name = word.split("").map((c, k) => c === " " ? "<span>&nbsp;</span>" : `<span style="animation-delay:${k * .08}s">${c}</span>`).join("");
   card.innerHTML = `
     <div class="screen">
       <div class="scan" aria-hidden="true"></div>
       <div class="p1">WELCOME</div>
-      <h2 class="pname" aria-label="Jayden">${name}</h2>
-      <div class="ptitle">Quiz Quest</div>
+      <h2 class="pname${admin ? "" : " guest"}" aria-label="${admin ? "Jayden" : "Quiz Quest"}">${name}</h2>
+      <div class="ptitle">${admin ? "Quiz Quest" : "with Foxy Fox"}</div>
       <div class="load"><div></div></div>
       <div class="loadtxt">4 missions loaded · Grade 3</div>
     </div>
-    <button class="next big-start" id="go">▶ Press Start</button>`;
+    <button class="next big-start" id="go">▶ Press Start</button>
+    <button class="back who" id="who">${admin ? "Not Jayden? Use this device as a guest" : "🔑 I'm Jayden"}</button>`;
   document.getElementById("go").onclick = () => { jingle(); intro(); };
+  document.getElementById("who").onclick = () => { if (admin) { store("qq-admin", null); splash(); toast("This device is now a guest device."); } else pinScreen(); };
 }
 
 // Foxy Fox introduces himself, one line at a time
 function intro() {
-  card.classList.remove("quiz");
-  const lines = [
+  card.classList.remove("quiz", "mp");
+  const lines = isAdmin() ? [
     "Hey Jayden! I'm Foxy Fox, your computer sidekick.",
     "I loaded 4 missions for you: Shapes, Subtraction, Multiplication, and Division.",
     "Every right answer earns you a star. If a problem is tricky, you get a second try, and you can use the drawing pad to work it out.",
+    "Want to race your friends? Pick Multiplayer to open your room. You're the host, so you pick the rules!",
     "Ready to play, Jayden?",
+  ] : [
+    "Hey there! I'm Foxy Fox, the computer sidekick here at Quiz Quest.",
+    "There are 4 missions: Shapes, Subtraction, Multiplication, and Division.",
+    "Play by yourself, or pick Multiplayer to join Jayden's room and race everyone.",
+    "Ready to play?",
   ];
   let k = 0;
   card.innerHTML = `
@@ -535,7 +638,7 @@ function talk(text, robot) {
 }
 
 function tableMenu(m) {
-  card.classList.remove("quiz");
+  card.classList.remove("quiz", "mp");
   const nums = [2, 3, 4, 5, 6, 7, 8, 9, 10];
   const isTimes = m === "times";
   card.innerHTML = `
@@ -853,7 +956,7 @@ function answer(btn) {
 }
 
 function finish() {
-  card.classList.remove("quiz");
+  card.classList.remove("quiz", "mp");
   document.getElementById("bar").style.width = "100%";
   const n = score >= 9 ? 3 : score >= 6 ? 2 : 1;
   const champ = "You are a " + ({ times: "Multiplication", minus: "Subtraction", divide: "Division" }[mode] || "Shape") + " Champion!";
@@ -949,6 +1052,709 @@ function tick() {
   });
   bits = bits.filter(b => b.y < cv.height + 30);
   if (bits.length) requestAnimationFrame(tick); else { running = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
+
+// ===================== MULTIPLAYER =====================
+// Settings you can change
+const CONFIG = {
+  ADMIN_PIN: "2468",        // Jayden's secret admin PIN
+  ROOM_PASSWORD: "foxy",    // password you share with the people you invite
+  FIREBASE: null,           // paste the Firebase web app settings here to play across devices
+  Q_TIME: 20,               // seconds per question
+  REVEAL_TIME: 6,           // seconds to show the answer and the scores
+};
+if (window.QQ_FIREBASE_OVERRIDE) CONFIG.FIREBASE = window.QQ_FIREBASE_OVERRIDE; // used only for testing
+const SPEED = Math.max(1, +(new URLSearchParams(location.search).get("speed") || 1)); // used only for testing
+
+const MISSION_NAMES = { shapes: "Shapes", minus: "Subtraction", times: "Multiplication", divide: "Division" };
+const MISSION_ICONS = { shapes: "🔷", minus: "➖", times: "✖️", divide: "➗" };
+const LEVEL_NAMES = { easy: "Easy", normal: "Normal", hard: "Hard" };
+const LEVELS = {
+  minus: { easy: "2 digit numbers, no borrowing", normal: "2 digit numbers with borrowing", hard: "3 digit numbers with borrowing" },
+  times: { easy: "The 2s, 5s and 10s", normal: "The 2s through the 10s", hard: "Mostly the 6s, 7s, 8s and 9s" },
+  divide: { easy: "Divide by 2, 5 and 10", normal: "Divide by 2 through 10", hard: "Mostly divide by 6, 7, 8 and 9" },
+};
+
+function recall(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function store(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+const FORCE_GUEST = new URLSearchParams(location.search).has("guest"); // open a link with ?guest=1 to play as a guest
+function isAdmin() { return !FORCE_GUEST && recall("qq-admin") === "yes"; }
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => Number(n || 0).toLocaleString("en-US");
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.hidden = false; t.classList.remove("pop"); void t.offsetWidth; t.classList.add("pop");
+  clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 3800);
+}
+
+// ---------- difficulty levels ----------
+function levelTable(level) {
+  if (level === "easy") return pick([2, 5, 10]);
+  if (level === "hard") return Math.random() < 0.8 ? pick([6, 7, 8, 9]) : rnd(2, 10);
+  return rnd(2, 10);
+}
+function minusAt(level) {
+  let a, b;
+  const borrow = (x, y) => x % 10 < y % 10 || Math.floor(x / 10) % 10 < Math.floor(y / 10) % 10;
+  if (level === "easy") {
+    const ta = rnd(2, 9), oa = rnd(1, 9), tb = rnd(1, ta - 1), ob = rnd(0, oa);
+    a = ta * 10 + oa; b = tb * 10 + ob;
+  } else if (level === "hard") {
+    do { a = rnd(200, 999); b = rnd(100, a - 11); } while (!borrow(a, b));
+  } else {
+    do { a = rnd(30, 99); b = rnd(11, a - 1); } while (!(a % 10 < b % 10));
+  }
+  return makeMinus(a, b);
+}
+function levelMaker(mission, level) {
+  if (mission === "times") return () => makeTimes(levelTable(level));
+  if (mission === "divide") return () => makeDivide(levelTable(level));
+  if (mission === "minus") return () => minusAt(level);
+  return () => pick([makeName, makeName, makeName, makeSides, makeSides, makeIsQuad])();
+}
+function stripQ(q) {
+  const out = {};
+  ["kind", "key", "a", "b", "d", "q", "text", "options", "answer", "why", "two"].forEach(k => { if (q[k] !== undefined) out[k] = q[k]; });
+  return out;
+}
+function visualFor(q) {
+  const n = (x, lo, hi) => Math.min(hi, Math.max(lo, Math.round(+x) || lo));
+  if (q.kind === "times") return dotsSVG(n(q.a, 1, 12), n(q.b, 1, 12));
+  if (q.kind === "divide") return dotsSVG(n(q.d, 1, 12), n(q.q, 1, 12));
+  if (q.kind === "minus") return stackHTML(n(q.a, 0, 9999), n(q.b, 0, 9999));
+  return shapeSVG(SHAPES[q.key] ? q.key : "square");
+}
+
+// ---------- connection layer (Firebase, or a same device demo) ----------
+function loadScript(src) {
+  return new Promise((ok, bad) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
+}
+const LocalDB = {
+  P: "qqdb:", subs: [], disc: [], pending: false,
+  init() {
+    // other tabs react only after a whole save has finished
+    addEventListener("storage", e => { if (!e.key || e.key === "qqdbv") this.notify(); });
+    addEventListener("pagehide", () => this.runDisconnect());
+  },
+  keys() { const out = []; for (let n = 0; n < localStorage.length; n++) { const k = localStorage.key(n); if (k && k.startsWith(this.P)) out.push(k); } return out; },
+  read(path) {
+    const pre = this.P + path, obj = {}; let any = false;
+    for (const k of this.keys()) {
+      if (k === pre) return JSON.parse(localStorage.getItem(k));
+      if (k.startsWith(pre + "/")) {
+        any = true;
+        const parts = k.slice(pre.length + 1).split("/"); let o = obj;
+        parts.slice(0, -1).forEach(p => { o = o[p] = (o[p] && typeof o[p] === "object") ? o[p] : {}; });
+        o[parts[parts.length - 1]] = JSON.parse(localStorage.getItem(k));
+      }
+    }
+    return any ? obj : null;
+  },
+  clear(path) { const pre = this.P + path; this.keys().forEach(k => { if (k === pre || k.startsWith(pre + "/")) localStorage.removeItem(k); }); },
+  write(path, v) {
+    this.clear(path);
+    const walk = (p, x) => {
+      if (x === null || x === undefined) return;
+      if (typeof x === "object") { for (const k in x) walk(p + "/" + k, x[k]); }
+      else localStorage.setItem(this.P + p, JSON.stringify(x));
+    };
+    walk(path, v);
+  },
+  commit() { localStorage.setItem("qqdbv", Date.now() + ":" + Math.random()); this.notify(); },
+  notify() {
+    if (this.pending) return; this.pending = true;
+    setTimeout(() => { this.pending = false; this.subs.slice().forEach(s => this.fire(s)); }, 0);
+  },
+  fire(s) { const v = this.read(s.path), j = JSON.stringify(v); if (j !== s.last) { s.last = j; s.cb(v); } },
+  runDisconnect() { this.disc.forEach(([op, p, v]) => op === "remove" ? this.clear(p) : this.write(p, v)); this.disc = []; this.commit(); },
+};
+const Net = {
+  mode: null, offset: 0, db: null,
+  async init() {
+    if (this.mode) return;
+    if (CONFIG.FIREBASE) {
+      await loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js");
+      await loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-database-compat.js");
+      const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(CONFIG.FIREBASE);
+      this.db = app.database();
+      if (CONFIG.FIREBASE.emulatorHost) this.db.useEmulator(CONFIG.FIREBASE.emulatorHost, CONFIG.FIREBASE.emulatorPort);
+      this.db.ref(".info/serverTimeOffset").on("value", s => { this.offset = s.val() || 0; });
+      await Promise.race([this.db.ref(".info/serverTimeOffset").once("value"), new Promise((_, bad) => setTimeout(() => bad(new Error("timeout")), 10000))]);
+      this.mode = "firebase";
+    } else { LocalDB.init(); this.mode = "local"; }
+  },
+  now() { return Date.now() + this.offset; },
+  on(path, cb) {
+    if (this.mode === "firebase") { const r = this.db.ref(path), h = s => cb(s.val()); r.on("value", h); return () => r.off("value", h); }
+    const s = { path, cb, last: undefined }; LocalDB.subs.push(s); LocalDB.fire(s);
+    return () => { LocalDB.subs = LocalDB.subs.filter(x => x !== s); };
+  },
+  async get(path) { if (this.mode === "firebase") return (await this.db.ref(path).once("value")).val(); return LocalDB.read(path); },
+  async set(path, v) { if (this.mode === "firebase") return this.db.ref(path).set(v); LocalDB.write(path, v); LocalDB.commit(); },
+  async update(path, obj) {
+    if (this.mode === "firebase") return this.db.ref(path).update(obj);
+    for (const k in obj) LocalDB.write(path + "/" + k, obj[k]); LocalDB.commit();
+  },
+  async remove(path) { if (this.mode === "firebase") return this.db.ref(path).remove(); LocalDB.clear(path); LocalDB.commit(); },
+  disconnectRemove(path) { if (this.mode === "firebase") this.db.ref(path).onDisconnect().remove(); else LocalDB.disc.push(["remove", path]); },
+  disconnectSet(path, v) { if (this.mode === "firebase") this.db.ref(path).onDisconnect().set(v); else LocalDB.disc.push(["set", path, v]); },
+  cancelDisconnect(path) { if (this.mode === "firebase") this.db.ref(path).onDisconnect().cancel(); else LocalDB.disc = LocalDB.disc.filter(d => d[1] !== path); },
+};
+function hashStr(s) { let h = 7; for (const c of String(s).toLowerCase()) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h.toString(36); }
+const ROOM = "rooms/jayden-" + hashStr(CONFIG.ROOM_PASSWORD);
+const rp = sub => ROOM + (sub ? "/" + sub : "");
+
+// ---------- choose single player or multiplayer ----------
+function modeMenu(m) {
+  card.classList.remove("quiz", "mp");
+  card.innerHTML = `
+    ${navBar(MISSION_ICONS[m] + " " + MISSION_NAMES[m])}
+    <h2 class="question pop">How do you want to play?</h2>
+    <div class="answers mode-grid">
+      <button class="ans big-choice" id="solo"><span class="mi">🎯</span>Single player<small>Just you, at your own pace</small></button>
+      <button class="ans big-choice times" id="multi"><span class="mi">👥</span>Multiplayer<small>${isAdmin() ? "Host a game in your room" : "Join Jayden's room"}</small></button>
+    </div>
+    ${helpBlock()}`;
+  wireHelp(isAdmin()
+    ? "Single player is practice for just you. Multiplayer opens your room so friends can join and race you!"
+    : "Single player is practice for just you. Multiplayer lets you join Jayden's room and race everyone!");
+  document.getElementById("solo").onclick = () => (m === "times" || m === "divide") ? tableMenu(m) : start(m);
+  document.getElementById("multi").onclick = () => isAdmin() ? hostEntry(m) : guestJoin(m);
+  wireNav(menu, () => modeMenu(m));
+}
+
+function loadingScreen(text) {
+  card.classList.remove("quiz", "mp");
+  card.innerHTML = `<div class="loading pop"><div class="spinner"></div><p>${text}</p></div>`;
+}
+async function connect() {
+  try { await Net.init(); return true; }
+  catch (e) { menu(); toast("Couldn't connect to the game room. Check the internet and try again."); return false; }
+}
+
+// ---------- admin (Jayden) setup ----------
+async function hostEntry(m) {
+  loadingScreen("Opening your room…");
+  if (!(await connect())) return;
+  const g = await Net.get(rp("game"));
+  if (g && ["question", "reveal", "final"].includes(g.status)) return resumeAsk(m);
+  m === "shapes" ? countMenu(m, "") : levelMenu(m);
+}
+function resumeAsk(m) {
+  card.innerHTML = `
+    ${navBar("Your room")}
+    <h2 class="question pop">A game is still going in your room</h2>
+    <div class="answers">
+      <button class="ans" id="resume">▶ Go back to that game</button>
+      <button class="ans times" id="fresh">✨ End it and set up a new game</button>
+    </div>`;
+  document.getElementById("resume").onclick = () => hostResume();
+  document.getElementById("fresh").onclick = () => m === "shapes" ? countMenu(m, "") : levelMenu(m);
+  wireNav(menu, () => resumeAsk(m));
+}
+function levelMenu(m) {
+  card.classList.remove("quiz", "mp");
+  card.innerHTML = `
+    ${navBar(MISSION_ICONS[m] + " " + MISSION_NAMES[m])}
+    <h2 class="question pop">Pick the difficulty</h2>
+    <div class="answers">
+      ${["easy", "normal", "hard"].map(l => `<button class="ans level-btn lv-${l}" data-l="${l}">${LEVEL_NAMES[l]}<small>${LEVELS[m][l]}</small></button>`).join("")}
+    </div>
+    ${helpBlock()}`;
+  wireHelp("Easy is a warm up, Normal is regular 3rd grade work, and Hard is a real challenge. Everyone in the room plays the level you pick.");
+  card.querySelectorAll("[data-l]").forEach(b => b.onclick = () => countMenu(m, b.dataset.l));
+  wireNav(menu, () => levelMenu(m));
+}
+function countMenu(m, level) {
+  card.classList.remove("quiz", "mp");
+  card.innerHTML = `
+    ${navBar(MISSION_ICONS[m] + " " + MISSION_NAMES[m] + (level ? " · " + LEVEL_NAMES[level] : ""))}
+    <h2 class="question pop">How many questions?</h2>
+    <div class="answers count-grid">
+      ${[5, 10, 15, 20].map(n => `<button class="ans" data-n="${n}">${n}</button>`).join("")}
+    </div>
+    ${helpBlock()}`;
+  wireHelp("5 questions is a quick game. 20 questions is a long game. Everyone gets 20 seconds for each question.");
+  card.querySelectorAll("[data-n]").forEach(b => b.onclick = () => hostOpen(m, level, +b.dataset.n));
+  wireNav(menu, () => countMenu(m, level));
+}
+
+let MP = { on: false };
+function freshMP(extra) { return Object.assign({ on: false, pid: "", name: "", isHost: false, state: null, key: "", qs: null, qsRound: -1, answered: {}, finalSnap: null, lastScored: "", lastAdv: "", tickN: -1 }, extra); }
+
+async function hostOpen(m, level, n) {
+  loadingScreen("Opening your room…");
+  if (!(await connect())) return;
+  const players = (await Net.get(rp("players"))) || {};
+  const g = (await Net.get(rp("game"))) || {};
+  const upd = {
+    host: { online: true },
+    game: { status: "lobby", mission: m, level: level || "", count: n, qTime: CONFIG.Q_TIME / SPEED, reveal: CONFIG.REVEAL_TIME / SPEED, round: (g.round || 0) + 1 },
+    answers: null,
+    "players/jayden": { name: "Jayden", admin: true, joined: Net.now(), score: 0, in: true },
+  };
+  for (const pid in players) if (pid !== "jayden") Object.assign(upd, { [`players/${pid}/score`]: 0, [`players/${pid}/last`]: null, [`players/${pid}/again`]: null, [`players/${pid}/in`]: true });
+  await Net.update(rp(), upd);
+  enterRoom(freshMP({ pid: "jayden", name: "Jayden", isHost: true }));
+}
+async function hostResume() {
+  loadingScreen("Going back to your game…");
+  await Net.update(rp(), { "host/online": true });
+  enterRoom(freshMP({ pid: "jayden", name: "Jayden", isHost: true }));
+}
+
+// ---------- guests ----------
+function guestJoin(m, err) {
+  card.classList.remove("quiz", "mp");
+  const last = recall("qq-name") || "", pw = recall("qq-room") || "";
+  card.innerHTML = `
+    ${navBar("Join Jayden's room")}
+    <h2 class="question pop">Join Jayden's room</h2>
+    <form class="join" id="joinf" autocomplete="off">
+      <label for="pname">Your name</label>
+      <input id="pname" maxlength="12" placeholder="Type your first name" value="${esc(last)}" autocapitalize="words">
+      <label for="ppass">Room password</label>
+      <input id="ppass" maxlength="20" placeholder="Ask the person who invited you" value="${esc(pw)}" autocapitalize="none">
+      <div class="join-err" id="jerr">${err ? esc(err) : ""}</div>
+      <button class="next" id="joinbtn" type="submit">Join the room ➜</button>
+      <p class="join-note">Jayden picks the mission and the rules for everyone.</p>
+    </form>`;
+  wireNav(menu, () => guestJoin(m));
+  const nameIn = document.getElementById("pname");
+  if (!last) setTimeout(() => { try { nameIn.focus(); } catch (e) {} }, 300);
+  document.getElementById("joinf").onsubmit = async e => {
+    e.preventDefault();
+    const raw = nameIn.value.trim().replace(/\s+/g, " ");
+    const pass = document.getElementById("ppass").value.trim();
+    const errBox = document.getElementById("jerr");
+    if (!/^[A-Za-z][A-Za-z ]{0,11}$/.test(raw)) { errBox.textContent = "Type a name using letters only (up to 12)."; return; }
+    if (pass.toLowerCase() !== CONFIG.ROOM_PASSWORD.toLowerCase()) { errBox.textContent = "That password isn't right. Ask the person who invited you."; return; }
+    const name = raw[0].toUpperCase() + raw.slice(1);
+    if (name.toLowerCase() === "jayden") { errBox.textContent = "Jayden is the room's owner. Please use a different name."; return; }
+    document.getElementById("joinbtn").disabled = true;
+    errBox.textContent = "Joining…";
+    if (!(await connect())) return;
+    const players = (await Net.get(rp("players"))) || {};
+    if (Object.values(players).some(p => p && String(p.name).toLowerCase() === name.toLowerCase())) {
+      return guestJoin(m, `Someone named ${name} is already in the room. Try adding a letter, like ${name} ${String.fromCharCode(65 + rnd(0, 25))}.`);
+    }
+    const g = (await Net.get(rp("game"))) || {};
+    const pid = "p" + Math.random().toString(36).slice(2, 10);
+    const mid = ["question", "reveal", "final"].includes(g.status);
+    const me = { name, admin: false, joined: Net.now(), score: 0, in: !mid };
+    if (g.status === "final") me.again = "yes";
+    await Net.set(rp("players/" + pid), me);
+    Net.disconnectRemove(rp("players/" + pid));
+    store("qq-name", name); store("qq-room", pass);
+    enterRoom(freshMP({ pid, name }));
+  };
+}
+
+// ---------- room engine ----------
+function enterRoom(state) {
+  MP = state; MP.on = true; MP.since = Net.now() - 1000;
+  if (MP.isHost) Net.disconnectSet(rp("host/online"), false);
+  card.classList.add("mp");
+  MP.unsub = Net.on(rp(), v => onRoom(v));
+  MP.timer = setInterval(tick, 200);
+}
+function leaveRoom(msg) {
+  if (!MP.on) return;
+  MP.on = false;
+  if (MP.unsub) MP.unsub();
+  clearInterval(MP.timer);
+  if (MP.isHost) Net.cancelDisconnect(rp("host/online"));
+  else { Net.cancelDisconnect(rp("players/" + MP.pid)); Net.remove(rp("players/" + MP.pid)); }
+  document.getElementById("score").textContent = 0;
+  document.getElementById("pause").hidden = true;
+  stopConfetti();
+  card.classList.remove("mp", "quiz");
+  menu();
+  if (msg) toast(msg);
+}
+function onRoom(v) {
+  if (!MP.on) return;
+  MP.state = v || {};
+  const g = MP.state.game || {}, players = MP.state.players || {};
+  if (g.status === "closed" && !MP.isHost && (g.closedAt || 0) >= MP.since) return leaveRoom("Jayden ended the game. Thanks for playing!");
+  if (!players[MP.pid]) {
+    if (MP.isHost) return leaveRoom("Your room was closed.");
+    return leaveRoom(g.status === "question" ? "Jayden started a new game. Join again anytime!" : "You left Jayden's room.");
+  }
+  if (g.questions && MP.qsRound !== g.round) { MP.qs = JSON.parse(g.questions); MP.qsRound = g.round; MP.answered = {}; MP.finalSnap = null; }
+  render();
+}
+function myKey() {
+  const s = MP.state, g = s.game || {}, me = (s.players || {})[MP.pid] || {};
+  let st = g.status || "nogame";
+  if (st === "closed") st = "nogame";
+  if (st === "lobby" && me.again === "pending") st = "final";
+  if (st === "question" && Net.now() < g.qStart) st = "ready";
+  if (["question", "ready", "reveal"].includes(st) && !me.in) st = "watch";
+  if (st === "final" && !MP.finalSnap && !me.in) st = "watch";
+  return `${st}:${g.round || 0}:${st === "watch" || st === "lobby" || st === "nogame" ? "" : (g.qi || 0)}`;
+}
+function render() {
+  const g = (MP.state && MP.state.game) || {};
+  if (["question", "reveal"].includes(g.status) && (!MP.qs || MP.qsRound !== g.round || !MP.qs[g.qi])) return;
+  const k = myKey();
+  if (k !== MP.key) {
+    MP.key = k;
+    const st = k.split(":")[0];
+    ({ nogame: rLobby, lobby: rLobby, ready: rReady, question: rQuestion, reveal: rReveal, final: rFinal, watch: rWatch, closed: () => {} }[st] || rLobby)();
+  }
+  refresh();
+}
+function tick() {
+  if (!MP.on || !MP.state) return;
+  if (MP.isHost) hostLoop();
+  if (myKey() !== MP.key) render();
+  const g = MP.state.game || {};
+  const tl = document.getElementById("tleft");
+  if (tl && g.status === "question") {
+    const ms = Math.max(0, g.qStart + g.qTime * 1000 - Net.now());
+    const sec = Math.ceil(ms / 1000);
+    tl.textContent = sec;
+    const fill = document.getElementById("tfill");
+    if (fill) { fill.style.width = (ms / (g.qTime * 10)) + "%"; fill.classList.toggle("low", sec <= 5); }
+    if (sec <= 3 && sec > 0 && sec !== MP.tickN && !MP.answered[g.qi]) { MP.tickN = sec; tones([[880, 0, .08, "square"]]); }
+    if (ms <= 0 && !MP.answered[g.qi] && !MP.timesUp) {
+      MP.timesUp = true;
+      card.querySelectorAll(".mp-ans").forEach(b => b.disabled = true);
+      const fb = document.getElementById("fb");
+      if (fb) fb.innerHTML = `<div class="feedback try pop"><span class="big">⏰ Time's up!</span>Let's see the answer…</div>`;
+    }
+  }
+  const nx = document.getElementById("nextin");
+  if (nx && g.status === "reveal") {
+    const s = Math.max(0, Math.ceil((g.revealEnd - Net.now()) / 1000));
+    nx.textContent = g.qi + 1 < g.count ? `Next question in ${s}…` : `Final scores in ${s}…`;
+  }
+  const rd = document.getElementById("readyn");
+  if (rd) rd.textContent = Math.max(1, Math.ceil((g.qStart - Net.now()) / 1000));
+  const paused = !MP.isHost && MP.state.host && MP.state.host.online === false && ["question", "reveal", "lobby"].includes(g.status);
+  document.getElementById("pause").hidden = !paused;
+}
+
+// the host's computer runs the game clock and the scoring
+function hostLoop() {
+  const s = MP.state, g = s.game; if (!g) return;
+  const now = Net.now(), players = s.players || {};
+  if (g.status === "question" && MP.qs) {
+    const k = `${g.round}_${g.qi}`;
+    if (MP.lastScored === k) return;
+    const inP = Object.entries(players).filter(([, p]) => p.in);
+    const ans = (s.answers && s.answers[k]) || {};
+    const all = inP.length > 0 && inP.every(([pid]) => ans[pid]);
+    if (all || now >= g.qStart + g.qTime * 1000 + 300) {
+      MP.lastScored = k;
+      const q = MP.qs[g.qi], upd = {};
+      inP.forEach(([pid, p]) => {
+        const a = ans[pid], ok = !!a && String(a.a) === String(q.answer);
+        const pts = ok ? Math.round(1000 - 500 * Math.min(1, Math.max(0, a.t) / (g.qTime * 1000))) : 0;
+        upd[`players/${pid}/score`] = (p.score || 0) + pts;
+        upd[`players/${pid}/last`] = { pts, ok, a: a ? String(a.a) : "" };
+      });
+      upd["game/status"] = "reveal";
+      upd["game/revealEnd"] = now + g.reveal * 1000;
+      Net.update(rp(), upd);
+    }
+  } else if (g.status === "reveal" && now >= g.revealEnd) {
+    const k = `${g.round}_${g.qi}`;
+    if (MP.lastAdv === k) return;
+    MP.lastAdv = k;
+    if (g.qi + 1 < g.count) Net.update(rp("game"), { status: "question", qi: g.qi + 1, qStart: now + 1500 / SPEED });
+    else {
+      const upd = { "game/status": "final" };
+      for (const pid in players) if (pid !== "jayden") upd[`players/${pid}/again`] = players[pid].in ? "pending" : "yes";
+      Net.update(rp(), upd);
+    }
+  }
+}
+
+async function hostStart() {
+  const s = MP.state, g = s.game, players = s.players || {};
+  const btn = document.getElementById("startbtn"); if (btn) btn.disabled = true;
+  const maker = levelMaker(g.mission, g.level);
+  let list = [], tries = 0;
+  while (list.length < g.count && tries++ < 400) {
+    const q = maker();
+    if (list.some(x => x.text === q.text && x.key === q.key && x.a === q.a && x.b === q.b && x.d === q.d)) continue;
+    list.push(stripQ(q));
+  }
+  const upd = { answers: null };
+  for (const pid in players) {
+    if (players[pid].again === "pending") { upd["players/" + pid] = null; continue; }
+    Object.assign(upd, { [`players/${pid}/in`]: true, [`players/${pid}/score`]: 0, [`players/${pid}/last`]: null, [`players/${pid}/again`]: null });
+  }
+  Object.assign(upd, { "game/status": "question", "game/questions": JSON.stringify(list), "game/qi": 0, "game/qStart": Net.now() + 3000 / SPEED, "game/round": (g.round || 0) + 1 });
+  MP.finalSnap = null;
+  await Net.update(rp(), upd);
+}
+async function hostToLobby(everyone) {
+  const s = MP.state, players = s.players || {}, upd = { "game/status": "lobby", "players/jayden/again": null };
+  if (everyone) for (const pid in players) Object.assign(upd, { [`players/${pid}/again`]: null, [`players/${pid}/in`]: true });
+  MP.finalSnap = null;
+  await Net.update(rp(), upd);
+}
+async function hostClose() {
+  await Net.update(rp(), { "game/status": "closed", "game/closedAt": Net.now(), "host/online": false });
+  leaveRoom("You closed your room.");
+  setTimeout(async () => { const g = await Net.get(rp("game")); if (g && g.status === "closed") Net.remove(rp()); }, 2500);
+}
+
+// ---------- shared screen pieces ----------
+function mpBar(label, restart) {
+  return `<div class="quiz-bar">
+      <button class="mini" id="quit">🏠 Exit</button>
+      <div class="qnum">${label}</div>
+      ${restart && MP.isHost ? '<button class="mini" id="restart">🔄 Start over</button>' : '<span class="mini-spacer"></span>'}
+    </div>`;
+}
+function wireMpBar() {
+  const q = document.getElementById("quit");
+  if (q) q.onclick = () => { stopConfetti(); MP.isHost ? hostClose() : leaveRoom(); };
+  const r = document.getElementById("restart");
+  if (r) r.onclick = () => { stopConfetti(); hostToLobby(true); };
+}
+function ranked() {
+  const ps = Object.entries((MP.state && MP.state.players) || {}).map(([pid, p]) => Object.assign({ pid }, p));
+  return ps.sort((a, b) => (b.score || 0) - (a.score || 0) || (a.joined || 0) - (b.joined || 0));
+}
+const MEDALS = ["🥇", "🥈", "🥉"];
+function boardChips() {
+  return ranked().filter(p => p.in).map((p, n) =>
+    `<span class="chip${p.pid === MP.pid ? " me" : ""}">${p.score ? (MEDALS[n] || "") : ""}${p.admin ? "👑" : ""} ${esc(p.name)} <b>${fmt(p.score)}</b></span>`).join("");
+}
+function missionLine(g) {
+  if (!g || !g.mission) return `<div class="mission-sum waiting">Waiting for Jayden to pick a mission…</div>`;
+  return `<div class="mission-sum"><span class="mi">${MISSION_ICONS[g.mission]}</span><b>${MISSION_NAMES[g.mission]}</b>${g.level ? `<span class="tag lv-${g.level}">${LEVEL_NAMES[g.level]}</span>` : ""}<span class="tag">${g.count} questions</span></div>`;
+}
+function setHeader() {
+  const me = (MP.state.players || {})[MP.pid] || {}, g = MP.state.game || {};
+  document.getElementById("score").textContent = fmt(me.score);
+  document.getElementById("bar").style.width = g.count ? ((g.status === "final" ? g.count : (g.qi || 0)) / g.count * 100) + "%" : "0%";
+}
+
+// ---------- screens ----------
+function rLobby() {
+  card.classList.remove("quiz");
+  const g = MP.state.game || {};
+  card.innerHTML = `
+    ${mpBar("Jayden's room")}
+    <div class="lobby-head">
+      <div class="lobby-fox">${BUDDY}</div>
+      <div class="bubble"><div class="bubble-hi">${MP.isHost ? "Your room is open!" : "Welcome, " + esc(MP.name) + "!"}</div>
+        ${MP.isHost ? "Players show up below as they join. Tap Start when everyone is in." : "You're in Jayden's room. The game starts when Jayden taps Start."}</div>
+    </div>
+    <div id="msum">${missionLine(g)}</div>
+    ${MP.isHost && g.mission ? `<div class="rules" id="rules"></div>` : ""}
+    <h3 class="sub">Players in the room <span id="pcount"></span></h3>
+    <div class="plist" id="plist"></div>
+    ${MP.isHost ? `<button class="next" id="startbtn">▶ Start game</button><p class="join-note" id="starthint"></p>` : `<p class="wait-dots">Waiting for Jayden to start<span>.</span><span>.</span><span>.</span></p>`}
+    ${Net.mode === "local" ? `<p class="demo-note">Demo mode: Firebase isn't connected yet, so players can only join from other tabs on this same device.</p>` : ""}`;
+  wireMpBar();
+  if (MP.isHost) {
+    document.getElementById("startbtn").onclick = hostStart;
+    talk("Your room is open! Waiting for players.", card.querySelector(".robot"));
+  } else talk(`Welcome, ${MP.name}!`, card.querySelector(".robot"));
+}
+function rulesHTML(g) {
+  const lv = g.mission === "shapes" ? "" : `<div class="rule-row"><span>Difficulty</span>${["easy", "normal", "hard"].map(l => `<button class="rchip${g.level === l ? " on" : ""}" data-rl="${l}">${LEVEL_NAMES[l]}</button>`).join("")}</div>`;
+  return lv + `<div class="rule-row"><span>Questions</span>${[5, 10, 15, 20].map(n => `<button class="rchip${g.count === n ? " on" : ""}" data-rn="${n}">${n}</button>`).join("")}</div>`;
+}
+function rReady() {
+  card.classList.remove("quiz");
+  const g = MP.state.game;
+  card.innerHTML = `
+    ${mpBar(`Question ${g.qi + 1} of ${g.count}`, true)}
+    <div class="board" id="board"></div>
+    <div class="ready pop"><p>Get ready!</p><div class="ready-n" id="readyn">3</div><p class="ready-sub">${MISSION_ICONS[g.mission]} ${MISSION_NAMES[g.mission]}${g.level ? " · " + LEVEL_NAMES[g.level] : ""}</p></div>`;
+  wireMpBar();
+  if (g.qi === 0) chime();
+}
+function rQuestion() {
+  card.classList.add("quiz");
+  const g = MP.state.game, q = MP.qs[g.qi];
+  MP.timesUp = false; MP.tickN = -1;
+  card.innerHTML = `
+    <div class="mp-head">
+      ${mpBar(`Question ${g.qi + 1} of ${g.count} · <span class="tnum">⏱ <b id="tleft">${Math.ceil(g.qTime)}</b></span>`, true)}
+      <div class="tbar"><div id="tfill"></div></div>
+      <div class="board" id="board"></div>
+    </div>
+    <h2 class="question">${esc(q.text)}</h2>
+    <div class="shape-box pop">${visualFor(q)}</div>
+    <div class="answers ${q.two ? "two" : ""}">
+      ${q.options.map(o => `<button class="ans mp-ans" data-a="${esc(o)}">${esc(o)}</button>`).join("")}
+    </div>
+    ${helpBlock()}
+    <div id="fb"></div>`;
+  card.querySelectorAll(".mp-ans").forEach(b => b.onclick = () => mpAnswer(b));
+  wirePad();
+  wireMpBar();
+}
+async function mpAnswer(btn) {
+  const g = MP.state.game;
+  if (MP.answered[g.qi] || g.status !== "question") return;
+  const t = Net.now() - g.qStart;
+  if (t > g.qTime * 1000) return;
+  MP.answered[g.qi] = btn.dataset.a;
+  card.querySelectorAll(".mp-ans").forEach(b => b.disabled = true);
+  btn.classList.add("picked");
+  const fb = document.getElementById("fb");
+  fb.innerHTML = `<div class="feedback try pop"><span class="big">🔒 Locked in!</span><span id="acount">Waiting for the others…</span></div>`;
+  tones([[660, 0, .12], [880, .08, .15]]);
+  await Net.set(rp(`answers/${g.round}_${g.qi}/${MP.pid}`), { a: btn.dataset.a, t: Math.max(0, Math.round(t)) });
+}
+function rReveal() {
+  card.classList.remove("quiz");
+  const g = MP.state.game, q = MP.qs[g.qi], me = MP.state.players[MP.pid] || {}, last = me.last || { pts: 0, ok: false, a: "" };
+  let head;
+  if (last.ok) head = `<span class="big">🎉 Correct! +${fmt(last.pts)} points</span>`;
+  else if (last.a) head = `<span class="big">Good try! The answer is ${esc(q.answer)}</span>`;
+  else head = `<span class="big">⏰ Time ran out. The answer is ${esc(q.answer)}</span>`;
+  card.innerHTML = `
+    ${mpBar(`Question ${g.qi + 1} of ${g.count}`, true)}
+    <h2 class="question small-q">${esc(q.text)}</h2>
+    <div class="answers reveal-ans ${q.two || q.options.length === 2 ? "two" : ""}">
+      ${q.options.map(o => `<div class="ans ${o === q.answer ? "right" : (o === last.a ? "wrong" : "dim")}">${esc(o)}</div>`).join("")}
+    </div>
+    <div class="feedback ${last.ok ? "good" : "bad"} pop">${head}${esc(q.why)}</div>
+    <h3 class="sub">Scores</h3>
+    <div class="scores" id="scores"></div>
+    <p class="nextin" id="nextin"></p>`;
+  wireMpBar();
+  if (last.ok) { beep(true); confetti(30); speak(pick(CHEERS) + " Plus " + last.pts + " points!"); }
+  else { beep(false); speak("The answer is " + q.answer); }
+  setTimeout(() => { const sc = document.getElementById("scores"); if (sc && sc.getBoundingClientRect().top > innerHeight * 0.6) sc.scrollIntoView({ behavior: "smooth", block: "center" }); }, 900);
+}
+function scoresHTML(list, showDelta) {
+  return list.map((p, n) => `<div class="srow${p.pid === MP.pid ? " me" : ""}">
+      <span class="rank">${MEDALS[n] || n + 1}</span>
+      <span class="sname">${p.admin ? "👑 " : ""}${esc(p.name)}${p.pid === MP.pid ? " (you)" : ""}</span>
+      ${showDelta && p.last ? `<span class="delta ${p.last.ok ? "up" : ""}">${p.last.ok ? "+" + fmt(p.last.pts) : "+0"}</span>` : ""}
+      <span class="spts">${fmt(p.score)}</span></div>`).join("");
+}
+function rFinal() {
+  card.classList.remove("quiz");
+  if (!MP.finalSnap) MP.finalSnap = ranked().filter(p => p.in);
+  const list = MP.finalSnap, top = list[0], g = MP.state.game || {};
+  const tie = list.length > 1 && list[1].score === top.score;
+  const winLine = tie ? "It's a tie at the top!" : (top.pid === MP.pid ? "You win! 🏆" : `${esc(top.name)} wins! 🏆`);
+  const meRank = list.findIndex(p => p.pid === MP.pid);
+  card.innerHTML = `
+    ${mpBar("Final scores")}
+    <div class="end-stars pop">🏆</div>
+    <h2 class="question">${winLine}</h2>
+    <p class="final-sub">${meRank >= 0 ? `You finished ${["1st", "2nd", "3rd"][meRank] || (meRank + 1) + "th"} with ${fmt(list[meRank].score)} points!` : ""}</p>
+    <div class="scores">${scoresHTML(list, false)}</div>
+    <div id="againbox"></div>`;
+  wireMpBar();
+  confetti(meRank === 0 ? 160 : 70);
+  speak(tie ? "It's a tie! Great game everyone!" : (top.pid === MP.pid ? "You win! Amazing job!" : top.name + " wins! Great game everyone!"));
+}
+function againHTML() {
+  const me = MP.state.players[MP.pid] || {}, g = MP.state.game || {};
+  const ins = ranked().filter(p => p.admin || p.again === "yes").map(p => esc(p.name)).join(", ");
+  if (MP.isHost) {
+    return `<h3 class="sub">Play again?</h3>
+      <div class="answers two"><button class="next" id="again-yes">🔄 Play again</button><button class="ans times" id="again-no">🏠 No, close my room</button></div>
+      <p class="join-note">Ready to play again: ${ins}</p>`;
+  }
+  if (me.again === "yes") return `<p class="wait-dots">You're in! Waiting for Jayden<span>.</span><span>.</span><span>.</span></p><p class="join-note">Ready to play again: ${ins}</p>`;
+  return `<h3 class="sub">Play again?</h3>
+    <div class="answers two"><button class="next" id="again-yes">🔄 Yes, play again</button><button class="ans times" id="again-no">🚪 No thanks</button></div>`;
+}
+function rWatch() {
+  card.classList.remove("quiz");
+  const g = MP.state.game || {};
+  card.innerHTML = `
+    ${mpBar("Jayden's room")}
+    <div class="lobby-head">
+      <div class="lobby-fox">${BUDDY}</div>
+      <div class="bubble"><div class="bubble-hi">Game in progress!</div>You'll jump in when the next game starts. Here's how everyone is doing.</div>
+    </div>
+    <div id="msum">${missionLine(g)}</div>
+    <p class="final-sub" id="watchq"></p>
+    <div class="scores" id="scores"></div>`;
+  wireMpBar();
+}
+
+// update the live parts without redrawing the screen
+function refresh() {
+  const s = MP.state, g = s.game || {}, players = s.players || {};
+  setHeader();
+  const plist = document.getElementById("plist");
+  if (plist) {
+    const list = Object.entries(players).map(([pid, p]) => Object.assign({ pid }, p)).sort((a, b) => (b.admin ? 1 : 0) - (a.admin ? 1 : 0) || (a.joined || 0) - (b.joined || 0));
+    plist.innerHTML = list.map(p => `<div class="pchip${p.pid === MP.pid ? " me" : ""}${p.again === "pending" ? " deciding" : ""}">
+        <span class="pav">${p.admin ? "👑" : esc(p.name[0])}</span>${esc(p.name)}${p.pid === MP.pid ? " (you)" : ""}${p.admin ? '<small>Host</small>' : (p.again === "pending" ? "<small>Deciding…</small>" : "")}</div>`).join("");
+    const ready = list.filter(p => p.again !== "pending");
+    document.getElementById("pcount").textContent = `(${ready.length})`;
+    const sb = document.getElementById("startbtn");
+    if (sb) {
+      const enough = ready.length >= 2;
+      sb.disabled = !enough;
+      document.getElementById("starthint").textContent = enough
+        ? (list.some(p => p.again === "pending") ? "Players still deciding will be left out if you start now." : "")
+        : "Waiting for at least 1 more player to join.";
+    }
+  }
+  const msum = document.getElementById("msum");
+  if (msum) msum.innerHTML = missionLine(g);
+  const rules = document.getElementById("rules");
+  if (rules && g.mission) {
+    rules.innerHTML = rulesHTML(g);
+    rules.querySelectorAll("[data-rl]").forEach(b => b.onclick = () => Net.update(rp("game"), { level: b.dataset.rl }));
+    rules.querySelectorAll("[data-rn]").forEach(b => b.onclick = () => Net.update(rp("game"), { count: +b.dataset.rn }));
+  }
+  const board = document.getElementById("board");
+  if (board) board.innerHTML = boardChips();
+  const scores = document.getElementById("scores");
+  if (scores && g.status === "reveal") scores.innerHTML = scoresHTML(ranked().filter(p => p.in), true);
+  else if (scores && document.getElementById("watchq")) {
+    scores.innerHTML = scoresHTML(ranked().filter(p => p.in), false);
+    document.getElementById("watchq").textContent = g.status === "final" ? "Final scores are in!" : `Question ${(g.qi || 0) + 1} of ${g.count}`;
+  }
+  const ac = document.getElementById("acount");
+  if (ac && g.status === "question") {
+    const inP = Object.keys(players).filter(pid => players[pid].in);
+    const got = Object.keys((s.answers || {})[`${g.round}_${g.qi}`] || {}).filter(pid => players[pid] && players[pid].in).length;
+    ac.textContent = `Waiting for the others… (${got} of ${inP.length} answered)`;
+  }
+  const ab = document.getElementById("againbox");
+  if (ab) {
+    ab.innerHTML = againHTML();
+    const y = document.getElementById("again-yes"), n = document.getElementById("again-no");
+    if (y) y.onclick = () => { stopConfetti(); MP.isHost ? hostToLobby(false) : Net.update(rp("players/" + MP.pid), { again: "yes" }); };
+    if (n) n.onclick = () => { stopConfetti(); MP.isHost ? hostClose() : leaveRoom("Thanks for playing! Pick any mission you like."); };
+  }
+}
+
+// ---------- admin PIN ----------
+function pinScreen() {
+  card.classList.remove("quiz", "mp");
+  let pin = "";
+  card.innerHTML = `
+    <h2 class="question pop">Enter Jayden's PIN</h2>
+    <div class="pin-dots" id="pdots"></div>
+    <div class="pin-pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button class="ans pin-key" data-k="${k}">${k}</button>`).join("")}</div>
+    <p class="join-note" id="pinerr"></p>
+    <button class="back" id="pinback">Back</button>`;
+  const dots = () => { document.getElementById("pdots").innerHTML = [0, 1, 2, 3].map(n => `<span class="${n < pin.length ? "on" : ""}"></span>`).join(""); };
+  dots();
+  card.querySelectorAll(".pin-key").forEach(b => b.onclick = () => {
+    const k = b.dataset.k;
+    pin = k === "⌫" ? pin.slice(0, -1) : (pin + k).slice(0, 4);
+    dots();
+    if (pin.length === 4) {
+      if (pin === CONFIG.ADMIN_PIN) { store("qq-admin", "yes"); welcomed = false; splash(); toast("Welcome, Jayden! This iPad now knows it's you."); }
+      else { document.getElementById("pinerr").textContent = "That's not the right PIN. Try again."; card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 400); pin = ""; setTimeout(dots, 250); }
+    }
+  });
+  document.getElementById("pinback").onclick = splash;
 }
 
 splash();
