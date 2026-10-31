@@ -1079,10 +1079,18 @@ function tick() {
 const CONFIG = {
   ADMIN_PIN: "2468",        // Jayden's secret admin PIN
   ROOM_PASSWORD: "foxy",    // password you share with the people you invite
-  FIREBASE: null,           // paste the Firebase web app settings here to play across devices
+  FIREBASE: {               // Firebase project: jayden-quiz-quest
+    apiKey: "AIzaSyAMWhQRR_WHQC-l8e3B7w996UHLTTdVkZ0",
+    authDomain: "jayden-quiz-quest.firebaseapp.com",
+    databaseURL: "https://jayden-quiz-quest-default-rtdb.firebaseio.com",
+    projectId: "jayden-quiz-quest",
+    storageBucket: "jayden-quiz-quest.firebasestorage.app",
+    messagingSenderId: "681116508557",
+    appId: "1:681116508557:web:217a1a5b386deb70ccddc4",
+  },
   Q_TIME: 20,               // seconds per question
 };
-if (window.QQ_FIREBASE_OVERRIDE) CONFIG.FIREBASE = window.QQ_FIREBASE_OVERRIDE; // used only for testing
+if (window.QQ_FIREBASE_OVERRIDE !== undefined) CONFIG.FIREBASE = window.QQ_FIREBASE_OVERRIDE || null; // used only for testing
 const READY_MS = 3400; // the 3, 2, 1 countdown before each question, plus a moment for every device to catch up
 const SPEED = Math.max(1, +(new URLSearchParams(location.search).get("speed") || 1)); // used only for testing
 
@@ -1270,6 +1278,12 @@ function loadingScreen(text) {
   card.classList.remove("quiz", "mp");
   card.innerHTML = `<div class="loading pop"><div class="spinner"></div><p>${text}</p></div>`;
 }
+function roomError() {
+  if (MP.on) { MP.on = false; if (MP.unsub) MP.unsub(); clearInterval(MP.timer); }
+  card.classList.remove("mp", "quiz");
+  menu();
+  toast("Couldn't open the game room. Check the internet and try again in a moment.");
+}
 async function connect() {
   try { await Net.init(); return true; }
   catch (e) { menu(); toast("Couldn't connect to the game room. Check the internet and try again."); return false; }
@@ -1279,7 +1293,8 @@ async function connect() {
 async function hostEntry(m) {
   loadingScreen("Opening your room…");
   if (!(await connect())) return;
-  const g = await Net.get(rp("game"));
+  let g;
+  try { g = await Net.get(rp("game")); } catch (e) { return roomError(); }
   if (g && ["question", "reveal", "final"].includes(g.status)) return resumeAsk(m);
   m === "shapes" ? countMenu(m, "") : levelMenu(m);
 }
@@ -1328,8 +1343,8 @@ function freshMP(extra) { return Object.assign({ on: false, pid: "", name: "", i
 async function hostOpen(m, level, n) {
   loadingScreen("Opening your room…");
   if (!(await connect())) return;
-  const players = (await Net.get(rp("players"))) || {};
-  const g = (await Net.get(rp("game"))) || {};
+  let players, g;
+  try { players = (await Net.get(rp("players"))) || {}; g = (await Net.get(rp("game"))) || {}; } catch (e) { return roomError(); }
   const upd = {
     host: { online: true },
     game: { status: "lobby", mission: m, level: level || "", count: n, qTime: CONFIG.Q_TIME / SPEED, round: (g.round || 0) + 1 },
@@ -1337,12 +1352,12 @@ async function hostOpen(m, level, n) {
     "players/jayden": { name: "Jayden", admin: true, joined: Net.now(), score: 0, in: true },
   };
   for (const pid in players) if (pid !== "jayden") Object.assign(upd, { [`players/${pid}/score`]: 0, [`players/${pid}/last`]: null, [`players/${pid}/again`]: null, [`players/${pid}/in`]: true });
-  await Net.update(rp(), upd);
+  try { await Net.update(rp(), upd); } catch (e) { return roomError(); }
   enterRoom(freshMP({ pid: "jayden", name: "Jayden", isHost: true }));
 }
 async function hostResume() {
   loadingScreen("Going back to your game…");
-  await Net.update(rp(), { "host/online": true });
+  try { await Net.update(rp(), { "host/online": true }); } catch (e) { return roomError(); }
   enterRoom(freshMP({ pid: "jayden", name: "Jayden", isHost: true }));
 }
 
@@ -1379,16 +1394,16 @@ function guestJoin(m, err) {
     document.getElementById("joinbtn").disabled = true;
     errBox.textContent = "Joining…";
     if (!(await connect())) return;
-    const players = (await Net.get(rp("players"))) || {};
+    let players, g;
+    try { players = (await Net.get(rp("players"))) || {}; g = (await Net.get(rp("game"))) || {}; } catch (e) { return roomError(); }
     if (Object.values(players).some(p => p && String(p.name).toLowerCase() === name.toLowerCase())) {
       return guestJoin(m, `Someone named ${name} is already in the room. Try adding a letter, like ${name} ${String.fromCharCode(65 + rnd(0, 25))}.`);
     }
-    const g = (await Net.get(rp("game"))) || {};
     const pid = "p" + Math.random().toString(36).slice(2, 10);
     const mid = ["question", "reveal", "final"].includes(g.status);
     const me = { name, admin: false, joined: Net.now(), score: 0, in: !mid };
     if (g.status === "final") me.again = "yes";
-    await Net.set(rp("players/" + pid), me);
+    try { await Net.set(rp("players/" + pid), me); } catch (e) { return roomError(); }
     Net.disconnectRemove(rp("players/" + pid));
     store("qq-name", name); store("qq-room", pass);
     enterRoom(freshMP({ pid, name, picked: m }));
@@ -1553,7 +1568,7 @@ async function hostStart() {
   }
   Object.assign(upd, { "game/status": "question", "game/questions": JSON.stringify(list), "game/qi": 0, "game/qStart": Net.now() + READY_MS / SPEED, "game/round": (g.round || 0) + 1 });
   MP.finalSnap = null;
-  await Net.update(rp(), upd);
+  try { await Net.update(rp(), upd); } catch (e) { if (btn) btn.disabled = false; toast("Couldn't start the game. Check the internet and tap Start again."); }
 }
 async function hostToLobby(everyone) {
   const s = MP.state, players = s.players || {}, upd = { "game/status": "lobby", "players/jayden/again": null };

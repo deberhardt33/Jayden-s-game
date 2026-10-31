@@ -9,6 +9,6 @@ It is one static page (`index.html`), so Vercel hosts it with no build step.
 * Single player never asks who you are.
 * Settings live at the top of the multiplayer code in `index.html` (search for `const CONFIG`):
   `ADMIN_PIN`, `ROOM_PASSWORD`, `FIREBASE`, `Q_TIME`, `REVEAL_TIME`.
-* Until `FIREBASE` is filled in, multiplayer runs in demo mode (tabs on the same device only).
+* Multiplayer uses the Firebase project `jayden-quiz-quest` (Realtime Database).
 * `database.rules.json` holds the Firebase Realtime Database rules to paste into the Firebase console.
 
