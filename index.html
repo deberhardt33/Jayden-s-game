@@ -174,10 +174,7 @@ svg circle.lit { fill: #ffc93c; }
 .ans.minus { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
 .ans.divide { background: #f15bb5; box-shadow: 0 6px 0 #c13a8c; }
 .ans.plus { background: #33c26b; box-shadow: 0 6px 0 #22924f; }
-.menu-grid #pick-shapes { grid-column: 1 / -1; }
-.menu-grid #pick-shapes { grid-template-columns: auto auto; justify-content: center; align-items: center; column-gap: 14px; }
-.menu-grid #pick-shapes .mi { grid-row: span 2; margin: 0; font-size: 2.4rem; }
-.menu-grid #pick-shapes small { justify-self: start; }
+.ans.spanish { background: #e94f37; box-shadow: 0 6px 0 #b13a27; }
 .stack { font-family: var(--body); font-weight: 900; font-size: 3.4rem; line-height: 1.1; text-align: right; font-variant-numeric: tabular-nums; display: inline-grid; gap: 2px; padding: 6px 18px; }
 .stack .op { margin-right: 14px; color: var(--bad); }
 .stack .line { height: 6px; background: var(--ink); border-radius: 3px; margin-block: 4px; }
@@ -343,6 +340,46 @@ svg circle.lit { fill: #ffc93c; }
 }
 @media (max-width: 420px) { .mode-grid { grid-template-columns: 1fr; } .rule-row > span { min-width: 0; width: 100%; text-align: center; } }
 @media (prefers-reduced-motion: reduce) { .spinner, .wait-dots span, .pchip { animation: none; } }
+
+/* Spanish mission */
+.sp-show[hidden], .sp-think[hidden] { display: none !important; }
+.answers.sp-cats { grid-template-columns: 1fr; }
+.sp-cat { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; text-align: left; font-size: 1.6rem; padding: 14px 18px; }
+.sp-cat .mi { grid-row: span 2; margin: 0; font-size: 2.6rem; }
+.sp-house { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
+.sp-family { background: #f15bb5; box-shadow: 0 6px 0 #c13a8c; }
+.sp-friends { background: #33c26b; box-shadow: 0 6px 0 #22924f; }
+.sp-hi .buddy { width: 84px; }
+.sp-pic { font-size: min(7rem, 16vh); line-height: 1.1; text-align: center; }
+.sp-quote { font-size: 3rem; line-height: 1; text-align: center; }
+.sp-ask { line-height: 1.3; }
+.sp-en { color: var(--btn); white-space: normal; }
+.sp-think { display: grid; gap: 8px; justify-items: center; }
+.sp-think-txt { font-weight: 900; font-size: 1.3rem; }
+.sp-timer { width: min(360px, 90%); height: 14px; border-radius: 999px; background: #e6e9f5; overflow: hidden; }
+.sp-timer > div { height: 100%; background: linear-gradient(90deg, #ffc93c, #ff9f1c); border-radius: 999px; animation: sptime linear both; }
+@keyframes sptime { from { width: 100%; } to { width: 0; } }
+.sp-show { animation: pulse 1.4s ease-in-out infinite; }
+.sp-answer { background: #fff; border: 4px solid #e94f37; border-radius: 22px; padding: 14px 16px; display: grid; gap: 6px; justify-items: center; }
+.sp-es { font-family: var(--display); font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.15; color: #e94f37; text-align: center; transition: transform .25s; }
+.sp-es.speaking { transform: scale(1.08); text-shadow: 0 0 18px rgba(255,201,60,.8); }
+.sp-es .w { display: inline-block; border-radius: 10px; padding: 0 4px; transition: background .15s, transform .15s; }
+.sp-es .w.on { background: #fff1c2; transform: scale(1.12); }
+.sp-step { font-weight: 900; font-size: 1.25rem; text-align: center; }
+.sp-step.together { color: var(--btn); animation: pulse 1s ease-in-out infinite; }
+.sp-mean { opacity: .65; font-weight: 800; }
+.sp-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+.sp-btns .next { margin: 0; }
+.sp-again { background: #2ab7ca; color: #fff; box-shadow: 0 6px 0 #1b8a99; }
+@media (orientation: landscape) and (min-width: 700px) {
+  .answers.sp-cats { grid-template-columns: repeat(3, 1fr); }
+  .sp-cat { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .sp-cat .mi { grid-row: auto; }
+  .answers.menu-grid { grid-template-columns: repeat(3, 1fr); }
+  .sp-pic { font-size: min(6rem, 15vh); }
+}
+@media (max-width: 420px) { .sp-btns { grid-template-columns: 1fr; } .sp-cat { font-size: 1.3rem; } }
+@media (prefers-reduced-motion: reduce) { .sp-show, .sp-step.together, .sp-timer > div { animation: none; } }
 </style>
 </head>
 <body>
@@ -601,10 +638,12 @@ function menu(first) {
       <button class="ans big-choice minus" id="pick-minus"><span class="mi">➖</span>Subtraction<small>Take away numbers</small></button>
       <button class="ans big-choice times" id="pick-times"><span class="mi">✖️</span>Multiplication<small>Count groups of dots</small></button>
       <button class="ans big-choice divide" id="pick-divide"><span class="mi">➗</span>Division<small>Share into equal groups</small></button>
+      <button class="ans big-choice spanish" id="pick-spanish"><span class="mi">🇪🇸</span>Spanish<small>Say words in Spanish</small></button>
     </div>
     <p class="howto">🎯 Play solo &nbsp;·&nbsp; 👥 Race friends in multiplayer &nbsp;·&nbsp; 💡 Draw to help</p>`;
   if (welcomed) talk(first ? "Awesome! Pick a mission." : `Welcome back${isAdmin() ? ", Jayden" : ""}! Pick a mission.`, card.querySelector(".robot"));
   ["shapes", "plus", "minus", "times", "divide"].forEach(m => document.getElementById("pick-" + m).onclick = () => modeMenu(m));
+  document.getElementById("pick-spanish").onclick = spCategory;
 }
 
 function splash() {
@@ -619,7 +658,7 @@ function splash() {
       <h2 class="pname${admin ? "" : " guest"}" aria-label="${admin ? "Jayden" : "Quiz Quest"}">${name}</h2>
       <div class="ptitle">${admin ? "Quiz Quest" : "with Foxy Fox"}</div>
       <div class="load"><div></div></div>
-      <div class="loadtxt">5 missions loaded · Grade 3</div>
+      <div class="loadtxt">6 missions loaded · Grade 3</div>
     </div>
     <button class="next big-start" id="go">▶ Press Start</button>`;
   document.getElementById("go").onclick = () => { jingle(); intro(); };
@@ -630,13 +669,13 @@ function intro() {
   card.classList.remove("quiz", "mp");
   const lines = isAdmin() ? [
     "Hey Jayden! I'm Foxy Fox, your computer sidekick.",
-    "I loaded 5 missions for you: Shapes, Addition, Subtraction, Multiplication, and Division.",
+    "I loaded 6 missions for you: Shapes, Addition, Subtraction, Multiplication, Division, and Spanish!",
     "Every right answer earns you a star. If a problem is tricky, you get a second try, and you can use the drawing pad to work it out.",
     "Want to race your friends? Pick Multiplayer to open your room. You're the host, so you pick the rules!",
     "Ready to play, Jayden?",
   ] : [
     "Hey there! I'm Foxy Fox, the computer sidekick here at Quiz Quest.",
-    "There are 5 missions: Shapes, Addition, Subtraction, Multiplication, and Division.",
+    "There are 6 missions: Shapes, Addition, Subtraction, Multiplication, Division, and Spanish.",
     "Play by yourself, or pick Multiplayer to join Jayden's room and race everyone.",
     "Ready to play?",
   ];
@@ -1396,6 +1435,336 @@ function countMenu(m, level) {
   wireHelp("5 questions is a quick game. 20 questions is a long game. Everyone gets 20 seconds for each question.");
   card.querySelectorAll("[data-n]").forEach(b => b.onclick = () => hostOpen(m, level, +b.dataset.n));
   wireNav(menu, () => countMenu(m, level));
+}
+
+// ---------- Spanish mission (single player flash cards) ----------
+// Each item: [English, Spanish, picture]. Fluent sentences have no picture.
+const ES = {
+  house: { name: "Household", icon: "🏠", blurb: "Things you say at home",
+    basic: [["house","casa","🏠"],["bed","cama","🛏️"],["door","puerta","🚪"],["window","ventana","🪟"],["chair","silla","🪑"],
+      ["kitchen","cocina","🍳"],["bathroom","baño","🛁"],["couch","sofá","🛋️"],["light","luz","💡"],["key","llave","🔑"],
+      ["clock","reloj","⏰"],["spoon","cuchara","🥄"],["fork","tenedor","🍴"],["plate","plato","🍽️"],["cup","taza","☕"],
+      ["water","agua","💧"],["milk","leche","🥛"],["bread","pan","🍞"],["soap","jabón","🧼"],["book","libro","📚"],
+      ["dog","perro","🐶"],["cat","gato","🐱"],["television","televisión","📺"],["toy","juguete","🧸"],["mirror","espejo","🪞"]],
+    medium: [["I want water", "Yo quiero agua", "💧"],
+      ["I want milk", "Yo quiero leche", "🥛"],
+      ["I want cereal", "Yo quiero cereal", "🥣"],
+      ["I want to sleep", "Yo quiero dormir", "😴"],
+      ["I want to watch TV", "Yo quiero ver televisión", "📺"],
+      ["I'm hungry", "Yo tengo hambre", "😋"],
+      ["I'm thirsty", "Yo tengo sed", "🥤"],
+      ["I'm cold", "Yo tengo frío", "🥶"],
+      ["I'm hot", "Yo tengo calor", "🥵"],
+      ["I'm sleepy", "Yo tengo sueño", "🥱"],
+      ["I have a toy", "Yo tengo un juguete", "🧸"],
+      ["Give me water, please", "Dame agua, por favor", "💧"],
+      ["Give me bread, please", "Dame pan, por favor", "🍞"],
+      ["Give me the spoon, please", "Dame la cuchara, por favor", "🥄"],
+      ["Give me a blanket", "Dame una cobija", "🛌"],
+      ["Pass me the salt", "Pásame la sal", "🧂"],
+      ["I need soap", "Yo necesito jabón", "🧼"],
+      ["I need a towel", "Yo necesito una toalla", "🛁"],
+      ["Can I go to the bathroom?", "¿Puedo ir al baño?", "🚽"],
+      ["Where is the cat?", "¿Dónde está el gato?", "🐱"],
+      ["Help me, please", "Ayúdame, por favor", "🙏"]],
+    fluent: [["Please help me set the table for dinner.","Por favor, ayúdame a poner la mesa para la cena."],
+      ["Can I watch TV after I finish my homework?","¿Puedo ver la tele después de terminar mi tarea?"],
+      ["Don't forget to brush your teeth before bed.","No olvides cepillarte los dientes antes de dormir."],
+      ["The dog is sleeping on the couch.","El perro está durmiendo en el sofá."],
+      ["Please close the door when you come in.","Por favor, cierra la puerta cuando entres."],
+      ["I can't find my shoes anywhere.","No encuentro mis zapatos por ningún lado."],
+      ["What are we having for dinner tonight?","¿Qué vamos a cenar esta noche?"],
+      ["It's time to clean your room.","Es hora de limpiar tu cuarto."],
+      ["Turn off the lights when you leave the room.","Apaga las luces cuando salgas del cuarto."],
+      ["I'm going to take a shower now.","Me voy a bañar ahora."],
+      ["Can you pass me the milk, please?","¿Me pasas la leche, por favor?"],
+      ["My backpack is next to the door.","Mi mochila está al lado de la puerta."],
+      ["Wake up, it's time to go to school.","Despierta, es hora de ir a la escuela."],
+      ["The cookies are in the kitchen.","Las galletas están en la cocina."],
+      ["Please put your toys in the box.","Por favor, pon tus juguetes en la caja."],
+      ["I'm cold, can I have a blanket?","Tengo frío, ¿me das una cobija?"],
+      ["Let's eat breakfast together.","Vamos a desayunar juntos."],
+      ["Don't run inside the house.","No corras dentro de la casa."],
+      ["Who left the window open?","¿Quién dejó la ventana abierta?"],
+      ["I already fed the cat.","Ya le di de comer al gato."]] },
+  family: { name: "Family", icon: "👨‍👩‍👦", blurb: "Things you say to your family",
+    basic: [["mom","mamá","👩"],["dad","papá","👨"],["brother","hermano","👦"],["sister","hermana","👧"],["grandma","abuela","👵"],
+      ["grandpa","abuelo","👴"],["baby","bebé","👶"],["family","familia","👨‍👩‍👦"],["uncle","tío","🧔"],["aunt","tía","👩‍🦰"],
+      ["cousin","primo","🧒"],["hug","abrazo","🤗"],["kiss","beso","😘"],["love","amor","❤️"],["thank you","gracias","🙏"],
+      ["hello","hola","👋"],["birthday","cumpleaños","🎂"],["gift","regalo","🎁"],["cake","pastel","🍰"],["happy","feliz","😊"],["sorry","perdón","🙇"]],
+    medium: [["I love you, Mom", "Te quiero, mamá", "❤️"],
+      ["I want a hug", "Yo quiero un abrazo", "🤗"],
+      ["I want to play", "Yo quiero jugar", "🎮"],
+      ["I want pizza", "Yo quiero pizza", "🍕"],
+      ["I want to go outside", "Yo quiero salir", "🌳"],
+      ["I have homework", "Yo tengo tarea", "📝"],
+      ["I have a question", "Yo tengo una pregunta", "❓"],
+      ["I have a brother", "Yo tengo un hermano", "👦"],
+      ["I have a sister", "Yo tengo una hermana", "👧"],
+      ["I'm tired", "Yo estoy cansado", "😩"],
+      ["I'm happy", "Yo estoy feliz", "😄"],
+      ["Give me a kiss", "Dame un beso", "😘"],
+      ["Give me a hug, Dad", "Dame un abrazo, papá", "🤗"],
+      ["Give me money, please", "Dame dinero, por favor", "💵"],
+      ["Give me cookies, please", "Dame galletas, por favor", "🍪"],
+      ["Thank you, Grandma", "Gracias, abuela", "🙏"],
+      ["Can you help me, Mom?", "¿Me ayudas, mamá?", "🙋"],
+      ["Good night, Dad", "Buenas noches, papá", "🌙"],
+      ["Happy birthday, Grandpa", "Feliz cumpleaños, abuelo", "🎂"],
+      ["I miss you", "Yo te extraño", "🥺"],
+      ["Can I play, Mom?", "¿Puedo jugar, mamá?", "⚽"]],
+    fluent: [["Mom, can I play outside after school?","Mamá, ¿puedo jugar afuera después de la escuela?"],
+      ["Dad, can you help me with my homework?","Papá, ¿me ayudas con mi tarea?"],
+      ["I love you very much, Grandma.","Te quiero mucho, abuela."],
+      ["My brother and I are going to play soccer.","Mi hermano y yo vamos a jugar fútbol."],
+      ["Thank you for dinner, it was delicious.","Gracias por la cena, estuvo deliciosa."],
+      ["When are we going to visit Grandpa?","¿Cuándo vamos a visitar al abuelo?"],
+      ["My aunt and uncle are coming tomorrow.","Mis tíos vienen mañana."],
+      ["Happy birthday, I hope you have a great day.","Feliz cumpleaños, espero que tengas un gran día."],
+      ["Can my cousin sleep over tonight?","¿Puede mi primo quedarse a dormir esta noche?"],
+      ["I'm sorry, I didn't mean to do it.","Lo siento, no fue mi intención."],
+      ["Mom, I finished all my homework.","Mamá, ya terminé toda mi tarea."],
+      ["Dad, what time are we leaving?","Papá, ¿a qué hora nos vamos?"],
+      ["My sister is reading a book in her room.","Mi hermana está leyendo un libro en su cuarto."],
+      ["We are going to Grandma's house on Sunday.","Vamos a la casa de la abuela el domingo."],
+      ["Can we have pizza for dinner tonight?","¿Podemos cenar pizza esta noche?"],
+      ["Thank you for taking care of me.","Gracias por cuidarme."],
+      ["I want to give you a big hug.","Quiero darte un abrazo grande."],
+      ["The baby is sleeping, let's be quiet.","El bebé está durmiendo, hagamos silencio."],
+      ["Can I call Grandma on the phone?","¿Puedo llamar a la abuela por teléfono?"],
+      ["I had a lot of fun with you today.","Me divertí mucho contigo hoy."]] },
+  friends: { name: "Friends", icon: "🤝", blurb: "Things you say to your friends",
+    basic: [["friend","amigo","🤝"],["ball","pelota","⚽"],["soccer","fútbol","🥅"],["game","juego","🎲"],["park","parque","🌳"],
+      ["school","escuela","🏫"],["bike","bicicleta","🚲"],["fun","divertido","🎉"],["team","equipo","👕"],["teacher","maestro","🧑‍🏫"],
+      ["music","música","🎵"],["ice cream","helado","🍦"],["goodbye","adiós","👋"],["to run","correr","🏃"],["to jump","saltar","🦘"],
+      ["to play","jugar","🎮"],["recess","recreo","🛝"],["cookie","galleta","🍪"],["party","fiesta","🥳"],["to win","ganar","🏆"],["video game","videojuego","🕹️"]],
+    medium: [["Do you want to play?", "¿Quieres jugar?", "🎮"],
+      ["I want the ball", "Yo quiero la pelota", "⚽"],
+      ["I want to play soccer", "Yo quiero jugar fútbol", "🥅"],
+      ["I want ice cream", "Yo quiero helado", "🍦"],
+      ["I want to win", "Yo quiero ganar", "🏆"],
+      ["I have a video game", "Yo tengo un videojuego", "🕹️"],
+      ["I have a bike", "Yo tengo una bicicleta", "🚲"],
+      ["I have an idea", "Yo tengo una idea", "💡"],
+      ["I have a dog", "Yo tengo un perro", "🐶"],
+      ["Give me the ball, please", "Dame la pelota, por favor", "⚽"],
+      ["Give me a cookie, please", "Dame una galleta, por favor", "🍪"],
+      ["High five!", "¡Dame cinco!", "✋"],
+      ["You are my friend", "Tú eres mi amigo", "🤝"],
+      ["My name is Jayden", "Yo me llamo Jayden", "😊"],
+      ["What's your name?", "¿Cómo te llamas?", "🏷️"],
+      ["Let's go to the park", "Vamos al parque", "🌳"],
+      ["It's your turn", "Te toca a ti", "👉"],
+      ["Me too", "Yo también", "🙋"],
+      ["How fun!", "¡Qué divertido!", "🎉"],
+      ["See you tomorrow", "Nos vemos mañana", "👋"],
+      ["I like your drawing", "Me gusta tu dibujo", "🖍️"]],
+    fluent: [["Do you want to come to my house to play?","¿Quieres venir a mi casa a jugar?"],
+      ["Let's play soccer at recess today.","Juguemos fútbol en el recreo hoy."],
+      ["What is your favorite video game?","¿Cuál es tu videojuego favorito?"],
+      ["Will you sit with me at lunch?","¿Te sientas conmigo en el almuerzo?"],
+      ["My birthday party is on Saturday.","Mi fiesta de cumpleaños es el sábado."],
+      ["You are a really good friend.","Eres un muy buen amigo."],
+      ["Let's see who can run the fastest!","¡Vamos a ver quién corre más rápido!"],
+      ["I'm going to the park after school.","Voy al parque después de la escuela."],
+      ["Do you want to share my snack?","¿Quieres compartir mi merienda?"],
+      ["That was the best game ever!","¡Fue el mejor juego de todos!"],
+      ["Can I play with you and your friends?","¿Puedo jugar contigo y tus amigos?"],
+      ["Don't worry, we can try again.","No te preocupes, podemos intentarlo otra vez."],
+      ["My favorite color is blue, what's yours?","Mi color favorito es el azul, ¿y el tuyo?"],
+      ["Let's build a fort with the pillows.","Construyamos un fuerte con las almohadas."],
+      ["I'm so glad you came to my party.","Qué bueno que viniste a mi fiesta."],
+      ["Do you want to ride bikes this weekend?","¿Quieres andar en bicicleta este fin de semana?"],
+      ["Who wants to be on my team?","¿Quién quiere estar en mi equipo?"],
+      ["Thank you for helping me, you're the best.","Gracias por ayudarme, eres el mejor."],
+      ["What do you want to play today?","¿A qué quieres jugar hoy?"],
+      ["I'll save you a seat on the bus.","Te guardo un asiento en el autobús."]] },
+};
+const ES_LEVELS = {
+  basic: { name: "Basic", think: 3, desc: "Single words with pictures" },
+  medium: { name: "Medium", think: 5, desc: "Short phrases like Yo quiero, Yo tengo and Dame, with pictures" },
+  fluent: { name: "Fluent", think: 7, desc: "Longer sentences, like a real conversation" },
+};
+const ES_CHEERS = ["¡Muy bien!", "¡Excelente!", "¡Fantástico!", "¡Súper!", "¡Bravo!", "¡Genial!"];
+let SP = null, spRun = 0;
+
+// Spanish voice, spoken slowly so it's easy to copy
+let esVoice = null;
+function findEsVoice() {
+  if (!window.speechSynthesis) return;
+  const vs = speechSynthesis.getVoices();
+  esVoice = vs.find(v => /^es[-_](MX|US)/i.test(v.lang)) || vs.find(v => /^es[-_]419/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null;
+}
+if (window.speechSynthesis) { findEsVoice(); try { speechSynthesis.addEventListener("voiceschanged", findEsVoice); } catch (e) {} }
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function sayAsync(text, lang, rate) {
+  return new Promise(resolve => {
+    const guess = Math.max(1400, text.length * (lang === "es" ? 150 : 75) / rate * .7 + 900);
+    if (!soundOn || !window.speechSynthesis) { setTimeout(resolve, guess); return; }
+    let done = false; const fin = () => { if (!done) { done = true; resolve(); } };
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      if (lang === "es") { u.lang = esVoice ? esVoice.lang : "es-MX"; if (esVoice) u.voice = esVoice; u.rate = rate; u.pitch = 1; }
+      else { u.lang = "en-US"; u.rate = rate; u.pitch = 1.15; }
+      u.onend = fin; u.onerror = fin;
+      speechSynthesis.speak(u);
+      setTimeout(fin, guess * 2.2 + 2500); // in case the iPad never says it finished
+    } catch (e) { setTimeout(fin, guess); }
+  });
+}
+function spStop() { spRun++; clearInterval(SP && SP.timer); try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {} }
+function spExit() { spStop(); menu(); }
+
+function spCategory() {
+  spStop(); card.classList.remove("quiz", "mp");
+  card.innerHTML = `
+    ${navBar("🇪🇸 Spanish")}
+    <div class="buddy-row sp-hi">
+      ${BUDDY}
+      <div class="bubble pop"><div class="bubble-hi">¡Hola, Jayden!</div>Let's learn some Spanish. Pick a group.</div>
+    </div>
+    <div class="answers sp-cats">
+      ${Object.entries(ES).map(([k, c]) => `<button class="ans big-choice sp-cat sp-${k}" data-c="${k}"><span class="mi">${c.icon}</span>${c.name}<small>${c.blurb}</small></button>`).join("")}
+    </div>
+    ${helpBlock()}`;
+  talk("¡Hola, Jayden! Let's learn some Spanish. Pick a group.", card.querySelector(".robot"));
+  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends.");
+  card.querySelectorAll("[data-c]").forEach(b => b.onclick = () => spLevel(b.dataset.c));
+  wireNav(spExit, spCategory);
+}
+function spLevel(cat) {
+  spStop(); card.classList.remove("quiz", "mp");
+  card.innerHTML = `
+    ${navBar("🇪🇸 Spanish · " + ES[cat].name)}
+    <h2 class="question pop">Pick your level</h2>
+    <div class="answers">
+      ${Object.entries(ES_LEVELS).map(([k, l], n) => `<button class="ans level-btn lv-${["easy", "normal", "hard"][n]}" data-l="${k}">${l.name}<small>${l.desc}</small></button>`).join("")}
+    </div>
+    ${helpBlock()}`;
+  wireHelp("Basic is one word at a time. Medium is short phrases like Yo quiero (I want), Yo tengo (I have) and Dame (give me). Fluent is longer sentences, like talking to a real person!");
+  card.querySelectorAll("[data-l]").forEach(b => b.onclick = () => spCount(cat, b.dataset.l));
+  wireNav(spExit, () => spLevel(cat));
+}
+function spCount(cat, lvl) {
+  spStop(); card.classList.remove("quiz", "mp");
+  const unit = lvl === "basic" ? "words" : lvl === "medium" ? "phrases" : "sentences";
+  card.innerHTML = `
+    ${navBar("🇪🇸 " + ES[cat].name + " · " + ES_LEVELS[lvl].name)}
+    <h2 class="question pop">How many ${unit}?</h2>
+    <div class="answers count-grid">
+      ${[5, 10, 15, 20].map(n => `<button class="ans" data-n="${n}">${n}</button>`).join("")}
+    </div>
+    ${helpBlock()}`;
+  wireHelp(`5 is a quick practice. 20 is a long practice. You can always stop with Exit.`);
+  card.querySelectorAll("[data-n]").forEach(b => b.onclick = () => spStart(cat, lvl, +b.dataset.n));
+  wireNav(spExit, () => spCount(cat, lvl));
+}
+function spStart(cat, lvl, n) {
+  spStop();
+  const pool = shuffle(ES[cat][lvl].slice());
+  SP = { cat, lvl, n, list: pool.slice(0, Math.min(n, pool.length)), k: 0, timer: 0 };
+  score = 0; document.getElementById("score").textContent = 0;
+  spCard();
+}
+function spCard() {
+  spStop();
+  const run = spRun, { cat, lvl, list, k } = SP, [en, es, pic] = list[k], total = list.length;
+  card.classList.remove("quiz", "mp");
+  document.getElementById("bar").style.width = (k / total * 100) + "%";
+  const think = ES_LEVELS[lvl].think;
+  card.innerHTML = `
+    ${navBar(`🇪🇸 ${k + 1} of ${total} · ${ES_LEVELS[lvl].name}`)}
+    ${pic ? `<div class="sp-pic pop">${pic}</div>` : `<div class="sp-quote pop">💬</div>`}
+    <h2 class="question sp-ask">How do you say <span class="sp-en">“${en}”</span> in Spanish?</h2>
+    <div class="sp-think" id="think"><div class="sp-think-txt">🤔 Think about it…</div><div class="sp-timer"><div id="tfill" style="animation-duration:${think}s"></div></div></div>
+    <button class="next sp-show" id="show" hidden>👀 Tap to see the answer</button>
+    <div id="spans"></div>
+    ${helpBlock()}`;
+  wireHelp("Say it out loud in your head first. Then tap the button to check. Use the drawing pad if you want to write it down!");
+  wireNav(spExit, () => spStart(cat, lvl, SP.n));
+  sayAsync(`How do you say, ${en}, in Spanish?`, "en", 1);
+  SP.timer = setTimeout(() => {
+    if (run !== spRun) return;
+    document.getElementById("think").hidden = true;
+    const b = document.getElementById("show"); b.hidden = false;
+    b.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    b.onclick = () => spReveal(run);
+  }, think * 1000);
+}
+async function spReveal(run) {
+  const { list, k } = SP, [en, es] = list[k];
+  document.getElementById("show").remove();
+  try { speechSynthesis.cancel(); } catch (e) {}
+  chime();
+  const box = document.getElementById("spans");
+  box.innerHTML = `
+    <div class="sp-answer pop">
+      <div class="sp-es" id="spes">${es.split(" ").map(w => `<span class="w">${w}</span>`).join(" ")}</div>
+      <div class="sp-step" id="spstep">🔊 Listen…</div>
+    </div>
+    <div id="spbtns"></div>`;
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  const word = document.getElementById("spes"), step = document.getElementById("spstep");
+  const slow = SP.lvl === "fluent" ? 0.7 : 0.6;
+  const sayEs = async () => { word.classList.add("speaking"); await sayAsync(es, "es", slow); word.classList.remove("speaking"); };
+  // together: one word at a time with a quick pause between words
+  const sayByWord = async () => {
+    const spans = [...word.querySelectorAll(".w")];
+    for (let n = 0; n < spans.length; n++) {
+      if (run !== spRun) return;
+      spans.forEach(x => x.classList.toggle("on", x === spans[n]));
+      const w = spans[n].textContent.replace(/[¿?¡!.,]/g, "");
+      if (w) await sayAsync(w, "es", slow);
+      await wait(n < spans.length - 1 ? 450 : 350);
+    }
+    spans.forEach(x => x.classList.remove("on"));
+  };
+  await wait(500); if (run !== spRun) return;
+  // 1st time: just say it
+  await sayEs(); if (run !== spRun) return;
+  await wait(700); if (run !== spRun) return;
+  // 2nd time: say it together
+  step.innerHTML = "🗣️ Now say it with me!"; step.classList.add("together");
+  await sayAsync("Now say it with me!", "en", 1); if (run !== spRun) return;
+  await wait(400); if (run !== spRun) return;
+  await sayByWord(); if (run !== spRun) return;
+  score++; document.getElementById("score").textContent = score;
+  step.classList.remove("together");
+  step.innerHTML = `⭐ ${pick(ES_CHEERS)} <span class="sp-mean">(${en})</span>`;
+  const last = k + 1 >= list.length;
+  document.getElementById("spbtns").innerHTML = `
+    <div class="sp-btns">
+      <button class="ans sp-again" id="again1">🔊 Say it again</button>
+      <button class="next" id="spnext">${last ? "🏁 Finish" : "Next ➜"}</button>
+    </div>`;
+  const nx = document.getElementById("spnext");
+  nx.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  document.getElementById("again1").onclick = async e => {
+    const b = e.currentTarget; b.disabled = true; try { speechSynthesis.cancel(); } catch (x) {}
+    const r = spRun; await sayEs(); if (r === spRun) b.disabled = false;
+  };
+  nx.onclick = () => { spStop(); SP.k++; SP.k < list.length ? spCard() : spDone(); };
+}
+function spDone() {
+  spStop(); card.classList.remove("quiz", "mp");
+  document.getElementById("bar").style.width = "100%";
+  const { cat, lvl, list } = SP, unit = lvl === "basic" ? "words" : lvl === "medium" ? "phrases" : "sentences";
+  card.innerHTML = `
+    ${navBar("🇪🇸 ¡Terminaste!")}
+    <div class="end-stars pop">⭐⭐⭐</div>
+    <h2 class="question">¡Muy bien, Jayden!</h2>
+    <p style="font-size:1.3rem;font-weight:900;margin:0">You practiced ${list.length} Spanish ${unit} in ${ES[cat].name}!</p>
+    <button class="next" id="again">🔄 Practice again</button>
+    <button class="ans times" id="other">🇪🇸 Pick another Spanish group</button>
+    <button class="back" id="home">🏠 Back to missions</button>
+    ${helpBlock()}`;
+  wireHelp("Practice again gives you new words in the same group. Pick another group to try Household, Family or Friends.");
+  talk("¡Muy bien, Jayden! Great job practicing your Spanish!", null);
+  document.getElementById("again").onclick = () => { stopConfetti(); spStart(cat, lvl, SP.n); };
+  document.getElementById("other").onclick = () => { stopConfetti(); spCategory(); };
+  document.getElementById("home").onclick = () => { stopConfetti(); spExit(); };
+  wireNav(() => { stopConfetti(); spExit(); }, () => { stopConfetti(); spStart(cat, lvl, SP.n); });
+  confetti(160);
 }
 
 let MP = { on: false };
