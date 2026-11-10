@@ -353,6 +353,8 @@ svg circle.lit { fill: #ffc93c; }
 .sp-body { background: #ff9f1c; box-shadow: 0 6px 0 #c97a0a; }
 .sp-food { background: #e94f37; box-shadow: 0 6px 0 #b13a27; }
 .sp-animals { background: #7b61ff; box-shadow: 0 6px 0 #5a43d6; }
+.sp-colors { background: linear-gradient(120deg, #ff5f6d, #ffb347 30%, #3cc47c 55%, #3a9bff 78%, #a66bff); box-shadow: 0 6px 0 #6b4fd1; text-shadow: 0 2px 3px rgba(0,0,0,.35); }
+.sp-clothes { background: #3a86ff; box-shadow: 0 6px 0 #2563c9; }
 .answers.sp-cats .sp-cat { padding-top: 10px; padding-bottom: 10px; }
 .sp-hi .buddy { width: 84px; }
 .sp-pic { font-size: min(7rem, 16vh); line-height: 1.1; text-align: center; }
@@ -377,7 +379,8 @@ svg circle.lit { fill: #ffc93c; }
 .sp-btns .next { margin: 0; }
 .sp-again { background: #2ab7ca; color: #fff; box-shadow: 0 6px 0 #1b8a99; }
 @media (orientation: landscape) and (min-width: 700px) {
-  .answers.sp-cats { grid-template-columns: repeat(3, 1fr); }
+  .answers.sp-cats { grid-template-columns: repeat(4, 1fr); }
+  .sp-cat { font-size: 1.45rem; }
   .answers.menu-grid { grid-template-columns: repeat(3, 1fr); }
   .sp-pic { font-size: min(6rem, 15vh); }
 }
@@ -1782,6 +1785,129 @@ const ES = {
       ["The bird is building a nest in the tree.", "El pájaro está haciendo un nido en el árbol."],
       ["Bears like to eat honey.", "A los osos les gusta comer miel."],
       ["The bunny has long ears and a fluffy tail.", "El conejo tiene orejas largas y una cola esponjosa."]] },
+  colors: { name: "Colors", icon: "🌈", blurb: "Red, blue, green and more",
+    basic: [["red", "rojo", "🔴"],
+      ["blue", "azul", "🔵"],
+      ["green", "verde", "🟢"],
+      ["yellow", "amarillo", "🟡"],
+      ["orange", "naranja", "🟠"],
+      ["purple", "morado", "🟣"],
+      ["brown", "café", "🟤"],
+      ["black", "negro", "⚫"],
+      ["white", "blanco", "⚪"],
+      ["pink", "rosado", "🩷"],
+      ["gray", "gris", "🩶"],
+      ["light blue", "celeste", "🩵"],
+      ["gold", "dorado", "🥇"],
+      ["silver", "plateado", "🥈"],
+      ["rainbow", "arcoíris", "🌈"],
+      ["paint", "pintura", "🎨"],
+      ["crayon", "crayón", "🖍️"],
+      ["paintbrush", "pincel", "🖌️"],
+      ["shiny", "brillante", "✨"],
+      ["dark", "oscuro", "🌑"]],
+    medium: [["I like red", "Me gusta el rojo", "🔴"],
+      ["I like green", "Me gusta el verde", "🟢"],
+      ["The sky is blue", "El cielo es azul", "🌤️"],
+      ["The sun is yellow", "El sol es amarillo", "☀️"],
+      ["The grass is green", "La hierba es verde", "🌱"],
+      ["The strawberry is red", "La fresa es roja", "🍓"],
+      ["The snow is white", "La nieve es blanca", "❄️"],
+      ["The cat is black", "El gato es negro", "🐈‍⬛"],
+      ["The elephant is gray", "El elefante es gris", "🐘"],
+      ["The pumpkin is orange", "La calabaza es naranja", "🎃"],
+      ["Chocolate is brown", "El chocolate es café", "🍫"],
+      ["I want the blue one", "Yo quiero el azul", "🔵"],
+      ["I have a red crayon", "Tengo un crayón rojo", "🖍️"],
+      ["Give me the green one, please", "Dame el verde, por favor", "🟢"],
+      ["Give me the yellow one, please", "Dame el amarillo, por favor", "🟡"],
+      ["What color is it?", "¿De qué color es?", "🎨"],
+      ["It's pink", "Es rosado", "🩷"],
+      ["Mix red and blue", "Mezcla rojo y azul", "🟣"],
+      ["I like the colors", "Me gustan los colores", "🌈"],
+      ["The leaves are green", "Las hojas son verdes", "🍃"]],
+    fluent: [["My favorite color is blue, like the sky.", "Mi color favorito es el azul, como el cielo."],
+      ["The rainbow has many colors.", "El arcoíris tiene muchos colores."],
+      ["If you mix red and yellow, you get orange.", "Si mezclas rojo y amarillo, te sale naranja."],
+      ["I want to paint the sun yellow.", "Quiero pintar el sol de amarillo."],
+      ["Can I use your green crayon?", "¿Puedo usar tu crayón verde?"],
+      ["My dog is brown with white spots.", "Mi perro es café con manchas blancas."],
+      ["The leaves turn orange and red in the fall.", "Las hojas se ponen naranjas y rojas en el otoño."],
+      ["What color do you want for your bike?", "¿De qué color quieres tu bicicleta?"],
+      ["The fire truck is red and very big.", "El camión de bomberos es rojo y muy grande."],
+      ["I'm going to color the ocean blue.", "Voy a colorear el mar de azul."],
+      ["Bananas are yellow and grapes are purple.", "Los plátanos son amarillos y las uvas son moradas."],
+      ["The zebra is black and white.", "La cebra es blanca y negra."],
+      ["My sister's favorite color is pink.", "El color favorito de mi hermana es el rosado."],
+      ["The grass is green after the rain.", "La hierba está verde después de la lluvia."],
+      ["I need the black marker to write my name.", "Necesito el marcador negro para escribir mi nombre."],
+      ["Gold medals are for the winners.", "Las medallas de oro son para los ganadores."],
+      ["The night sky is dark and full of stars.", "El cielo de noche está oscuro y lleno de estrellas."],
+      ["Let's paint a picture with lots of colors.", "Vamos a pintar un dibujo con muchos colores."],
+      ["My new backpack is red and black.", "Mi mochila nueva es roja y negra."],
+      ["The flamingo is pink and stands on one leg.", "El flamenco es rosado y se para en una pata."]] },
+  clothes: { name: "Clothes", icon: "👕", blurb: "Things you wear",
+    basic: [["shirt", "camisa", "👕"],
+      ["pants", "pantalones", "👖"],
+      ["shoes", "zapatos", "👟"],
+      ["socks", "calcetines", "🧦"],
+      ["cap", "gorra", "🧢"],
+      ["hat", "sombrero", "👒"],
+      ["jacket", "chaqueta", "🧥"],
+      ["dress", "vestido", "👗"],
+      ["scarf", "bufanda", "🧣"],
+      ["gloves", "guantes", "🧤"],
+      ["boots", "botas", "👢"],
+      ["pajamas", "pijama", "🛌"],
+      ["glasses", "lentes", "👓"],
+      ["tie", "corbata", "👔"],
+      ["backpack", "mochila", "🎒"],
+      ["watch", "reloj", "⌚"],
+      ["sandals", "sandalias", "🩴"],
+      ["clothes", "ropa", "👚"],
+      ["umbrella", "paraguas", "☂️"],
+      ["ring", "anillo", "💍"]],
+    medium: [["Put on your shoes", "Ponte los zapatos", "👟"],
+      ["Put on your socks", "Ponte los calcetines", "🧦"],
+      ["Put on your jacket", "Ponte la chaqueta", "🧥"],
+      ["Put on your pajamas", "Ponte el pijama", "🛌"],
+      ["Take off your cap", "Quítate la gorra", "🧢"],
+      ["Take off your boots", "Quítate las botas", "👢"],
+      ["Tie your shoes", "Átate los zapatos", "👟"],
+      ["Zip up your jacket", "Abróchate la chaqueta", "🧥"],
+      ["I want my cap", "Yo quiero mi gorra", "🧢"],
+      ["I have new shoes", "Yo tengo zapatos nuevos", "👟"],
+      ["I need gloves", "Yo necesito guantes", "🧤"],
+      ["Give me my socks, please", "Dame mis calcetines, por favor", "🧦"],
+      ["Give me the scarf, please", "Dame la bufanda, por favor", "🧣"],
+      ["I like your shirt", "Me gusta tu camisa", "👕"],
+      ["My shirt is blue", "Mi camisa es azul", "👕"],
+      ["My boots are black", "Mis botas son negras", "👢"],
+      ["Where are my shoes?", "¿Dónde están mis zapatos?", "👟"],
+      ["I'm already dressed", "Ya estoy vestido", "🙋"],
+      ["The clothes are dirty", "La ropa está sucia", "🧺"],
+      ["The dress is pretty", "El vestido es bonito", "👗"],
+      ["I wear glasses", "Uso lentes", "👓"]],
+    fluent: [["It's cold, put on your jacket before you go out.", "Hace frío, ponte la chaqueta antes de salir."],
+      ["I can't find my other sock.", "No encuentro mi otro calcetín."],
+      ["Please put your dirty clothes in the basket.", "Por favor, pon tu ropa sucia en la canasta."],
+      ["I want to wear my soccer shirt today.", "Quiero ponerme mi camiseta de fútbol hoy."],
+      ["Tie your shoes so you don't fall.", "Átate los zapatos para que no te caigas."],
+      ["It's raining, take your boots and umbrella.", "Está lloviendo, lleva tus botas y tu paraguas."],
+      ["My new sneakers are white and blue.", "Mis tenis nuevos son blancos y azules."],
+      ["Grandma made me a warm scarf.", "La abuela me hizo una bufanda calientita."],
+      ["Put on your pajamas, it's time for bed.", "Ponte el pijama, es hora de dormir."],
+      ["Wear a hat because the sun is very strong.", "Ponte un sombrero porque el sol está muy fuerte."],
+      ["These pants are too small for me.", "Estos pantalones me quedan muy chicos."],
+      ["Can I wear shorts today?", "¿Puedo ponerme shorts hoy?"],
+      ["Hang your jacket behind the door.", "Cuelga tu chaqueta detrás de la puerta."],
+      ["I need gloves to play in the snow.", "Necesito guantes para jugar en la nieve."],
+      ["My dad wears a tie to work.", "Mi papá usa corbata para ir al trabajo."],
+      ["Take off your shoes before you come in.", "Quítate los zapatos antes de entrar."],
+      ["Which shirt do you want to wear?", "¿Qué camisa te quieres poner?"],
+      ["My cap is on the table.", "Mi gorra está en la mesa."],
+      ["I'm going to wear my new boots to school.", "Voy a usar mis botas nuevas en la escuela."],
+      ["Fold your clothes and put them away.", "Dobla tu ropa y guárdala."]] },
 };
 const ES_LEVELS = {
   basic: { name: "Basic", think: 3, desc: "Single words with pictures" },
@@ -1831,7 +1957,7 @@ function spCategory() {
     </div>
     ${helpBlock()}`;
   talk("¡Hola, Jayden! Let's learn some Spanish. Pick a group.", card.querySelector(".robot"));
-  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends. Body is the parts of your body, like your eyes, nose and hands. Food is yummy things to eat. Animals is pets, farm animals and zoo animals.");
+  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends. Body is the parts of your body, like your eyes, nose and hands. Food is yummy things to eat. Animals is pets, farm animals and zoo animals. Colors is red, blue, green and more. Clothes is things you wear, like shirts and shoes.");
   card.querySelectorAll("[data-c]").forEach(b => b.onclick = () => spLevel(b.dataset.c));
   wireNav(spExit, spCategory);
 }
@@ -1961,7 +2087,7 @@ function spDone() {
     <button class="ans times" id="other">🇪🇸 Pick another Spanish group</button>
     <button class="back" id="home">🏠 Back to missions</button>
     ${helpBlock()}`;
-  wireHelp("Practice again gives you new words in the same group. Pick another group to try Household, Family, Friends, Body, Food or Animals.");
+  wireHelp("Practice again gives you new words in the same group. Pick another group to try a different set of words.");
   talk("¡Muy bien, Jayden! Great job practicing your Spanish!", null);
   document.getElementById("again").onclick = () => { stopConfetti(); spStart(cat, lvl, SP.n); };
   document.getElementById("other").onclick = () => { stopConfetti(); spCategory(); };
