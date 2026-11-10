@@ -349,6 +349,8 @@ svg circle.lit { fill: #ffc93c; }
 .sp-house { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
 .sp-family { background: #f15bb5; box-shadow: 0 6px 0 #c13a8c; }
 .sp-friends { background: #33c26b; box-shadow: 0 6px 0 #22924f; }
+.sp-body { background: #ff9f1c; box-shadow: 0 6px 0 #c97a0a; }
+.answers.sp-cats .sp-cat { padding-top: 10px; padding-bottom: 10px; }
 .sp-hi .buddy { width: 84px; }
 .sp-pic { font-size: min(7rem, 16vh); line-height: 1.1; text-align: center; }
 .sp-quote { font-size: 3rem; line-height: 1; text-align: center; }
@@ -372,7 +374,7 @@ svg circle.lit { fill: #ffc93c; }
 .sp-btns .next { margin: 0; }
 .sp-again { background: #2ab7ca; color: #fff; box-shadow: 0 6px 0 #1b8a99; }
 @media (orientation: landscape) and (min-width: 700px) {
-  .answers.sp-cats { grid-template-columns: repeat(3, 1fr); }
+  .answers.sp-cats { grid-template-columns: repeat(4, 1fr); }
   .sp-cat { grid-template-columns: 1fr; justify-items: center; text-align: center; }
   .sp-cat .mi { grid-row: auto; }
   .answers.menu-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1579,7 +1581,70 @@ const ES = {
       ["Thank you for helping me, you're the best.","Gracias por ayudarme, eres el mejor."],
       ["What do you want to play today?","¿A qué quieres jugar hoy?"],
       ["I'll save you a seat on the bus.","Te guardo un asiento en el autobús."]] },
-};
+  body: { name: "Body", icon: "💪", blurb: "Parts of your body",
+    basic: [["head", "cabeza", "🧑"],
+      ["eye", "ojo", "👁️"],
+      ["ear", "oreja", "👂"],
+      ["nose", "nariz", "👃"],
+      ["mouth", "boca", "👄"],
+      ["tooth", "diente", "🦷"],
+      ["tongue", "lengua", "👅"],
+      ["hand", "mano", "✋"],
+      ["foot", "pie", "🦶"],
+      ["leg", "pierna", "🦵"],
+      ["arm", "brazo", "💪"],
+      ["finger", "dedo", "👆"],
+      ["hair", "pelo", "💇"],
+      ["face", "cara", "😀"],
+      ["heart", "corazón", "🫀"],
+      ["bone", "hueso", "🦴"],
+      ["lips", "labios", "💋"],
+      ["nails", "uñas", "💅"],
+      ["knee", "rodilla", "🩹"],
+      ["neck", "cuello", "🧣"],
+      ["shoulders", "hombros", "🤷"],
+      ["eyebrow", "ceja", "🤨"],
+      ["brain", "cerebro", "🧠"]],
+    medium: [["I have two eyes", "Yo tengo dos ojos", "👀"],
+      ["I have ten fingers", "Yo tengo diez dedos", "🖐️"],
+      ["I have long hair", "Yo tengo pelo largo", "💇"],
+      ["I have big ears", "Yo tengo orejas grandes", "👂"],
+      ["I have a loose tooth", "Tengo un diente flojo", "🦷"],
+      ["My head hurts", "Me duele la cabeza", "🤕"],
+      ["My tummy hurts", "Me duele la panza", "🤢"],
+      ["My foot hurts", "Me duele el pie", "🦶"],
+      ["Wash your hands", "Lávate las manos", "🧼"],
+      ["Brush your teeth", "Cepíllate los dientes", "🪥"],
+      ["Wash your face", "Lávate la cara", "🧽"],
+      ["Touch your nose", "Tócate la nariz", "👃"],
+      ["Raise your hand", "Levanta la mano", "🙋"],
+      ["Open your mouth", "Abre la boca", "👄"],
+      ["Close your eyes", "Cierra los ojos", "😌"],
+      ["Give me your hand", "Dame la mano", "🤝"],
+      ["I want a band-aid", "Yo quiero una curita", "🩹"],
+      ["I need ice", "Yo necesito hielo", "🧊"],
+      ["My arm is strong", "Mi brazo es fuerte", "💪"],
+      ["I'm sick", "Yo estoy enfermo", "🤒"]],
+    fluent: [["I hurt my knee playing soccer.", "Me lastimé la rodilla jugando fútbol."],
+      ["Wash your hands before you eat.", "Lávate las manos antes de comer."],
+      ["I have a loose tooth, it's going to fall out.", "Tengo un diente flojo, se me va a caer."],
+      ["My tummy hurts, I ate too much candy.", "Me duele la panza, comí demasiados dulces."],
+      ["Close your eyes and count to ten.", "Cierra los ojos y cuenta hasta diez."],
+      ["My heart beats fast when I run.", "Mi corazón late rápido cuando corro."],
+      ["Touch your toes and then jump up high.", "Tócate los dedos de los pies y luego salta alto."],
+      ["My grandpa has white hair.", "Mi abuelo tiene el pelo blanco."],
+      ["I need a band-aid for my finger.", "Necesito una curita para mi dedo."],
+      ["Brush your teeth for two minutes.", "Cepíllate los dientes por dos minutos."],
+      ["She has brown eyes and long hair.", "Ella tiene ojos cafés y pelo largo."],
+      ["I can kick the ball with my left foot.", "Puedo patear la pelota con el pie izquierdo."],
+      ["Raise your hand if you know the answer.", "Levanta la mano si sabes la respuesta."],
+      ["My legs are tired after the game.", "Mis piernas están cansadas después del partido."],
+      ["Cover your mouth when you cough.", "Tápate la boca cuando toses."],
+      ["I'm sick and my throat hurts.", "Estoy enfermo y me duele la garganta."],
+      ["Look with your eyes, not with your hands.", "Mira con los ojos, no con las manos."],
+      ["Your brain helps you think and learn.", "Tu cerebro te ayuda a pensar y aprender."],
+      ["Stretch your arms up to the sky.", "Estira los brazos hacia el cielo."],
+      ["Hold my hand when we cross the street.", "Dame la mano cuando crucemos la calle."]] },};
 const ES_LEVELS = {
   basic: { name: "Basic", think: 3, desc: "Single words with pictures" },
   medium: { name: "Medium", think: 5, desc: "Short phrases like Yo quiero, Yo tengo and Dame, with pictures" },
@@ -1628,7 +1693,7 @@ function spCategory() {
     </div>
     ${helpBlock()}`;
   talk("¡Hola, Jayden! Let's learn some Spanish. Pick a group.", card.querySelector(".robot"));
-  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends.");
+  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends. Body is the parts of your body, like your eyes, nose and hands.");
   card.querySelectorAll("[data-c]").forEach(b => b.onclick = () => spLevel(b.dataset.c));
   wireNav(spExit, spCategory);
 }
@@ -1758,7 +1823,7 @@ function spDone() {
     <button class="ans times" id="other">🇪🇸 Pick another Spanish group</button>
     <button class="back" id="home">🏠 Back to missions</button>
     ${helpBlock()}`;
-  wireHelp("Practice again gives you new words in the same group. Pick another group to try Household, Family or Friends.");
+  wireHelp("Practice again gives you new words in the same group. Pick another group to try Household, Family, Friends or Body.");
   talk("¡Muy bien, Jayden! Great job practicing your Spanish!", null);
   document.getElementById("again").onclick = () => { stopConfetti(); spStart(cat, lvl, SP.n); };
   document.getElementById("other").onclick = () => { stopConfetti(); spCategory(); };
