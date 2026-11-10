@@ -343,13 +343,16 @@ svg circle.lit { fill: #ffc93c; }
 
 /* Spanish mission */
 .sp-show[hidden], .sp-think[hidden] { display: none !important; }
-.answers.sp-cats { grid-template-columns: 1fr; }
-.sp-cat { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; text-align: left; font-size: 1.6rem; padding: 14px 18px; }
-.sp-cat .mi { grid-row: span 2; margin: 0; font-size: 2.6rem; }
+.answers.sp-cats { grid-template-columns: repeat(2, 1fr); }
+.sp-cat { display: grid; justify-items: center; text-align: center; font-size: 1.6rem; padding: 12px 10px; }
+.sp-cat .mi { margin: 0; font-size: 2.8rem; line-height: 1.1; }
+.sp-cat .mi .kid-ico { height: 3.3rem; width: auto; display: block; filter: drop-shadow(0 2px 0 rgba(0,0,0,.15)); }
 .sp-house { background: #2ab7ca; box-shadow: 0 6px 0 #1b8a99; }
 .sp-family { background: #f15bb5; box-shadow: 0 6px 0 #c13a8c; }
 .sp-friends { background: #33c26b; box-shadow: 0 6px 0 #22924f; }
 .sp-body { background: #ff9f1c; box-shadow: 0 6px 0 #c97a0a; }
+.sp-food { background: #e94f37; box-shadow: 0 6px 0 #b13a27; }
+.sp-animals { background: #7b61ff; box-shadow: 0 6px 0 #5a43d6; }
 .answers.sp-cats .sp-cat { padding-top: 10px; padding-bottom: 10px; }
 .sp-hi .buddy { width: 84px; }
 .sp-pic { font-size: min(7rem, 16vh); line-height: 1.1; text-align: center; }
@@ -374,9 +377,7 @@ svg circle.lit { fill: #ffc93c; }
 .sp-btns .next { margin: 0; }
 .sp-again { background: #2ab7ca; color: #fff; box-shadow: 0 6px 0 #1b8a99; }
 @media (orientation: landscape) and (min-width: 700px) {
-  .answers.sp-cats { grid-template-columns: repeat(4, 1fr); }
-  .sp-cat { grid-template-columns: 1fr; justify-items: center; text-align: center; }
-  .sp-cat .mi { grid-row: auto; }
+  .answers.sp-cats { grid-template-columns: repeat(3, 1fr); }
   .answers.menu-grid { grid-template-columns: repeat(3, 1fr); }
   .sp-pic { font-size: min(6rem, 15vh); }
 }
@@ -1581,7 +1582,7 @@ const ES = {
       ["Thank you for helping me, you're the best.","Gracias por ayudarme, eres el mejor."],
       ["What do you want to play today?","¿A qué quieres jugar hoy?"],
       ["I'll save you a seat on the bus.","Te guardo un asiento en el autobús."]] },
-  body: { name: "Body", icon: "💪", blurb: "Parts of your body",
+  body: { name: "Body", icon: '<svg class="kid-ico" viewBox="0 0 64 80" aria-hidden="true"><g stroke="#3b2a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 31 L7 47 M44 31 L57 47" fill="none" stroke-width="10"/><path d="M20 31 L7 47 M44 31 L57 47" fill="none" stroke="#f2c29b" stroke-width="5.5"/><circle cx="7" cy="47" r="4.5" fill="#f2c29b"/><circle cx="57" cy="47" r="4.5" fill="#f2c29b"/><rect x="24" y="52" width="7" height="22" rx="3" fill="#2f4ea1"/><rect x="33" y="52" width="7" height="22" rx="3" fill="#2f4ea1"/><ellipse cx="26" cy="75" rx="6" ry="3.5" fill="#fff"/><ellipse cx="38" cy="75" rx="6" ry="3.5" fill="#fff"/><path d="M18 28 Q32 24 46 28 L44 56 L20 56 Z" fill="#2ab7ca"/><circle cx="32" cy="15" r="11" fill="#f2c29b"/><path d="M21 13 Q24 3 32 4 Q41 3 43 13 Q37 8 32 9 Q26 8 21 13 Z" fill="#6b3f1d"/><circle cx="28" cy="15" r="1.4" fill="#3b2a1a" stroke="none"/><circle cx="36" cy="15" r="1.4" fill="#3b2a1a" stroke="none"/><path d="M28 20 Q32 23 36 20" fill="none" stroke-width="2"/></g></svg>', blurb: "Parts of your body",
     basic: [["head", "cabeza", "🧑"],
       ["eye", "ojo", "👁️"],
       ["ear", "oreja", "👂"],
@@ -1644,7 +1645,144 @@ const ES = {
       ["Look with your eyes, not with your hands.", "Mira con los ojos, no con las manos."],
       ["Your brain helps you think and learn.", "Tu cerebro te ayuda a pensar y aprender."],
       ["Stretch your arms up to the sky.", "Estira los brazos hacia el cielo."],
-      ["Hold my hand when we cross the street.", "Dame la mano cuando crucemos la calle."]] },};
+      ["Hold my hand when we cross the street.", "Dame la mano cuando crucemos la calle."]] },  food: { name: "Food", icon: "🍔", blurb: "Yummy things to eat",
+    basic: [["apple", "manzana", "🍎"],
+      ["banana", "plátano", "🍌"],
+      ["orange", "naranja", "🍊"],
+      ["grapes", "uvas", "🍇"],
+      ["strawberry", "fresa", "🍓"],
+      ["watermelon", "sandía", "🍉"],
+      ["pineapple", "piña", "🍍"],
+      ["lemon", "limón", "🍋"],
+      ["cherry", "cereza", "🍒"],
+      ["carrot", "zanahoria", "🥕"],
+      ["corn", "maíz", "🌽"],
+      ["tomato", "tomate", "🍅"],
+      ["broccoli", "brócoli", "🥦"],
+      ["potato", "papa", "🥔"],
+      ["egg", "huevo", "🥚"],
+      ["cheese", "queso", "🧀"],
+      ["chicken", "pollo", "🍗"],
+      ["fish", "pescado", "🐟"],
+      ["meat", "carne", "🥩"],
+      ["rice", "arroz", "🍚"],
+      ["beans", "frijoles", "🫘"],
+      ["soup", "sopa", "🍲"],
+      ["hamburger", "hamburguesa", "🍔"],
+      ["popcorn", "palomitas", "🍿"],
+      ["candy", "dulces", "🍬"],
+      ["juice", "jugo", "🧃"]],
+    medium: [["I want an apple", "Yo quiero una manzana", "🍎"],
+      ["I want pizza", "Yo quiero pizza", "🍕"],
+      ["I want more", "Yo quiero más", "🍽️"],
+      ["I want juice", "Yo quiero jugo", "🧃"],
+      ["I want eggs", "Yo quiero huevos", "🍳"],
+      ["I'm very hungry", "Tengo mucha hambre", "😋"],
+      ["I have a taco", "Yo tengo un taco", "🌮"],
+      ["Give me a cookie, please", "Dame una galleta, por favor", "🍪"],
+      ["Give me more rice, please", "Dame más arroz, por favor", "🍚"],
+      ["Give me the cheese, please", "Dame el queso, por favor", "🧀"],
+      ["Can you give me water?", "¿Me das agua?", "💧"],
+      ["I like chocolate", "Me gusta el chocolate", "🍫"],
+      ["I like strawberries", "Me gustan las fresas", "🍓"],
+      ["I don't want broccoli", "Yo no quiero brócoli", "🥦"],
+      ["How yummy!", "¡Qué rico!", "😋"],
+      ["It's delicious", "Está delicioso", "🤤"],
+      ["It's hot", "Está caliente", "🔥"],
+      ["The soup is cold", "La sopa está fría", "🥣"],
+      ["What is there to eat?", "¿Qué hay de comer?", "🍽️"],
+      ["I'm full", "Ya estoy lleno", "😌"],
+      ["A glass of milk", "Un vaso de leche", "🥛"]],
+    fluent: [["Can I have pancakes for breakfast?", "¿Puedo comer panqueques en el desayuno?"],
+      ["I like pizza with lots of cheese.", "Me gusta la pizza con mucho queso."],
+      ["I don't like broccoli, but I will try it.", "No me gusta el brócoli, pero lo voy a probar."],
+      ["Apples and bananas are my favorite fruits.", "Las manzanas y los plátanos son mis frutas favoritas."],
+      ["Can I have ice cream after dinner?", "¿Puedo comer helado después de la cena?"],
+      ["The soup is too hot, I will wait.", "La sopa está muy caliente, voy a esperar."],
+      ["I want a ham and cheese sandwich.", "Quiero un sándwich de jamón y queso."],
+      ["Eat your vegetables so you grow strong.", "Cómete las verduras para que crezcas fuerte."],
+      ["We are having tacos for dinner tonight.", "Esta noche vamos a cenar tacos."],
+      ["Can you please pass me the rice?", "¿Me pasas el arroz, por favor?"],
+      ["I'm full, I can't eat any more.", "Estoy lleno, ya no puedo comer más."],
+      ["Strawberries are red and very sweet.", "Las fresas son rojas y muy dulces."],
+      ["My favorite food is chicken with rice.", "Mi comida favorita es el pollo con arroz."],
+      ["Let's make cookies with Grandma.", "Hagamos galletas con la abuela."],
+      ["Don't eat too much candy.", "No comas demasiados dulces."],
+      ["I want orange juice, not milk.", "Quiero jugo de naranja, no leche."],
+      ["This hamburger is delicious!", "¡Esta hamburguesa está deliciosa!"],
+      ["Wash the fruit before you eat it.", "Lava la fruta antes de comerla."],
+      ["Can we eat popcorn during the movie?", "¿Podemos comer palomitas durante la película?"],
+      ["Thank you for the food, it was very yummy.", "Gracias por la comida, estuvo muy rica."]] },
+  animals: { name: "Animals", icon: "🐶", blurb: "Pets, farm and zoo animals",
+    basic: [["dog", "perro", "🐶"],
+      ["cat", "gato", "🐱"],
+      ["bird", "pájaro", "🐦"],
+      ["fish", "pez", "🐟"],
+      ["horse", "caballo", "🐴"],
+      ["cow", "vaca", "🐮"],
+      ["pig", "cerdo", "🐷"],
+      ["chick", "pollito", "🐥"],
+      ["hen", "gallina", "🐔"],
+      ["duck", "pato", "🦆"],
+      ["sheep", "oveja", "🐑"],
+      ["rabbit", "conejo", "🐰"],
+      ["mouse", "ratón", "🐭"],
+      ["lion", "león", "🦁"],
+      ["tiger", "tigre", "🐯"],
+      ["bear", "oso", "🐻"],
+      ["monkey", "mono", "🐵"],
+      ["elephant", "elefante", "🐘"],
+      ["giraffe", "jirafa", "🦒"],
+      ["zebra", "cebra", "🦓"],
+      ["snake", "serpiente", "🐍"],
+      ["turtle", "tortuga", "🐢"],
+      ["frog", "rana", "🐸"],
+      ["butterfly", "mariposa", "🦋"],
+      ["shark", "tiburón", "🦈"],
+      ["whale", "ballena", "🐳"],
+      ["spider", "araña", "🕷️"]],
+    medium: [["I have a dog", "Yo tengo un perro", "🐶"],
+      ["I have a cat", "Yo tengo un gato", "🐱"],
+      ["I want a rabbit", "Yo quiero un conejo", "🐰"],
+      ["I want to see lions", "Yo quiero ver leones", "🦁"],
+      ["I want to pet the dog", "Quiero acariciar al perro", "🐕"],
+      ["The dog barks", "El perro ladra", "🐕"],
+      ["The cat meows", "El gato maúlla", "🐈"],
+      ["The cow says moo", "La vaca dice mu", "🐮"],
+      ["The fish swims", "El pez nada", "🐠"],
+      ["The bird flies", "El pájaro vuela", "🐦"],
+      ["The frog jumps", "La rana salta", "🐸"],
+      ["The bear sleeps", "El oso duerme", "🐻"],
+      ["The lion is strong", "El león es fuerte", "🦁"],
+      ["The giraffe is tall", "La jirafa es alta", "🦒"],
+      ["The elephant is big", "El elefante es grande", "🐘"],
+      ["The mouse is small", "El ratón es pequeño", "🐭"],
+      ["The turtle is slow", "La tortuga es lenta", "🐢"],
+      ["Look, a bird!", "¡Mira, un pájaro!", "🐦"],
+      ["Careful, a spider!", "¡Cuidado, una araña!", "🕷️"],
+      ["I like horses", "Me gustan los caballos", "🐴"],
+      ["Monkeys eat bananas", "Los monos comen plátanos", "🐵"]],
+    fluent: [["I want to go to the zoo to see the lions.", "Quiero ir al zoológico a ver los leones."],
+      ["My dog likes to play with the ball.", "A mi perro le gusta jugar con la pelota."],
+      ["The cat is sleeping on my bed.", "El gato está durmiendo en mi cama."],
+      ["The elephant has big ears and a long trunk.", "El elefante tiene orejas grandes y una trompa larga."],
+      ["Can we get a puppy, please?", "¿Podemos tener un perrito, por favor?"],
+      ["Monkeys love to climb trees.", "A los monos les encanta trepar árboles."],
+      ["The frog jumps into the water.", "La rana salta al agua."],
+      ["Don't touch the bee, it can sting you.", "No toques la abeja, te puede picar."],
+      ["The giraffe is the tallest animal.", "La jirafa es el animal más alto."],
+      ["I saw a big whale at the beach.", "Vi una ballena grande en la playa."],
+      ["The turtle walks very slowly.", "La tortuga camina muy despacio."],
+      ["Please give water to the dog.", "Por favor, dale agua al perro."],
+      ["The butterfly has very pretty colors.", "La mariposa tiene colores muy bonitos."],
+      ["Sharks live in the ocean.", "Los tiburones viven en el océano."],
+      ["The rooster sings in the morning.", "El gallo canta en la mañana."],
+      ["My favorite animal is the tiger.", "Mi animal favorito es el tigre."],
+      ["The horse runs very fast in the field.", "El caballo corre muy rápido en el campo."],
+      ["The bird is building a nest in the tree.", "El pájaro está haciendo un nido en el árbol."],
+      ["Bears like to eat honey.", "A los osos les gusta comer miel."],
+      ["The bunny has long ears and a fluffy tail.", "El conejo tiene orejas largas y una cola esponjosa."]] },
+};
 const ES_LEVELS = {
   basic: { name: "Basic", think: 3, desc: "Single words with pictures" },
   medium: { name: "Medium", think: 5, desc: "Short phrases like Yo quiero, Yo tengo and Dame, with pictures" },
@@ -1693,7 +1831,7 @@ function spCategory() {
     </div>
     ${helpBlock()}`;
   talk("¡Hola, Jayden! Let's learn some Spanish. Pick a group.", card.querySelector(".robot"));
-  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends. Body is the parts of your body, like your eyes, nose and hands.");
+  wireHelp("Household is things you say at home. Family is things you say to your mom, dad and family. Friends is things you say when you play with friends. Body is the parts of your body, like your eyes, nose and hands. Food is yummy things to eat. Animals is pets, farm animals and zoo animals.");
   card.querySelectorAll("[data-c]").forEach(b => b.onclick = () => spLevel(b.dataset.c));
   wireNav(spExit, spCategory);
 }
@@ -1823,7 +1961,7 @@ function spDone() {
     <button class="ans times" id="other">🇪🇸 Pick another Spanish group</button>
     <button class="back" id="home">🏠 Back to missions</button>
     ${helpBlock()}`;
-  wireHelp("Practice again gives you new words in the same group. Pick another group to try Household, Family, Friends or Body.");
+  wireHelp("Practice again gives you new words in the same group. Pick another group to try Household, Family, Friends, Body, Food or Animals.");
   talk("¡Muy bien, Jayden! Great job practicing your Spanish!", null);
   document.getElementById("again").onclick = () => { stopConfetti(); spStart(cat, lvl, SP.n); };
   document.getElementById("other").onclick = () => { stopConfetti(); spCategory(); };
